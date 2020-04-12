@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['Void.py'],
-             pathex=['C:\\Users\\Admin\\Desktop\\Coding\\Python\\App'],
+             pathex=['C:\\Users\\Admin\\Desktop\\Coding\\Python\\V01D'],
              binaries=[],
              datas=[],
              hiddenimports=[],
