@@ -12,9 +12,7 @@ import osBased
 import utils
 import neural_net
 
-
 run = True
-developer = True
 terminal_color = database.getcolor()
 title = "V01D Terminal"
 aliases = database.GetAliases()
@@ -111,17 +109,7 @@ def Initialize():
         
 
 def Run():
-    logged = False
-    admin = False
-
-    if developer:
-        logged = True
-        admin = True
-    else:
-        logged = database.RequestUser()
-        admin = database.RequestPermisions()
-    
-    while logged:
+    while True:
         cd = os.getcwd()
         userInput = input(cd + " > ")
         splitInput = userInput.split()
@@ -131,7 +119,7 @@ def Run():
         except TypeError:
             continue
 
-        if splitInput[0].lower() == "password" and admin:
+        if splitInput[0].lower() == "password":
             Password()
             continue
 
@@ -218,7 +206,7 @@ def Run():
 
         elif userInput.lower() == "help":
             os.system("help")
-            print("\n" + 
+            print("\n" +
 
                 "\n MATH: \n\n"
 
@@ -233,11 +221,6 @@ def Run():
                     "   sin - sinus\n"
                     "   cos - cosinus\n"
                     "   sqrt - square root\n"
-
-                "\n USERS: \n\n"
-
-                    "   login - login to existing account\n"
-                    "   (admin)register - registers new user\n"
 
                 "\n COMPUTER: \n\n"
 
@@ -298,23 +281,6 @@ def Run():
             Read()
             continue
         
-        # login and permision
-        elif userInput.lower() == "login":
-            database.RequestUser()
-            continue
-        
-        elif userInput.lower() == "register":
-            database.RegisterUser()
-            continue
-        
-        elif userInput.lower() == "permisions":
-            print(database.RequestPermisions())
-            continue
-        
-        elif userInput.lower() == "name":
-            print(database.RequestName())
-            continue
-        
         elif userInput.lower() == "void":
             Void()
             continue
@@ -357,6 +323,16 @@ def Run():
         elif userInput.lower() == "aliases":
             print(aliases)
 
+        elif splitInput[0].lower() == "download":
+            try:
+                if splitInput[1] == "-list":
+                    print(database.downloadDict.keys())
+                else:
+                    os.system(
+                        "start " + database.downloadDict.get(splitInput[1]))
+            except:
+                print("Not found\nTry: download -list")
+
         # In development
 
         elif userInput.lower() == "nn":
@@ -365,9 +341,9 @@ def Run():
             print("Random synaptic weights: ")
             print(neural_network.synaptic_weights)
 
-            training_inputs = np.array([[0,0,1],[1,1,1],[1,0,1],[0,1,1]])
+            training_inputs = np.array([[0,0,1],[1,1,1],[1,0,1],[0,1,1],[0,1,0],[1,0,0],[1,1,0]])
 
-            training_outputs = np.array([[0,1,0,1]]).T
+            training_outputs = np.array([[0,1,0,1,1,0,1]]).T
 
             neural_network.train(training_inputs, training_outputs, 20000)
 
@@ -378,49 +354,77 @@ def Run():
             B = str(input("Input 2: "))
             C = str(input("Input 3: "))
 
-            print("New situation: input data = ",A,B,C)
+            print("New situation: input data = ", A, B, C)
             print("Output data: ")
-            print(neural_network.think(np.array([A,B,C])))
+            print(neural_network.think(np.array([A, B, C])))
 
-        elif splitInput[0].lower() == "download":
-            try:
-                if splitInput[1] == "-list":
-                    print(database.downloadDict.keys())
-                else:
-                    os.system("start " + database.downloadDict.get(splitInput[1]))
-            except:
-                print("Not found\nTry download -list")
 
         # / In development
 
         else:
             try:
                 splitInput = userInput.split()
-                splitInput[1]
+                num1 = splitInput[0]
 
-                if splitInput[1] == "+" or "-" or "*" or "/" or "**":
-                    output = 0
-
+                try:
                     num1 = float(splitInput[0])
                     num2 = float(splitInput[2])
                     character = splitInput[1]
+                except:
+                    pass
 
+                if splitInput[0] == float:
                     if character == "+":
-                        output = num1 + num2
-                    elif character == "-":
-                        output = num1 - num2
-                    elif character == "*":
-                        output = num1 * num2
-                    elif character == "/":
-                        output = num1 / num2
-                    elif character == "**":
-                        output = num1 ** num2
-                    elif character == "//":
-                        output = num1 // num2
-                    elif character == "%":
-                        output = num1 % num2
+                        print(num1, "+", num2, "=", num1 + num2)
 
-                    print(output)
+                    elif character == "-":
+                        print(num1, "-", num2, "=", num1 - num2)
+
+                    elif character == "*":
+                        print(num1, "*", num2, "=", num1 * num2)
+
+                    elif character == "/":
+                        print(num1, "/", num2, "=", num1 / num2)
+
+                    elif character == "**":
+                        print(num1, "**", num2, "=", num1 ** num2)
+
+                    elif character == "root":
+                        print(num1, "root", num2,
+                            "=", num2 ** (1 / num1))
+
+                    elif character == "%":
+                        print(num1, "%", num2, "=", num1 % num2)
+
+                    #factorial
+                    elif character == "!":
+                        theNumber = num1 = num2
+                        num2 = 1
+                        while num1 > 1:
+                            num2 *= num1
+                            num1 = num1 - 1
+                        print("n!(", theNumber, ")=", num2)
+
+                    elif character == "sin":
+                        print("sin(", num1, ")=", math.sin(num1))
+
+                    elif character == "cos":
+                        print("cos(", num1, ")=", math.cos
+                            (num1))
+
+                    elif character == "tan":
+                        print("tan(", num1, ")=", math.tan(num1))
+
+                    elif character == "ln":
+                        print("ln(", num1, ")= ", math.log(num1))
+                else:
+                    if num1 == "pi":
+                        print("Pi =", math.pi)
+                    elif num1 == "e":
+                        print("e =", math.e)
+                    else:
+                        raise
+
 
             except:
                 try:
