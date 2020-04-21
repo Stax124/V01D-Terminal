@@ -364,67 +364,59 @@ def Run():
         else:
             try:
                 splitInput = userInput.split()
-                num1 = splitInput[0]
-
+                
                 try:
                     num1 = float(splitInput[0])
                     num2 = float(splitInput[2])
                     character = splitInput[1]
                 except:
-                    pass
+                    num1 = float(splitInput[0])
+                    character = splitInput[1]
+                
 
-                if splitInput[0] == float:
-                    if character == "+":
-                        print(num1, "+", num2, "=", num1 + num2)
+                if character == "+":
+                    print(num1, "+", num2, "=", num1 + num2)
 
-                    elif character == "-":
-                        print(num1, "-", num2, "=", num1 - num2)
+                elif character == "-":
+                    print(num1, "-", num2, "=", num1 - num2)
 
-                    elif character == "*":
-                        print(num1, "*", num2, "=", num1 * num2)
+                elif character == "*":
+                    print(num1, "*", num2, "=", num1 * num2)
 
-                    elif character == "/":
-                        print(num1, "/", num2, "=", num1 / num2)
+                elif character == "/":
+                    print(num1, "/", num2, "=", num1 / num2)
 
-                    elif character == "**":
-                        print(num1, "**", num2, "=", num1 ** num2)
+                elif character == "**":
+                    print(num1, "**", num2, "=", num1 ** num2)
 
-                    elif character == "root":
-                        print(num1, "root", num2,
-                            "=", num2 ** (1 / num1))
+                elif character == "root":
+                    print(num1, "root", num2,
+                        "=", num2 ** (1 / num1))
 
-                    elif character == "%":
-                        print(num1, "%", num2, "=", num1 % num2)
+                elif character == "%":
+                    print(num1, "%", num2, "=", num1 % num2)
 
-                    #factorial
-                    elif character == "!":
-                        theNumber = num1 = num2
-                        num2 = 1
-                        while num1 > 1:
-                            num2 *= num1
-                            num1 = num1 - 1
-                        print("n!(", theNumber, ")=", num2)
+                #factorial
+                elif character == "!":
+                    theNumber = num1 = num2
+                    num2 = 1
+                    while num1 > 1:
+                        num2 *= num1
+                        num1 = num1 - 1
+                    print("n!(", theNumber, ")=", num2)
 
-                    elif character == "sin":
-                        print("sin(", num1, ")=", math.sin(num1))
+                elif character == "sin":
+                    print("sin(", num1, ")=", math.sin(num1))
 
-                    elif character == "cos":
-                        print("cos(", num1, ")=", math.cos
-                            (num1))
+                elif character == "cos":
+                    print("cos(", num1, ")=", math.cos
+                        (num1))
 
-                    elif character == "tan":
-                        print("tan(", num1, ")=", math.tan(num1))
+                elif character == "tan":
+                    print("tan(", num1, ")=", math.tan(num1))
 
-                    elif character == "ln":
-                        print("ln(", num1, ")= ", math.log(num1))
-                else:
-                    if num1 == "pi":
-                        print("Pi =", math.pi)
-                    elif num1 == "e":
-                        print("e =", math.e)
-                    else:
-                        raise
-
+                elif character == "ln":
+                    print("ln(", num1, ")= ", math.log(num1))
 
             except:
                 try:
