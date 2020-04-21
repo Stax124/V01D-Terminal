@@ -301,8 +301,8 @@ def Run():
                 os.system(userInput)
             continue
 
-        elif userInput.lower() == "exit" or userInput == "quit":
-            exit()
+        elif userInput.lower() == "exit" or userInput.lower() == "quit":
+            os.system("exit")
 
         elif splitInput[0].lower() == "alias":
             l = splitInput[2:]

@@ -229,7 +229,10 @@ downloadDict = {
     "uplay":"http://ubi.li/4vxt9",
     "battlenet":"https://www.battle.net/download/getInstallerForGame?os=win&locale=enUS&version=LIVE&gameProgram=BATTLENET_APP",
     "epicgameslauncher":"https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi?productName=unrealtournament",
-    "geforcenow":"https://download.nvidia.com/gfnpc/GeForceNOW-release.exe"
+    "geforcenow":"https://download.nvidia.com/gfnpc/GeForceNOW-release.exe",
+    "vlc": "http://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe",
+    "notepad++": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.5/npp.7.8.5.Installer.x64.exe",
+    "Malwarebytes": "https://www.malwarebytes.com/mwb-download/thankyou/"
 }
 
 # -----------------------------------------
