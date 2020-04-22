@@ -17,18 +17,6 @@ terminal_color = database.getcolor()
 title = "V01D Terminal"
 aliases = database.GetAliases()
 
-class color:
-   PURPLE = '\033[95m'
-   CYAN = '\033[96m'
-   DARKCYAN = '\033[36m'
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   BOLD = '\033[1m'
-   UNDERLINE = '\033[4m'
-   END = '\033[0m'
-
 
 def Password():
     os.system("netsh wlan show profiles")
@@ -62,7 +50,7 @@ def Read():
     file.close()
 
 def Power():
-    print("If you want best powerscheme use: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
+    print("If you want best powerscheme paste this and then paste ID of the new scheme: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
     os.system("powercfg -list")
     _input = input("Select scheme: ")
 
@@ -77,36 +65,6 @@ def Power():
 
 # --------------------------------------------
 
-def Initialize():
-    os.system(f"title {title}")
-
-    LF_FACESIZE = 32
-    STD_OUTPUT_HANDLE = -11
-
-    class COORD(ctypes.Structure):
-        _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]
-
-    class CONSOLE_FONT_INFOEX(ctypes.Structure):
-        _fields_ = [("cbSize", ctypes.c_ulong),
-                    ("nFont", ctypes.c_ulong),
-                    ("dwFontSize", COORD),
-                    ("FontFamily", ctypes.c_uint),
-                    ("FontWeight", ctypes.c_uint),
-                    ("FaceName", ctypes.c_wchar * LF_FACESIZE)]
-
-    font = CONSOLE_FONT_INFOEX()
-    font.cbSize = ctypes.sizeof(CONSOLE_FONT_INFOEX)
-    font.nFont = 12
-    font.dwFontSize.X = 11
-    font.dwFontSize.Y = 18
-    font.FontFamily = 54
-    font.FontWeight = 400
-    font.FaceName = "Lucida Console"
-
-    handle = ctypes.windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
-    ctypes.windll.kernel32.SetCurrentConsoleFontEx(
-            handle, ctypes.c_long(False), ctypes.pointer(font))
-        
 
 def Run():
     while True:
@@ -163,13 +121,13 @@ def Run():
 
         elif userInput.lower() == "gpu":
             os.system("wmic path win32_VideoController get Name")
+            os.system("wmic path win32_VideoController get /all")
             continue
 
         elif userInput.lower() == "component":
             os.system("wmic cpu get caption, deviceid, name, numberofcores, maxclockspeed, status")
             os.system("wmic baseboard get product,Manufacturer,version,serialnumber")
             os.system("wmic path win32_VideoController get Name")
-            os.system("wmic path win32_VideoController get /all")
             os.system("wmic MEMORYCHIP get BankLabel, DeviceLocator, MemoryType, TypeDetail, Capacity, Speed")
             os.system("wmic memorychip list full")
             continue
@@ -218,9 +176,9 @@ def Run():
                     "       %   -    Modulus\n"
                     "       **  -    Exponentiation\n"
                     "       //  -    floor division\n"
-                    "   sin - sinus\n"
-                    "   cos - cosinus\n"
-                    "   sqrt - square root\n"
+                    "       sin - sinus (input: num1 sin)\n"
+                    "       cos - cosinus (input: num1 cos)\n"
+                    "       root - number´s root (input: num2 root num1)\n"
 
                 "\n COMPUTER: \n\n"
 
@@ -242,7 +200,7 @@ def Run():
 
                 "\n MANAGEMENT: \n\n"
 
-                    "   exit - quit application\n"
+                    "   exit | quit - quit application\n"
                     "   os - show operating system\n"
                 
                 "\n ALIAS: \n\n"
@@ -257,11 +215,9 @@ def Run():
                     "   pagefile - velikost a umístění pagefile\n"
                     "   read - read specified .txt file\n"
                     "   power - change your Windows powerplan\n"
+                    "   download - dictionary for downloading files (download -list)\n"
 
                 "\n IN DEVELOPMENT \n\n"
-
-                    "   download - !experimental! download file from web\n"
-                    "   nn - !experimental! neuralnetwork(20k iteration perceptron)\n"
                 )
             continue
 
@@ -305,12 +261,16 @@ def Run():
             os.system("exit")
 
         elif splitInput[0].lower() == "alias":
-            l = splitInput[2:]
-            complete = ""
-            for i in l:
-                complete += i + " "
-            aliases[splitInput[1]] = complete
-            database.WriteAliases(aliases)
+            try:
+                l = splitInput[2:]
+                complete = ""
+                for i in l:
+                    complete += i + " "
+                aliases[splitInput[1]] = complete
+                database.WriteAliases(aliases)
+            except:
+                print("Fatal error")
+            
 
         elif splitInput[0].lower() == "delalias":
             try:
@@ -325,7 +285,7 @@ def Run():
 
         elif splitInput[0].lower() == "download":
             try:
-                if splitInput[1] == "-list":
+                if splitInput[1].lower() == "-list":
                     print(database.downloadDict.keys())
                 else:
                     os.system(
@@ -333,33 +293,6 @@ def Run():
             except:
                 print("Not found\nTry: download -list")
 
-        # In development
-
-        elif userInput.lower() == "nn":
-            neural_network = neural_net.NeuralNetwork()
-
-            print("Random synaptic weights: ")
-            print(neural_network.synaptic_weights)
-
-            training_inputs = np.array([[0,0,1],[1,1,1],[1,0,1],[0,1,1],[0,1,0],[1,0,0],[1,1,0]])
-
-            training_outputs = np.array([[0,1,0,1,1,0,1]]).T
-
-            neural_network.train(training_inputs, training_outputs, 20000)
-
-            print("Synaptic weights after training: ")
-            print(neural_network.synaptic_weights)
-
-            A = str(input("Input 1: "))
-            B = str(input("Input 2: "))
-            C = str(input("Input 3: "))
-
-            print("New situation: input data = ", A, B, C)
-            print("Output data: ")
-            print(neural_network.think(np.array([A, B, C])))
-
-
-        # / In development
 
         else:
             try:
@@ -388,6 +321,9 @@ def Run():
 
                 elif character == "**":
                     print(num1, "**", num2, "=", num1 ** num2)
+
+                elif character == "//":
+                    print(num1, "//", num2, "=", num1 // num2)
 
                 elif character == "root":
                     print(num1, "root", num2,
@@ -426,11 +362,8 @@ def Run():
                     os.system(userInput)
 
             
-                
-       
 os.system(f"color {terminal_color}")
-
+os.system(f"title {title}")
 osBased.Clear()
 
-Initialize()
 Run()
