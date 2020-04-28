@@ -75,28 +75,7 @@ def main(): # Main loop
 
         if splitInput[0].lower() == "password":
             Password()
-            continue
-
-        elif userInput.lower() == "sin":
-            sin = float(input("Sin: "))
-            print(math.sin(sin))
-            continue
-
-        elif userInput.lower() == "cos":
-            cos = float(input("Cos: "))
-            print(math.cos(cos))
-            continue
-
-        elif userInput.lower() == "sqrt":
-            num = float(input("Sqrt: "))
-
-            try:
-                print(math.sqrt(num))
-            except:
-                print("Math error")
-            finally:
-                continue
-            
+            continue           
 
         elif userInput.lower() == "pagefile":
             os.system("wmic pagefile list")
