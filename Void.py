@@ -73,6 +73,11 @@ def main(): # Main loop
         userInput = prompt(cd + " > ", completer=database.completer, complete_while_typing=True) # Get user input (autocompetion allowed)
         splitInput = userInput.split() # Split input to get key words
 
+        try:
+            splitInput[0]
+        except:
+            continue
+
         if splitInput[0].lower() == "password":
             Password()
             continue           
@@ -186,8 +191,8 @@ def main(): # Main loop
 
                 "\n OTHER FUNCTIONS \n\n"
 
-                    "   ping - nekonečná smyčka odezvy\n"
-                    "   pagefile - velikost a umístění pagefile\n"
+                    "   ping - never ending ping loop\n"
+                    "   pagefile - show pagefile location and size\n"
                     "   read - read specified .txt file\n"
                     "   power - change your Windows powerplan\n"
                     "   download - dictionary for downloading files (download -list)\n"
