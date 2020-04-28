@@ -5,6 +5,8 @@ import math
 import numpy as np
 import ctypes
 import sys
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import WordCompleter
 
 # Project stuff
 import database

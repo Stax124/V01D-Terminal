@@ -3,6 +3,8 @@ import os
 import osBased
 from pathlib import Path
 import pickle
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import WordCompleter
 
 
 def writedata(data,filename,location,mode):
@@ -75,6 +77,20 @@ downloadDict = {
     "notepad++": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.5/npp.7.8.5.Installer.x64.exe",
     "Malwarebytes": "https://www.malwarebytes.com/mwb-download/thankyou/"
 }
+
+# -----------------------------------------
+
+completer = WordCompleter(
+    [
+        "help",
+        "cls",
+        "clear",
+        "void",
+        "read",
+        "power",
+    ],
+    ignore_case=True,
+)
 
 # -----------------------------------------
 
