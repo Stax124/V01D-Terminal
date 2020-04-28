@@ -215,4 +215,4 @@ permisions = GetPermisions()
 
 if __name__ == "__main__":
     import Void
-    Void.Run()
+    Void.main()
