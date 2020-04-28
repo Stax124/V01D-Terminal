@@ -72,7 +72,7 @@ def Power():
 def Run():
     while True:
         cd = os.getcwd()
-        userInput = input(cd + " > ")
+        userInput = prompt(cd + " > ", completer=database.completer, complete_while_typing=True)
         splitInput = userInput.split()
 
         try:
