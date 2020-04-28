@@ -7,6 +7,7 @@ import ctypes
 import sys
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.styles import Style
 
 # Project stuff
 import database
@@ -66,11 +67,10 @@ def Power(): # Change Windows power shemes
 # --------------------------------------------
 
 
-
 def main(): # Main loop
     while True:
         cd = os.getcwd() # Get current working directory
-        userInput = prompt(cd + " > ", completer=database.completer, complete_while_typing=True) # Get user input (autocompetion allowed)
+        userInput = prompt(cd + " > ", completer=database.completer, complete_while_typing=True)  # Get user input (autocompetion allowed)
         splitInput = userInput.split() # Split input to get key words
 
         try:

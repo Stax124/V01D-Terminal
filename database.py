@@ -125,6 +125,7 @@ completer = WordCompleter(
         "%",
         "tan",
         "ln",
+        "download",
     ],
     ignore_case=True,
 )
