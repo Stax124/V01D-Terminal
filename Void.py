@@ -364,7 +364,7 @@ def Run():
                 except:
                     os.system(userInput)
 
-            
+
 os.system(f"color {terminal_color}")
 os.system(f"title {title}")
 osBased.Clear()
