@@ -263,7 +263,7 @@ def main(): # Main loop
         elif userInput.lower() == "aliases": # Show alias dictionary
             print(aliases)
 
-        elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website download)
+        elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror)
             try:
                 if splitInput[1].lower() == "-list":
                     print(database.downloadDict.keys())
