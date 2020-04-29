@@ -7,7 +7,6 @@ import ctypes
 import sys
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
-from prompt_toolkit.styles import Style
 
 # Project stuff
 import database
