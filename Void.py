@@ -345,4 +345,8 @@ os.system(f"color {terminal_color}") # Set color
 os.system(f"title {title}") # Set title
 osBased.Clear() # Clear terminal
 
-main() # Run
+try:
+    main()  # Run
+except Exception as error:
+    print(error)
+    os.system("pause")
