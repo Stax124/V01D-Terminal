@@ -221,7 +221,7 @@ def main(): # Main loop
             Void()
             continue
 
-        elif userInput.lower() == "open":
+        elif userInput.lower() == "open": # Open file explorer in cwd
             os.system("explorer .\\")
             continue
 
