@@ -226,7 +226,10 @@ def main(): # Main loop
             continue
 
         elif userInput.lower() == "temp":
-            os.system()
+            os.system("start .\\temp.bat")
+
+        elif userInput.lower() == "startup":
+            os.system("explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")
 
         elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
             try:
