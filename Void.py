@@ -141,7 +141,7 @@ def main(): # Main loop
                 os.system("color /?") # show help on colors
             continue
 
-        elif userInput.lower() == "help": # Print cmd help and defined help at the same time
+        elif userInput.lower() == "help" or userInput.lower() == "/?": # Print cmd help and defined help at the same time
             os.system("help")
             print("\n" +
 
@@ -224,6 +224,9 @@ def main(): # Main loop
         elif userInput.lower() == "open": # Open file explorer in cwd
             os.system("explorer .\\")
             continue
+
+        elif userInput.lower() == "temp":
+            os.system()
 
         elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
             try:
