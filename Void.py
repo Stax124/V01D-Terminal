@@ -195,6 +195,7 @@ def main(): # Main loop
                     "   read - read specified .txt file\n"
                     "   power - change your Windows powerplan\n"
                     "   download - dictionary for downloading files (download -list)\n"
+                    "   open - open file explorer in current directory\n"
 
                 "\n IN DEVELOPMENT \n\n"
                 )
@@ -218,6 +219,10 @@ def main(): # Main loop
         
         elif userInput.lower() == "void":
             Void()
+            continue
+
+        elif userInput.lower() == "open":
+            os.system("explorer .\\")
             continue
 
         elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
