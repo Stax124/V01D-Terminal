@@ -7,6 +7,8 @@ import ctypes
 import sys
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+from prompt_toolkit.history import InMemoryHistory
 
 # Project stuff
 import database
@@ -223,6 +225,10 @@ def main(): # Main loop
 
         elif userInput.lower() == "open": # Open file explorer in cwd
             os.system("explorer .\\")
+            continue
+
+        elif userInput.lower() == "settings":  # Open file explorer in cwd
+            os.system("start ms-settings:")
             continue
 
         elif userInput.lower() == "temp":

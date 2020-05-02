@@ -291,8 +291,10 @@ completer = WordCompleter(
         "firewall.cpl",
         "wscui.cpl",
         "wupdmgr",
+        "settings",
     ],
     ignore_case=True,
+    match_middle=True
 )
 
 # ----------------------------------------------------------------------------
