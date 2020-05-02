@@ -292,6 +292,7 @@ completer = WordCompleter(
         "wscui.cpl",
         "wupdmgr",
         "settings",
+        "temp",
     ],
     ignore_case=True,
     match_middle=True
