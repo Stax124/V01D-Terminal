@@ -295,6 +295,7 @@ completer = WordCompleter(
         "wupdmgr",
         "settings",
         "temp",
+        "powershell",
     ],
     ignore_case=True,
     match_middle=True
