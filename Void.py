@@ -15,7 +15,6 @@ import database
 import osBased
 import utils
 
-terminal_color = database.getcolor() # Get saved color
 title = "V01D Terminal" # Set title
 aliases = database.GetAliases() # Get user defined aliases
 
@@ -362,7 +361,6 @@ def main(): # Main loop
                     os.system(userInput)
 
 
-os.system(f"color {terminal_color}") # Set color
 os.system(f"title {title}") # Set title
 osBased.Clear() # Clear terminal
 
