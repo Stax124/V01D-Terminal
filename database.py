@@ -242,7 +242,6 @@ completer = WordCompleter(
         "systeminfo",
         "taskmgr",
         "telnet",
-        "taskkill",
         "tskill",
         "tracert",
         "winchat",
