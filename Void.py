@@ -3,8 +3,6 @@
 import os
 import math
 import numpy as np
-import ctypes
-import sys
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.history import InMemoryHistory
