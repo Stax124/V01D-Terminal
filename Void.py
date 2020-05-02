@@ -5,7 +5,7 @@ import math
 import numpy as np
 import ctypes
 import sys
-from prompt_toolkit import prompt
+from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.history import InMemoryHistory
@@ -69,9 +69,12 @@ def Power(): # Change Windows power shemes
 
 
 def main(): # Main loop
+
+    session = PromptSession(completer=database.completer, complete_while_typing=True, validate_while_typing=True, complete_in_thread=True)
+
     while True:
         cd = os.getcwd() # Get current working directory
-        userInput = prompt(cd + " > ", completer=database.completer, complete_while_typing=True)  # Get user input (autocompetion allowed)
+        userInput = session.prompt(cd + " > ")  # Get user input (autocompetion allowed)
         splitInput = userInput.split() # Split input to get key words
 
         try:
