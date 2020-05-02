@@ -201,6 +201,7 @@ def main(): # Main loop
                     "   power - change your Windows powerplan\n"
                     "   download - dictionary for downloading files (download -list)\n"
                     "   open - open file explorer in current directory\n"
+                    "   temp - clear temp files\n"
 
                 "\n IN DEVELOPMENT \n\n"
                 )
