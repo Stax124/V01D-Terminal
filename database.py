@@ -4,7 +4,7 @@ import osBased
 from pathlib import Path
 import pickle
 from prompt_toolkit import prompt
-from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.completion import WordCompleter, NestedCompleter
 
 
 def writedata(data,filename,location,mode):
@@ -75,7 +75,9 @@ downloadDict = {
     "geforcenow":"https://download.nvidia.com/gfnpc/GeForceNOW-release.exe",
     "vlc": "http://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe",
     "notepad++": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.5/npp.7.8.5.Installer.x64.exe",
-    "Malwarebytes": "https://www.malwarebytes.com/mwb-download/thankyou/"
+    "Malwarebytes": "https://www.malwarebytes.com/mwb-download/thankyou/",
+    "audacity": "https://www.fosshub.com/Audacity.html?dwl=audacity-win-2.3.3.exe",
+    "tor": "https://www.torproject.org/dist/torbrowser/9.0.9/torbrowser-install-win64-9.0.9_en-US.exe"
 }
 
 # -----------------------------------------
@@ -298,8 +300,9 @@ completer = WordCompleter(
     match_middle=True
 )
 
+
 # ----------------------------------------------------------------------------
 
 if __name__ == "__main__":
     import Void
-    Void.Run()
+    Void.main()
