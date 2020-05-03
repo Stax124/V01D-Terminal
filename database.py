@@ -296,7 +296,7 @@ completer = WordCompleter(
         "settings",
         "temp",
         "powershell",
-        "%"+"APPDATA"+"%",
+        "%APPDATA%",
         "%ALLUSERSPROFILE%",
         "%CommonProgramFiles%",
         "%CommonProgramFiles(x86)%",
