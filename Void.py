@@ -2,7 +2,6 @@
 
 import os
 import math
-import numpy as np
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.history import InMemoryHistory
@@ -28,14 +27,19 @@ def Void(): # Open new terminal
     os.startfile("Void.py")
 
 
-def Read(): # Read file
-    path = input("Path:  ")
+def Read(splitInput): # Read file
+    try:
+        path = splitInput[1]
+    except:
+        print("Incorrrect path. Use path $pathToFile")
+        return
+    
     print("\n")
     
     try:
         file = open(path)
     except:
-        print("Incorrect path")
+        print("File not found")
         return
     
     try:
@@ -132,16 +136,6 @@ def main(): # Main loop
             Power()
             continue
 
-        elif splitInput[0].lower() == "color": # Change terminal color and update save file
-            try:
-                splitInput[1]
-                os.system(f"color {splitInput[1]}")
-                if splitInput[1] != "/?":
-                    database.writedata(splitInput[1],"color.txt",database.__location__,"w")
-            except:
-                os.system("color /?") # show help on colors
-            continue
-
         elif userInput.lower() == "help" or userInput.lower() == "/?": # Print cmd help and defined help at the same time
             os.system("help")
             print("\n" +
@@ -215,8 +209,8 @@ def main(): # Main loop
             osBased.Clear()
             continue
         
-        elif userInput.lower() == "read":
-            Read()
+        elif splitInput[0].lower() == "read":
+            Read(splitInput)
             continue
         
         elif userInput.lower() == "void":
@@ -254,7 +248,8 @@ def main(): # Main loop
             continue
 
         elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
-            os.system("exit")
+            return None
+            
 
         elif splitInput[0].lower() == "alias": # Define own function and save it
             try:
