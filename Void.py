@@ -6,11 +6,19 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.history import InMemoryHistory
 
+from typing import Callable, Iterable, List, Optional
+from prompt_toolkit.completion import CompleteEvent, Completer, Completion
+from prompt_toolkit.document import Document
+
 # Project stuff
 import database
 import osBased
 import utils
 
+__all__ = [
+    "PathCompleter",
+    "ExecutableCompleter",
+]
 title = "V01D Terminal" # Set title
 aliases = database.GetAliases() # Get user defined aliases
 
@@ -70,7 +78,7 @@ def Power(): # Change Windows power shemes
 
 def main(): # Main loop
 
-    session = PromptSession(completer=database.nestedCompleter, complete_while_typing=True, complete_in_thread=True, mouse_support=True)
+    session = PromptSession(completer=database.nestedCompleter,complete_while_typing=True,complete_in_thread=True,mouse_support=True)
 
     while True:
         cd = os.getcwd() # Get current working directory
