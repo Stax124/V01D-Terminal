@@ -78,7 +78,7 @@ def Power(): # Change Windows power shemes
 
 def main(): # Main loop
 
-    session = PromptSession(completer=database.nestedCompleter,complete_while_typing=True,complete_in_thread=True,mouse_support=True)
+    session = PromptSession(completer=database.combinedcompleter,complete_while_typing=True,complete_in_thread=True,mouse_support=True, wrap_lines=True)
 
     while True:
         cd = os.getcwd() # Get current working directory

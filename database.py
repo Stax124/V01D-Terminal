@@ -575,7 +575,7 @@ class ExecutableCompleter(PathCompleter):
 
 # ----------------------------------------------------------------------------
 
-combinedcompleter = merge_completers([nestedCompleter,ExecutableCompleter])
+combinedcompleter = merge_completers([ExecutableCompleter(),nestedCompleter])
 
 if __name__ == "__main__":
     import Void
