@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['Void.py'],
+a = Analysis(['void.py'],
              pathex=['C:\\Users\\Admin\\Desktop\\Coding\\Python\\V01D'],
              binaries=[],
              datas=[],
@@ -21,7 +21,7 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='Void',
+          name='void',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -34,4 +34,4 @@ coll = COLLECT(exe,
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='Void')
+               name='void')
