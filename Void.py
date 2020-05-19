@@ -35,6 +35,30 @@ def Void(): # Open new terminal
     os.startfile("Void.py")
 
 
+def gcd(a, b):
+    if b > a:
+        a, b = b, a
+
+    while b > 0:
+        a = a % b
+        a, b = b, a
+
+    return a
+
+
+def lcm(x, y):
+    if x > y:
+        greater = x
+    else:
+        greater = y
+    while(True):
+        if((greater % x == 0) and (greater % y == 0)):
+            lcm = greater
+            break
+        greater += 1
+    return lcm
+
+
 def Read(splitInput): # Read file
     try:
         path = splitInput[1]
@@ -84,11 +108,6 @@ def main(): # Main loop
         cd = os.getcwd() # Get current working directory
         userInput = session.prompt(cd + " > ")  # Get user input (autocompetion allowed)
         splitInput = userInput.split() # Split input to get key words
-
-        try:
-            splitInput[0]
-        except:
-            continue
 
         if splitInput[0].lower() == "password":
             Password()
@@ -161,6 +180,8 @@ def main(): # Main loop
                     "       sin - sinus (input: num1 sin)\n"
                     "       cos - cosinus (input: num1 cos)\n"
                     "       root - number´s root (input: num2 root num1)\n"
+                    "   gcd - greatest common divisor\n"
+                    "   lcm - least common multiple\n"
 
                 "\n COMPUTER: \n\n"
 
@@ -223,6 +244,18 @@ def main(): # Main loop
         
         elif userInput.lower() == "void":
             Void()
+            continue
+
+        elif splitInput[0].lower() == "lcm":
+            nums = str(splitInput[1]).split(",")
+            num = [float(nums[0]),float(nums[1])]
+            print(lcm(num[0],num[1]))
+            continue
+
+        elif splitInput[0].lower() == "gcd":
+            nums = str(splitInput[1]).split(",")
+            num = [float(nums[0]), float(nums[1])]
+            print(gcd(num[0], num[1]))
             continue
 
         elif userInput.lower() == "open": # Open file explorer in cwd
@@ -369,3 +402,4 @@ try:
 except Exception as error:
     print(error)
     os.system("pause")
+    main()

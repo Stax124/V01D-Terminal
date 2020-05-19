@@ -352,6 +352,8 @@ nestedCompleter = NestedCompleter.from_nested_dict(
         "password": None,
         "sin": None,
         "cos": None,
+        "gcd": None,
+        "lcm": None,
         "pagefile": None,
         "motherboard": None,
         "ram": None,
