@@ -560,21 +560,6 @@ class PathCompleter(Completer):
         except OSError:
             pass
 
-
-class ExecutableCompleter(PathCompleter):
-    """
-    Complete only executable files in the current path.
-    """
-
-    def __init__(self) -> None:
-        super().__init__(
-            only_directories=False,
-            min_input_len=1,
-            get_paths=lambda: os.environ.get("PATH", "").split(os.pathsep),
-            file_filter=lambda name: os.access(name, os.X_OK),
-            expanduser=True,
-        ),
-
 # ----------------------------------------------------------------------------
 
 combinedcompleter = merge_completers([PathCompleter(),nestedCompleter])

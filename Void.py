@@ -287,8 +287,10 @@ def main(): # Main loop
                 continue
 
             elif splitInput[0].lower() == "cd": # Change directory based on input
-                os.chdir(splitInput[1])
-                os.system(userInput)
+                out = ""
+                for i in range(splitInput[1:].__len__()):
+                    out += splitInput[i+1] + " "
+                os.chdir(out)
                 continue
 
             elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
