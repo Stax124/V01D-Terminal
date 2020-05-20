@@ -9,6 +9,8 @@ from prompt_toolkit.history import InMemoryHistory
 from typing import Callable, Iterable, List, Optional
 from prompt_toolkit.completion import CompleteEvent, Completer, Completion
 from prompt_toolkit.document import Document
+from prompt_toolkit.history import InMemoryHistory
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 
 # Project stuff
 import database
@@ -102,7 +104,7 @@ def Power(): # Change Windows power shemes
 
 def main(): # Main loop
     try:
-        session = PromptSession(completer=database.combinedcompleter,complete_while_typing=True,complete_in_thread=True,mouse_support=True, wrap_lines=True)
+        session = PromptSession(completer=database.combinedcompleter,complete_while_typing=True,complete_in_thread=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory())
 
         while True:
             cd = os.getcwd() # Get current working directory
@@ -331,65 +333,8 @@ def main(): # Main loop
 
 
             else:
-                try:  # Basic calculator
-                    splitInput = userInput.split()
-                    
-                    try:
-                        num1 = float(splitInput[0])
-                        num2 = float(splitInput[2])
-                        character = splitInput[1]
-                    except:
-                        num1 = float(splitInput[0])
-                        character = splitInput[1]
-                    
-
-                    if character == "+":
-                        print(num1, "+", num2, "=", num1 + num2)
-
-                    elif character == "-":
-                        print(num1, "-", num2, "=", num1 - num2)
-
-                    elif character == "*":
-                        print(num1, "*", num2, "=", num1 * num2)
-
-                    elif character == "/":
-                        print(num1, "/", num2, "=", num1 / num2)
-
-                    elif character == "**":
-                        print(num1, "**", num2, "=", num1 ** num2)
-
-                    elif character == "//":
-                        print(num1, "//", num2, "=", num1 // num2)
-
-                    elif character == "root":
-                        print(num1, "root", num2,
-                            "=", num2 ** (1 / num1))
-
-                    elif character == "%":
-                        print(num1, "%", num2, "=", num1 % num2)
-
-                    #factorial
-                    elif character == "!":
-                        theNumber = num1 = num2
-                        num2 = 1
-                        while num1 > 1:
-                            num2 *= num1
-                            num1 = num1 - 1
-                        print("n!(", theNumber, ")=", num2)
-
-                    elif character == "sin":
-                        print("sin(", num1, ")=", math.sin(num1))
-
-                    elif character == "cos":
-                        print("cos(", num1, ")=", math.cos
-                            (num1))
-
-                    elif character == "tan":
-                        print("tan(", num1, ")=", math.tan(num1))
-
-                    elif character == "ln":
-                        print("ln(", num1, ")= ", math.log(num1))
-
+                try: # Calculator
+                    print(eval(userInput.lower()))
                 except: # Try if input is alias
                     try:
                         value = aliases.get(userInput)
