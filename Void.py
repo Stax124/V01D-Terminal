@@ -2,6 +2,7 @@
 
 import os
 import math
+import ast
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.history import InMemoryHistory
@@ -11,6 +12,8 @@ from prompt_toolkit.completion import CompleteEvent, Completer, Completion
 from prompt_toolkit.document import Document
 from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+from prompt_toolkit.formatted_text import HTML
+from prompt_toolkit.styles import Style
 
 # Project stuff
 import database
@@ -99,6 +102,13 @@ def Power(): # Change Windows power shemes
     else:
         os.system("powercfg /setactive " + _input)
 
+
+_style = Style.from_dict(
+    {
+        "pointer": "#b20000",
+        "path": "#1919ff",
+    }
+)
 # --------------------------------------------
 
 
@@ -108,7 +118,8 @@ def main(): # Main loop
 
         while True:
             cd = os.getcwd() # Get current working directory
-            userInput = session.prompt(cd + " > ")  # Get user input (autocompetion allowed)
+            userInput = session.prompt(HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
+            ),style=_style)  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
             try:
@@ -334,7 +345,8 @@ def main(): # Main loop
 
             else:
                 try: # Calculator
-                    print(eval(userInput.lower()))
+                    output = eval(userInput.lower())
+                    print(float(output))
                 except: # Try if input is alias
                     try:
                         value = aliases.get(userInput)
@@ -347,7 +359,7 @@ def main(): # Main loop
         osBased.Clear() # Clear terminal
 
     except Exception as error:
-        print(error)
+        print(error.with_traceback)
         os.system("pause")
         main()
 
