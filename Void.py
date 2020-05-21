@@ -4,11 +4,10 @@ import os
 import math
 import ast
 from prompt_toolkit import PromptSession
-from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.history import InMemoryHistory
 
 from typing import Callable, Iterable, List, Optional
-from prompt_toolkit.completion import CompleteEvent, Completer, Completion
+from prompt_toolkit.completion import CompleteEvent, Completer, Completion, WordCompleter
 from prompt_toolkit.document import Document
 from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
@@ -89,7 +88,7 @@ _style = Style.from_dict(
 
 def main() -> None:  # Main loop
     try:
-        session = PromptSession(completer=database.combinedcompleter,complete_while_typing=True,complete_in_thread=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory())
+        session = PromptSession(completer=database.combinedcompleter, complete_while_typing=True,complete_in_thread=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory(),search_ignore_case=True)
 
         while True:
             cd = os.getcwd() # Get current working directory

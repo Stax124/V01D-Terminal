@@ -7,10 +7,10 @@ import osBased
 from pathlib import Path
 import pickle
 from prompt_toolkit import prompt
-from prompt_toolkit.completion import WordCompleter, NestedCompleter, PathCompleter
+from prompt_toolkit.completion import WordCompleter, NestedCompleter, PathCompleter, FuzzyCompleter
 
 
-def writedata(data,filename,location,mode):
+def writedata(data, filename, location, mode) -> None:
     target = os.path.join(location, filename)
     f = open(target,mode)
     f.write(data)
@@ -18,7 +18,7 @@ def writedata(data,filename,location,mode):
 
 # -----------------------------------------------------------------
 
-def WriteAliases(aliases):
+def WriteAliases(aliases) -> list:
     f = open(os.path.join(__location__, "aliases.pickle"), "wb")
     pickle.dump(aliases,f)
     f.close()
@@ -33,18 +33,6 @@ def GetAliases():
     else:
         return {}
 
-
-# --------------------------------------------------------------------
-
-def getcolor():
-    path = Path(os.path.join(__location__, "color.txt"))
-
-    if path.exists():
-        f = open(os.path.join(__location__, "color.txt"), "r")
-        color = f.read()
-        return color
-    else:
-        return "a"
 
 # --------------------------------------------------------------------
 
@@ -469,7 +457,7 @@ nestedCompleter = NestedCompleter.from_nested_dict(
 
 # ----------------------------------------------------------------------------
 
-combinedcompleter = merge_completers([PathCompleter(),nestedCompleter])
+combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(),nestedCompleter]))
 
 if __name__ == "__main__":
     import Void
