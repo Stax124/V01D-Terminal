@@ -3,7 +3,7 @@ import database
 from clint.textui import progress
 
 
-def gcd(a, b):
+def gcd(a, b) -> float:
     if b > a:
         a, b = b, a
 
@@ -11,10 +11,10 @@ def gcd(a, b):
         a = a % b
         a, b = b, a
 
-    return a
+    return float(a)
 
 
-def lcm(x, y):
+def lcm(x, y) -> float:
     if x > y:
         greater = x
     else:
@@ -24,10 +24,10 @@ def lcm(x, y):
             lcm = greater
             break
         greater += 1
-    return lcm
+    return float(lcm)
 
 
-def Download(target):
+def Download(target) -> None:
     url = ""
     urlSplit = ""
 

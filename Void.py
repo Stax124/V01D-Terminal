@@ -40,7 +40,7 @@ def Void(): # Open new terminal
     os.startfile("Void.py")
 
 
-def Read(splitInput): # Read file
+def Read(splitInput) -> None:  # Read file
     try:
         path = splitInput[1]
     except:
@@ -64,7 +64,7 @@ def Read(splitInput): # Read file
     print(content)
     file.close()
 
-def Power(): # Change Windows power shemes
+def Power() -> None: # Change Windows power shemes
     print("If you want best powerscheme paste this and then paste ID of the new scheme: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
     os.system("powercfg -list")
     _input = input("Select scheme: ")
@@ -87,8 +87,7 @@ _style = Style.from_dict(
 )
 # --------------------------------------------
 
-
-def main(): # Main loop
+def main() -> None:  # Main loop
     try:
         session = PromptSession(completer=database.combinedcompleter,complete_while_typing=True,complete_in_thread=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory())
 
