@@ -2,6 +2,31 @@ import requests
 import database
 from clint.textui import progress
 
+
+def gcd(a, b):
+    if b > a:
+        a, b = b, a
+
+    while b > 0:
+        a = a % b
+        a, b = b, a
+
+    return a
+
+
+def lcm(x, y):
+    if x > y:
+        greater = x
+    else:
+        greater = y
+    while(True):
+        if((greater % x == 0) and (greater % y == 0)):
+            lcm = greater
+            break
+        greater += 1
+    return lcm
+
+
 def Download(target):
     url = ""
     urlSplit = ""

@@ -40,30 +40,6 @@ def Void(): # Open new terminal
     os.startfile("Void.py")
 
 
-def gcd(a, b):
-    if b > a:
-        a, b = b, a
-
-    while b > 0:
-        a = a % b
-        a, b = b, a
-
-    return a
-
-
-def lcm(x, y):
-    if x > y:
-        greater = x
-    else:
-        greater = y
-    while(True):
-        if((greater % x == 0) and (greater % y == 0)):
-            lcm = greater
-            break
-        greater += 1
-    return lcm
-
-
 def Read(splitInput): # Read file
     try:
         path = splitInput[1]
@@ -267,13 +243,13 @@ def main(): # Main loop
             elif splitInput[0].lower() == "lcm":
                 nums = str(splitInput[1]).split(",")
                 num = [float(nums[0]),float(nums[1])]
-                print(lcm(num[0],num[1]))
+                print(utils.lcm(num[0],num[1]))
                 continue
 
             elif splitInput[0].lower() == "gcd":
                 nums = str(splitInput[1]).split(",")
                 num = [float(nums[0]), float(nums[1])]
-                print(gcd(num[0], num[1]))
+                print(utils.gcd(num[0], num[1]))
                 continue
 
             elif userInput.lower() == "open": # Open file explorer in cwd
