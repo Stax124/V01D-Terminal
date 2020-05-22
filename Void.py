@@ -27,6 +27,13 @@ title = "V01D Terminal" # Set title
 aliases = database.GetAliases() # Get user defined aliases
 
 
+def exist(var,index):
+    try:
+        var[index]
+        return True
+    except:
+        return False
+
 def Password(): # Get password of wifi network
     os.system("netsh wlan show profiles")
 
@@ -273,12 +280,17 @@ def main() -> None:  # Main loop
                 
                 continue
 
-            elif splitInput[0].lower() == "cd": # Change directory based on input
+            # Change directory based on input
+            elif splitInput[0].lower() == "cd" and exist(splitInput, 1):
                 out = ""
                 for i in range(splitInput[1:].__len__()):
                     out += splitInput[i+1] + " "
                 os.chdir(out)
                 continue
+
+            elif userInput.lower() == "cd":
+                uIn = session.prompt("path: ")
+                os.chdir(uIn)
 
             elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
                 return None
