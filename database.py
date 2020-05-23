@@ -1,13 +1,12 @@
 from prompt_toolkit.document import Document
-from prompt_toolkit.completion import CompleteEvent, Completer, Completion, merge_completers
+from prompt_toolkit.completion import CompleteEvent, Completer, Completion, merge_completers, WordCompleter, NestedCompleter, PathCompleter, FuzzyCompleter
 from typing import Callable, Iterable, List, Optional
 import sys
 import os
 import osBased
-from pathlib import Path
 import pickle
-from prompt_toolkit import prompt
-from prompt_toolkit.completion import WordCompleter, NestedCompleter, PathCompleter, FuzzyCompleter
+from pathlib import Path
+
 
 
 def writedata(data, filename, location, mode) -> None:
