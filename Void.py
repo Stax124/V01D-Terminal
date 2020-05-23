@@ -1,23 +1,22 @@
 # Project V01D
+try:
+    import os
+    import math
 
-import os
-import math
-import ast
-from prompt_toolkit import PromptSession
-from prompt_toolkit.history import InMemoryHistory
+    # Prompt-toolkit - autocompletion library
+    from prompt_toolkit import PromptSession
+    from prompt_toolkit.history import InMemoryHistory
+    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+    from prompt_toolkit.formatted_text import HTML
+    from prompt_toolkit.styles import Style
 
-from typing import Callable, Iterable, List, Optional
-from prompt_toolkit.completion import CompleteEvent, Completer, Completion, WordCompleter
-from prompt_toolkit.document import Document
-from prompt_toolkit.history import InMemoryHistory
-from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-from prompt_toolkit.formatted_text import HTML
-from prompt_toolkit.styles import Style
+    # Project stuff
+    import database
+    import osBased
+    import utils
 
-# Project stuff
-import database
-import osBased
-import utils
+except:
+    raise ImportError
 
 __all__ = [
     "PathCompleter",
@@ -71,19 +70,21 @@ def Read(splitInput) -> None:  # Read file
     file.close()
 
 def Power() -> None: # Change Windows power shemes
-    print("If you want best powerscheme paste this and then paste ID of the new scheme: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
+    "Change Windows 10 power scheme"
+    print("If you want best powerscheme paste this, then paste ID of the new scheme: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
     os.system("powercfg -list")
     _input = input("Select scheme: ")
 
     if _input == "powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61":
-        os.system("powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
+        os.system(_input)
         os.system("powercfg -list")
-        _input = input("Select scheme: ")
+        _input = input("Paste scheme id: ")
         os.system("powercfg /setactive " + _input)
 
     else:
         os.system("powercfg /setactive " + _input)
 
+# -------------------------------------------
 
 _style = Style.from_dict(
     {
@@ -94,6 +95,9 @@ _style = Style.from_dict(
 # --------------------------------------------
 
 def main() -> None:  # Main loop
+    """
+    Terminal main loop
+    """
     try:
         session = PromptSession(completer=database.combinedcompleter, complete_while_typing=True,complete_in_thread=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory(),search_ignore_case=True)
 
@@ -349,5 +353,7 @@ def main() -> None:  # Main loop
         os.system("pause")
         main()
 
-main()  # Run
+
+if __name__ == "__main__":
+    main()  # Run
 
