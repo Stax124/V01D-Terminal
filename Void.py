@@ -22,8 +22,18 @@ __all__ = [
     "PathCompleter",
     "ExecutableCompleter",
 ]
+
+# -------------------------------------------
+
+_style = Style.from_dict(
+    {
+        "pointer": "#b20000",
+        "path": "#1919ff",
+    }
+)
 title = "V01D Terminal" # Set title
 aliases = database.GetAliases() # Get user defined aliases
+multithreading = False
 
 
 def exist(var,index):
@@ -41,8 +51,18 @@ def Password(): # Get password of wifi network
     os.system(f"netsh wlan show profiles {networkName} key=clear")
 
 
-def Void(): # Open new terminal
-    os.startfile("Void.py")
+def Void(_splitinput): # Open new terminal
+    try:
+        if (_splitinput[1] == "multithreading"):
+            if (_splitinput[2].lower() == "true"):
+                multithreading = True
+            elif (_splitinput[2].lower() == "false"):
+                multithreading = False
+            print(f"Multithreading: {multithreading}")
+    except:
+        pass
+
+    # os.startfile("Void.py")
 
 
 def Read(splitInput) -> None:  # Read file
@@ -84,14 +104,7 @@ def Power() -> None: # Change Windows power shemes
     else:
         os.system("powercfg /setactive " + _input)
 
-# -------------------------------------------
 
-_style = Style.from_dict(
-    {
-        "pointer": "#b20000",
-        "path": "#1919ff",
-    }
-)
 # --------------------------------------------
 
 def main() -> None:  # Main loop
@@ -99,12 +112,12 @@ def main() -> None:  # Main loop
     Terminal main loop
     """
     try:
-        session = PromptSession(completer=database.combinedcompleter, complete_while_typing=True,complete_in_thread=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory(),search_ignore_case=True)
+        session = PromptSession(completer=database.combinedcompleter, complete_while_typing=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory(),search_ignore_case=True)
 
         while True:
             cd = os.getcwd() # Get current working directory
             userInput = session.prompt(HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
-            ),style=_style)  # Get user input (autocompetion allowed)
+            ),style=_style, complete_in_thread=multithreading)  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
             try:
@@ -245,8 +258,8 @@ def main() -> None:  # Main loop
                 Read(splitInput)
                 continue
             
-            elif userInput.lower() == "void":
-                Void()
+            elif splitInput[0].lower() == "void":
+                Void(splitInput)
                 continue
 
             elif splitInput[0].lower() == "lcm":
