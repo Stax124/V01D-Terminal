@@ -1,5 +1,5 @@
 from prompt_toolkit.document import Document
-from prompt_toolkit.completion import CompleteEvent, Completer, Completion, merge_completers, WordCompleter, NestedCompleter, PathCompleter, FuzzyCompleter
+from prompt_toolkit.completion import CompleteEvent, Completer, Completion, WordCompleter, NestedCompleter
 from typing import Callable, Iterable, List, Optional
 import sys
 import os
@@ -332,7 +332,7 @@ nestedCompleter = NestedCompleter.from_nested_dict(
         "help": {"/?": None},
         "cls": {"/?": None},
         "clear": None,
-        "void":None,
+        "void":{"multithreading":{"true":None,"false":None},"fuzzycomplete":{"true":None,"false":None}, "start":None},
         "read": None,
         "power": None,
         "password": None,
@@ -455,8 +455,6 @@ nestedCompleter = NestedCompleter.from_nested_dict(
 
 
 # ----------------------------------------------------------------------------
-
-combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(),nestedCompleter]))
 
 if __name__ == "__main__":
     import Void

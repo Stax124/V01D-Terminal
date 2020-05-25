@@ -2,11 +2,13 @@
 try:
     import os
     import math
+    import yaml
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit import PromptSession
     from prompt_toolkit.history import InMemoryHistory
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+    from prompt_toolkit.completion import merge_completers, PathCompleter, FuzzyCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
 
@@ -33,8 +35,17 @@ _style = Style.from_dict(
 )
 title = "V01D Terminal" # Set title
 aliases = database.GetAliases() # Get user defined aliases
-multithreading = False
+config = yaml.safe_load(open("config.yml"))
+CONFIG = r"config.yml"
 
+if config["fuzzycomplete"]:
+    combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.nestedCompleter]))
+else:
+    combinedcompleter = merge_completers([PathCompleter(), database.nestedCompleter])
+
+def saveToYml(data,path):
+    with open(path, "w") as file:
+        doc = yaml.dump(data, file)
 
 def exist(var,index):
     try:
@@ -55,14 +66,25 @@ def Void(_splitinput): # Open new terminal
     try:
         if (_splitinput[1] == "multithreading"):
             if (_splitinput[2].lower() == "true"):
-                multithreading = True
+                config["multithreading"] = True
             elif (_splitinput[2].lower() == "false"):
-                multithreading = False
-            print(f"Multithreading: {multithreading}")
+                config["multithreading"] = False
+            print(f"Multithreading: {config['multithreading']}")
+        if (_splitinput[1] == "fuzzycomplete"):
+            if (_splitinput[2].lower() == "true"):
+                config["fuzzycomplete"] = True
+            elif (_splitinput[2].lower() == "false"):
+                config["fuzzycomplete"] = False
+            print(f"Fuzzycomplete: {config['fuzzycomplete']}")
+
+        if (_splitinput[1] == "start"):
+            os.startfile(__file__)
+            
+        saveToYml(config,CONFIG)
     except:
         pass
 
-    # os.startfile("Void.py")
+    
 
 
 def Read(splitInput) -> None:  # Read file
@@ -112,12 +134,12 @@ def main() -> None:  # Main loop
     Terminal main loop
     """
     try:
-        session = PromptSession(completer=database.combinedcompleter, complete_while_typing=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory(),search_ignore_case=True)
+        session = PromptSession(completer=combinedcompleter, complete_while_typing=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory(),search_ignore_case=True)
 
         while True:
             cd = os.getcwd() # Get current working directory
             userInput = session.prompt(HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
-            ),style=_style, complete_in_thread=multithreading)  # Get user input (autocompetion allowed)
+            ),style=_style, complete_in_thread=config["multithreading"])  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
             try:
@@ -362,7 +384,7 @@ def main() -> None:  # Main loop
         osBased.Clear() # Clear terminal
 
     except Exception as error:
-        print(error.with_traceback)
+        print(error)
         os.system("pause")
         main()
 
