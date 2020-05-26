@@ -38,10 +38,15 @@ aliases = database.GetAliases() # Get user defined aliases
 config = yaml.safe_load(open("config.yml"))
 CONFIG = r"config.yml"
 
-if config["fuzzycomplete"]:
-    combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.nestedCompleter]))
-else:
-    combinedcompleter = merge_completers([PathCompleter(), database.nestedCompleter])
+if config["fuzzycomplete"] and osBased.Os == "Windows":
+    combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.WinCompleter]))
+elif osBased.Os == "Windows":
+    combinedcompleter = merge_completers([PathCompleter(), database.WinCompleter])
+elif osBased.Os == "Linux" and config["fuzzycomplete"]:
+    combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.LinuxCompleter]))
+elif osBased.Os == "Linux":
+    combinedcompleter = merge_completers([PathCompleter(), database.LinuxCompleter])
+
 
 def saveToYml(data,path):
     with open(path, "w") as file:
@@ -269,7 +274,7 @@ def main() -> None:  # Main loop
                 continue
 
             elif userInput.lower() == "os": # Show os
-                osBased.Os()
+                print(osBased.Os())
                 continue
 
             elif userInput.lower() == "clear" or userInput.lower() == "cls": # Clear terminal

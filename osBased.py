@@ -10,11 +10,11 @@ def Clear():
 
 def Os():
     if platform.system() == "Windows":
-        print("Windows")
+        return "Windows"
     elif platform.system() == "Linux":
-        print("Linux")
+        return "Linux"
     else:
-        print("Other")
+        return "Other"
 
 
 if __name__ == "__main__":

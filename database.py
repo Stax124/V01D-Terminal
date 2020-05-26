@@ -327,7 +327,7 @@ completer = WordCompleter(
     match_middle=True
 )
 
-nestedCompleter = NestedCompleter.from_nested_dict(
+WinCompleter = NestedCompleter.from_nested_dict(
     {
         "help": {"/?": None},
         "cls": {"/?": None},
@@ -453,6 +453,13 @@ nestedCompleter = NestedCompleter.from_nested_dict(
     }
 )
 
+
+LinuxCompleter = NestedCompleter.from_nested_dict(
+    {
+        "cd":None,
+        "clear":None
+    }
+)
 
 # ----------------------------------------------------------------------------
 
