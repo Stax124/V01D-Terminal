@@ -26,6 +26,17 @@ def lcm(x, y) -> float:
         greater += 1
     return float(lcm)
 
+def PlainToString(file):
+    f = open(file, "r")
+    text = f.read()
+
+    split = text.splitlines()
+    out = ""
+
+    for item in split:
+        out += "'" + item + "'" + ","
+
+    return(out)
 
 def Download(target) -> None:
     url = ""

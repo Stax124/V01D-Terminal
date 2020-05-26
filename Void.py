@@ -3,6 +3,7 @@ try:
     import os
     import math
     import yaml
+    import platform
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit import PromptSession
@@ -30,7 +31,7 @@ __all__ = [
 _style = Style.from_dict(
     {
         "pointer": "#b20000",
-        "path": "#1919ff",
+        "path": "#00fff0",
     }
 )
 title = "V01D Terminal" # Set title
@@ -38,13 +39,13 @@ aliases = database.GetAliases() # Get user defined aliases
 config = yaml.safe_load(open("config.yml"))
 CONFIG = r"config.yml"
 
-if config["fuzzycomplete"] and osBased.Os == "Windows":
+if config["fuzzycomplete"] and platform.system() == "Windows":
     combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.WinCompleter]))
-elif osBased.Os == "Windows":
+elif platform.system() == "Windows":
     combinedcompleter = merge_completers([PathCompleter(), database.WinCompleter])
-elif osBased.Os == "Linux" and config["fuzzycomplete"]:
+elif platform.system() == "Linux" and config["fuzzycomplete"]:
     combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.LinuxCompleter]))
-elif osBased.Os == "Linux":
+else:
     combinedcompleter = merge_completers([PathCompleter(), database.LinuxCompleter])
 
 
