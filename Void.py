@@ -32,6 +32,8 @@ _style = Style.from_dict(
     {
         "pointer": "#b20000",
         "path": "#00fff0",
+        "bottom-toolbar": "#aaaa00 bg:#242424",
+        "bottom-toolbar.text": "#aaaa00 bg:#242424"
     }
 )
 title = "V01D Terminal" # Set title
@@ -140,12 +142,13 @@ def main() -> None:  # Main loop
     Terminal main loop
     """
     try:
-        session = PromptSession(completer=combinedcompleter, complete_while_typing=True,mouse_support=True, wrap_lines=True,auto_suggest=AutoSuggestFromHistory(),search_ignore_case=True)
+        session = PromptSession(completer=combinedcompleter, complete_while_typing=True, mouse_support=True, wrap_lines=True, auto_suggest=AutoSuggestFromHistory(
+        ), search_ignore_case=True)
 
         while True:
             cd = os.getcwd() # Get current working directory
             userInput = session.prompt(HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
-            ),style=_style, complete_in_thread=config["multithreading"])  # Get user input (autocompetion allowed)
+                                            ), style=_style, complete_in_thread=config["multithreading"], bottom_toolbar=HTML(f'<b>{platform.system()}    FuzzyComplete:{config["fuzzycomplete"]}     Multithreading:{config["multithreading"]}</b>'))  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
             try:
