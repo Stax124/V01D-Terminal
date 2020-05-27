@@ -148,7 +148,7 @@ def main() -> None:  # Main loop
         while True:
             cd = os.getcwd() # Get current working directory
             userInput = session.prompt(HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
-                                            ), style=_style, complete_in_thread=config["multithreading"], bottom_toolbar=HTML(f'<b>{platform.system()}    FuzzyComplete:{config["fuzzycomplete"]}     Multithreading:{config["multithreading"]}</b>'))  # Get user input (autocompetion allowed)
+                                            ), style=_style, complete_in_thread=config["multithreading"], bottom_toolbar=HTML(f'<b>OS:{platform.system()}    FuzzyComplete:{config["fuzzycomplete"]}     Multithreading:{config["multithreading"]}</b>'))  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
             try:
