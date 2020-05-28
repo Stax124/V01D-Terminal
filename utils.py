@@ -15,6 +15,7 @@ def gcd(a, b) -> float:
 
 
 def lcm(x, y) -> float:
+    greater = 0
     if x > y:
         greater = x
     else:
@@ -26,11 +27,17 @@ def lcm(x, y) -> float:
         greater += 1
     return float(lcm)
 
-def PlainToString(file):
-    f = open(file, "r")
-    text = f.read()
+def PlainToString(text, mode):
+    # f = open(file, "r")
+    # text = f.read()
 
-    split = text.splitlines()
+    split = ""
+
+    if mode == "line":
+        split = text.splitlines()
+    else:
+        split = text.split()
+
     out = ""
 
     for item in split:
@@ -69,4 +76,4 @@ def Download(target) -> None:
 
 if __name__ == "__main__":
     import Void
-    Void.Run()
+    Void.main()

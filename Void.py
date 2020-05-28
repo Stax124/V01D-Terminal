@@ -210,6 +210,16 @@ def main() -> None:  # Main loop
                 Power()
                 continue
 
+            elif splitInput[0].lower() == "plain2string":
+                try:
+                    i = splitInput[2]
+                    mode = i
+                except:
+                    mode = None
+
+                print(utils.PlainToString(splitInput[1], mode=mode))
+                continue
+
             elif userInput.lower() == "help" or userInput.lower() == "/?": # Print cmd help and defined help at the same time
                 os.system("help")
                 print("\n" +
