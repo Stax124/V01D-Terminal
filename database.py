@@ -67,7 +67,9 @@ downloadDict = {
     "Malwarebytes": "https://www.malwarebytes.com/mwb-download/thankyou/",
     "audacity": "https://www.fosshub.com/Audacity.html?dwl=audacity-win-2.3.3.exe",
     "tor": "https://www.torproject.org/dist/torbrowser/9.0.9/torbrowser-install-win64-9.0.9_en-US.exe",
-    "anaconda": "https://repo.anaconda.com/archive/Anaconda3-2020.02-Windows-x86_64.exe"
+    "anaconda": "https://repo.anaconda.com/archive/Anaconda3-2020.02-Windows-x86_64.exe",
+    "unetbootin": "https://github.com/unetbootin/unetbootin/releases/download/677/unetbootin-windows-677.exe",
+    "aoemipartitionasistant": "https://www.diskpart.com/download-home.html"
 }
 
 # -----------------------------------------

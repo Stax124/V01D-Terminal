@@ -277,7 +277,7 @@ def main() -> None:  # Main loop
                         "   power - change your Windows powerplan\n"
                         "   download - dictionary for downloading files (download -list)\n"
                         "   open - open file explorer in current directory\n"
-                        "   temp - clear temp files\n"
+                        "   plain2string - convert plain text to strings (Usage: plain2string text/[filename] mode[line,file,none])\n"
 
                     "\n IN DEVELOPMENT \n\n"
                     )
@@ -322,9 +322,6 @@ def main() -> None:  # Main loop
             elif userInput.lower() == "settings":  # Open file explorer in cwd
                 os.system("start ms-settings:")
                 continue
-
-            elif userInput.lower() == "temp":
-                os.system("start .\\temp.bat")
 
             elif userInput.lower() == "startup":
                 os.system("explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")

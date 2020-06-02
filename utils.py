@@ -28,13 +28,19 @@ def lcm(x, y) -> float:
     return float(lcm)
 
 def PlainToString(text, mode):
-    # f = open(file, "r")
-    # text = f.read()
+    
 
     split = ""
 
     if mode == "line":
         split = text.splitlines()
+    elif mode == "file":
+        try:
+            f = open(text, "r")
+            text = f.read()
+            split = text.split()
+        except:
+            print("File not found")
     else:
         split = text.split()
 
