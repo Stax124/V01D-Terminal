@@ -30,10 +30,20 @@ __all__ = [
 
 _style = Style.from_dict(
     {
+        # Default style
+        "": "#ff0066",
+
+        # Specific style
         "pointer": "#b20000",
         "path": "#00fff0",
         "bottom-toolbar": "#aaaa00 bg:#242424",
-        "bottom-toolbar.text": "#aaaa00 bg:#242424"
+        "bottom-toolbar.text": "#aaaa00 bg:#242424",
+
+        # Completor
+        "completion-menu.completion": "bg:#008888 #ffffff",
+        "completion-menu.completion.current": "bg:#00aaaa #000000",
+        "scrollbar.background": "bg:#88aaaa",
+        "scrollbar.button": "bg:#222222",
     }
 )
 title = "V01D Terminal" # Set title
