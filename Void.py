@@ -40,7 +40,7 @@ _style = Style.from_dict(
         "bottom-toolbar.text": "#aaaa00 bg:#242424",
 
         # Completor
-        "completion-menu.completion": "bg:#ff0066 #ffffff",
+        "completion-menu.completion": "bg:#000000 #ffffff",
         "completion-menu.completion.current": "bg:#00aaaa #000000",
         "scrollbar.background": "bg:#88aaaa",
         "scrollbar.button": "bg:#222222",
