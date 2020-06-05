@@ -4,6 +4,8 @@ try:
     import math
     import yaml
     import platform
+    from elevate import elevate
+    import ctypes
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit import PromptSession
@@ -102,7 +104,16 @@ def Void(_splitinput): # Open new terminal
     except:
         pass
 
-    
+
+def is_admin():
+    try:
+        _is_admin = os.getuid() == 0
+
+
+    except AttributeError:
+        _is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+
+    return _is_admin
 
 
 def Read(splitInput) -> None:  # Read file
@@ -151,6 +162,9 @@ def main() -> None:  # Main loop
     """
     Terminal main loop
     """
+    
+    osBased.Clear()  # Clear terminal
+
     try:
         session = PromptSession(completer=combinedcompleter, complete_while_typing=True, mouse_support=True, wrap_lines=True, auto_suggest=AutoSuggestFromHistory(
         ), search_ignore_case=True)
@@ -158,7 +172,7 @@ def main() -> None:  # Main loop
         while True:
             cd = os.getcwd() # Get current working directory
             userInput = session.prompt(HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
-                                            ), style=_style, complete_in_thread=config["multithreading"], bottom_toolbar=HTML(f'<b>OS:{platform.system()}    FuzzyComplete:{config["fuzzycomplete"]}     Multithreading:{config["multithreading"]}</b>'))  # Get user input (autocompetion allowed)
+                                            ), style=_style, complete_in_thread=config["multithreading"], bottom_toolbar=HTML(f'<b>OS:{platform.system()}    FuzzyComplete:{config["fuzzycomplete"]}     Multithreading:{config["multithreading"]}     Admin:{is_admin()}</b>'))  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
             try:
@@ -168,7 +182,11 @@ def main() -> None:  # Main loop
 
             if splitInput[0].lower() == "password":
                 Password()
-                continue           
+                continue
+
+            if userInput.lower() == "elevate" or userInput.lower() == "admin":
+                elevate()
+                continue
 
             elif userInput.lower() == "pagefile":
                 os.system("wmic pagefile list")
@@ -385,11 +403,7 @@ def main() -> None:  # Main loop
 
             elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror)
                 try:
-                    if splitInput[1].lower() == "-list":
-                        print(database.downloadDict.keys())
-                    else:
-                        os.system(
-                            "start " + database.downloadDict.get(splitInput[1]))
+                    utils.Download(splitInput[1])
                 except:
                     print("Not found\nTry: download -list")
 
@@ -405,9 +419,6 @@ def main() -> None:  # Main loop
                     except: # Pass input to cmd to decide
                         os.system(userInput)
 
-
-        os.system(f"title {title}") # Set title
-        osBased.Clear() # Clear terminal
 
     except Exception as error:
         print(error)

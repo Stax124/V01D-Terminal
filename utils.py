@@ -1,5 +1,6 @@
-import requests
+import urllib.request
 import database
+import os
 from clint.textui import progress
 
 
@@ -52,9 +53,6 @@ def PlainToString(text, mode):
     return(out)
 
 def Download(target) -> None:
-    url = ""
-    urlSplit = ""
-
     try:
         url = database.downloadDict.get(target)
         urlSplit = url.split("/")
@@ -65,20 +63,11 @@ def Download(target) -> None:
         except:
             print("Target is not availible")
 
-    
-
-    f = requests.get(url, stream=True)
-
-    with open(urlSplit[-1], "wb") as _target:
-
-        total_length = int(f.headers.get('content-length'))
-
-        print(str(total_length / 1000000) + " MB")
-
-        for ch in progress.bar(f.iter_content(chunk_size = 2391975), expected_size=(total_length/1024) + 1):
-
-            if ch:
-                _target.write(ch)
+    try:
+        urllib.request.urlretrieve(url, urlSplit[-1])
+    except Exception as e:
+        print(e)
+        os.system("start "+ url)
 
 if __name__ == "__main__":
     import Void
