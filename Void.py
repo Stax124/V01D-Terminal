@@ -403,9 +403,15 @@ def main() -> None:  # Main loop
 
             elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror)
                 try:
-                    utils.Download(splitInput[1])
+                    if splitInput[1].lower() == "-list":
+                        print(database.downloadDict.keys())
+                    else:
+                        raise EOFError
                 except:
-                    print("Not found\nTry: download -list")
+                    try:
+                        utils.Download(splitInput[1])
+                    except:
+                        print("Not found\nTry: download -list")
 
 
             else:
