@@ -23,11 +23,6 @@ try:
 except:
     raise ImportError
 
-__all__ = [
-    "PathCompleter",
-    "ExecutableCompleter",
-]
-
 # -------------------------------------------
 
 _style = Style.from_dict(
@@ -50,7 +45,15 @@ _style = Style.from_dict(
 )
 title = "V01D Terminal" # Set title
 aliases = database.GetAliases() # Get user defined aliases
-config = yaml.safe_load(open("config.yml"))
+
+try:
+    config = yaml.safe_load(open("config.yml"))
+except:
+    config = {
+        "multithreading":True,
+        "fuzzycomplete":True
+    }
+
 CONFIG = r"config.yml"
 
 if config["fuzzycomplete"] and platform.system() == "Windows":
@@ -401,7 +404,7 @@ def main() -> None:  # Main loop
             elif userInput.lower() == "aliases": # Show alias dictionary
                 print(aliases)
 
-            elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror)
+            elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror) or download straight to active folder
                 try:
                     if splitInput[1].lower() == "-list":
                         print(database.downloadDict.keys())

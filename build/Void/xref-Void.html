@@ -26,7 +26,9 @@ imports:
  &#8226;   <a href="#collections">collections</a>
  &#8226;   <a href="#collections.abc">collections.abc</a>
  &#8226;   <a href="#copyreg">copyreg</a>
+ &#8226;   <a href="#ctypes">ctypes</a>
  &#8226;   <a href="#database">database</a>
+ &#8226;   <a href="#elevate">elevate</a>
  &#8226;   <a href="#encodings">encodings</a>
  &#8226;   <a href="#encodings.aliases">encodings.aliases</a>
  &#8226;   <a href="#encodings.ascii">encodings.ascii</a>
@@ -664,7 +666,6 @@ imports:
  &#8226;   <a href="#PIL.ImageSequence">PIL.ImageSequence</a>
  &#8226;   <a href="#PIL.ImageShow">PIL.ImageShow</a>
  &#8226;   <a href="#PIL.ImageTk">PIL.ImageTk</a>
- &#8226;   <a href="#PIL.Jpeg2KImagePlugin">PIL.Jpeg2KImagePlugin</a>
  &#8226;   <a href="#PIL.JpegImagePlugin">PIL.JpegImagePlugin</a>
  &#8226;   <a href="#PIL.PaletteFile">PIL.PaletteFile</a>
  &#8226;   <a href="#PIL.PdfParser">PIL.PdfParser</a>
@@ -1747,8 +1748,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#PIL">PIL</a>
- &#8226;   <a href="#PIL.IcnsImagePlugin">PIL.IcnsImagePlugin</a>
+    <a href="#PIL.IcnsImagePlugin">PIL.IcnsImagePlugin</a>
  &#8226;   <a href="#PIL.Image">PIL.Image</a>
 
   </div>
@@ -2613,7 +2613,9 @@ imported by:
   <a target="code" href="///C:/Users/Admin/Desktop/Coding/Python/V01D/Void.py" type="text/plain"><tt>Void</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
-    <a href="#database">database</a>
+    <a href="#ctypes">ctypes</a>
+ &#8226;   <a href="#database">database</a>
+ &#8226;   <a href="#elevate">elevate</a>
  &#8226;   <a href="#math">math</a>
  &#8226;   <a href="#os">os</a>
  &#8226;   <a href="#osBased">osBased</a>
@@ -9920,6 +9922,8 @@ imports:
   <div class="import">
 imported by:
     <a href="#PyInstaller.depend.utils">PyInstaller.depend.utils</a>
+ &#8226;   <a href="#Void">Void</a>
+ &#8226;   <a href="#Void.py">Void.py</a>
  &#8226;   <a href="#clint.packages.colorama.win32">clint.packages.colorama.win32</a>
  &#8226;   <a href="#clint.textui.cols">clint.textui.cols</a>
  &#8226;   <a href="#ctypes._aix">ctypes._aix</a>
@@ -9927,6 +9931,7 @@ imported by:
  &#8226;   <a href="#ctypes.macholib">ctypes.macholib</a>
  &#8226;   <a href="#ctypes.util">ctypes.util</a>
  &#8226;   <a href="#ctypes.wintypes">ctypes.wintypes</a>
+ &#8226;   <a href="#elevate.windows">elevate.windows</a>
  &#8226;   <a href="#multiprocessing.sharedctypes">multiprocessing.sharedctypes</a>
  &#8226;   <a href="#numpy._distributor_init">numpy._distributor_init</a>
  &#8226;   <a href="#numpy.core._dtype_ctypes">numpy.core._dtype_ctypes</a>
@@ -10104,7 +10109,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#prompt_toolkit.eventloop.win32">prompt_toolkit.eventloop.win32</a>
+    <a href="#elevate.windows">elevate.windows</a>
+ &#8226;   <a href="#prompt_toolkit.eventloop.win32">prompt_toolkit.eventloop.win32</a>
  &#8226;   <a href="#prompt_toolkit.input.win32">prompt_toolkit.input.win32</a>
  &#8226;   <a href="#prompt_toolkit.output.win32">prompt_toolkit.output.win32</a>
  &#8226;   <a href="#prompt_toolkit.output.windows10">prompt_toolkit.output.windows10</a>
@@ -11659,6 +11665,68 @@ imported by:
     <a href="#numpy.distutils.ccompiler">numpy.distutils.ccompiler</a>
  &#8226;   <a href="#numpy.distutils.misc_util">numpy.distutils.misc_util</a>
  &#8226;   <a href="#requests.cookies">requests.cookies</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="elevate"></a>
+  <a target="code" href="///C:/python38/lib/site-packages/elevate/__init__.py" type="text/plain"><tt>elevate</tt></a>
+<span class="moduletype">Package</span>  <div class="import">
+imports:
+    <a href="#elevate.posix">elevate.posix</a>
+ &#8226;   <a href="#elevate.windows">elevate.windows</a>
+ &#8226;   <a href="#sys">sys</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#Void">Void</a>
+ &#8226;   <a href="#Void.py">Void.py</a>
+ &#8226;   <a href="#elevate.posix">elevate.posix</a>
+ &#8226;   <a href="#elevate.windows">elevate.windows</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="elevate.posix"></a>
+  <a target="code" href="///C:/python38/lib/site-packages/elevate/posix.py" type="text/plain"><tt>elevate.posix</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#elevate">elevate</a>
+ &#8226;   <a href="#errno">errno</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#pipes">pipes</a>
+ &#8226;   <a href="#shlex">shlex</a>
+ &#8226;   <a href="#sys">sys</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#elevate">elevate</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="elevate.windows"></a>
+  <a target="code" href="///C:/python38/lib/site-packages/elevate/windows.py" type="text/plain"><tt>elevate.windows</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#ctypes">ctypes</a>
+ &#8226;   <a href="#ctypes.wintypes">ctypes.wintypes</a>
+ &#8226;   <a href="#elevate">elevate</a>
+ &#8226;   <a href="#subprocess">subprocess</a>
+ &#8226;   <a href="#sys">sys</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#elevate">elevate</a>
 
   </div>
 
@@ -14737,6 +14805,7 @@ imported by:
  &#8226;   <a href="#clint.utils">clint.utils</a>
  &#8226;   <a href="#distutils.dir_util">distutils.dir_util</a>
  &#8226;   <a href="#distutils.file_util">distutils.file_util</a>
+ &#8226;   <a href="#elevate.posix">elevate.posix</a>
  &#8226;   <a href="#gettext">gettext</a>
  &#8226;   <a href="#gzip">gzip</a>
  &#8226;   <a href="#multiprocessing.forkserver">multiprocessing.forkserver</a>
@@ -23127,6 +23196,7 @@ imported by:
  &#8226;   <a href="#distutils.unixccompiler">distutils.unixccompiler</a>
  &#8226;   <a href="#distutils.util">distutils.util</a>
  &#8226;   <a href="#doctest">doctest</a>
+ &#8226;   <a href="#elevate.posix">elevate.posix</a>
  &#8226;   <a href="#email.utils">email.utils</a>
  &#8226;   <a href="#fileinput">fileinput</a>
  &#8226;   <a href="#fnmatch">fnmatch</a>
@@ -23311,6 +23381,7 @@ imported by:
  &#8226;   <a href="#urllib3.connection">urllib3.connection</a>
  &#8226;   <a href="#urllib3.contrib._appengine_environ">urllib3.contrib._appengine_environ</a>
  &#8226;   <a href="#urllib3.filepost">urllib3.filepost</a>
+ &#8226;   <a href="#utils">utils</a>
  &#8226;   <a href="#uu">uu</a>
  &#8226;   <a href="#uuid">uuid</a>
  &#8226;   <a href="#webbrowser">webbrowser</a>
@@ -23487,7 +23558,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#numpy.distutils._shell_utils">numpy.distutils._shell_utils</a>
+    <a href="#elevate.posix">elevate.posix</a>
+ &#8226;   <a href="#numpy.distutils._shell_utils">numpy.distutils._shell_utils</a>
 
   </div>
 
@@ -28327,7 +28399,6 @@ imports:
  &#8226;   <a href="#pygments.styles.vim">pygments.styles.vim</a>
  &#8226;   <a href="#pygments.styles.vs">pygments.styles.vs</a>
  &#8226;   <a href="#pygments.styles.xcode">pygments.styles.xcode</a>
- &#8226;   <a href="#pygments.unistring">pygments.unistring</a>
  &#8226;   <a href="#sys">sys</a>
 
   </div>
@@ -28880,8 +28951,7 @@ imports:
  &#8226;   <a href="#pygments.lexers._mapping">pygments.lexers._mapping</a>
  &#8226;   <a href="#pygments.lexers._mql_builtins">pygments.lexers._mql_builtins</a>
  &#8226;   <a href="#pygments.lexers._scilab_builtins">pygments.lexers._scilab_builtins</a>
- &#8226;   <a href="#pygments.lexers._stan_builtins">pygments.lexers._stan_builtins</a>
- &#8226;   <a href="#pygments.lexers._vbscript_builtins">pygments.lexers._vbscript_builtins</a>
+ &#8226;   <a href="#pygments.lexers._tsql_builtins">pygments.lexers._tsql_builtins</a>
  &#8226;   <a href="#pygments.modeline">pygments.modeline</a>
  &#8226;   <a href="#pygments.plugin">pygments.plugin</a>
  &#8226;   <a href="#pygments.util">pygments.util</a>
@@ -29328,7 +29398,6 @@ imports:
   <div class="import">
 imported by:
     <a href="#pygments">pygments</a>
- &#8226;   <a href="#pygments.lexers">pygments.lexers</a>
  &#8226;   <a href="#pygments.lexers.modeling">pygments.lexers.modeling</a>
 
   </div>
@@ -29363,6 +29432,7 @@ imports:
   <div class="import">
 imported by:
     <a href="#pygments">pygments</a>
+ &#8226;   <a href="#pygments.lexers">pygments.lexers</a>
  &#8226;   <a href="#pygments.lexers.sql">pygments.lexers.sql</a>
 
   </div>
@@ -29397,7 +29467,6 @@ imports:
   <div class="import">
 imported by:
     <a href="#pygments">pygments</a>
- &#8226;   <a href="#pygments.lexers">pygments.lexers</a>
  &#8226;   <a href="#pygments.lexers.basic">pygments.lexers.basic</a>
 
   </div>
@@ -33389,8 +33458,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#pygments">pygments</a>
- &#8226;   <a href="#pygments.lexers.dotnet">pygments.lexers.dotnet</a>
+    <a href="#pygments.lexers.dotnet">pygments.lexers.dotnet</a>
  &#8226;   <a href="#pygments.lexers.haskell">pygments.lexers.haskell</a>
  &#8226;   <a href="#pygments.lexers.javascript">pygments.lexers.javascript</a>
  &#8226;   <a href="#pygments.lexers.jvm">pygments.lexers.jvm</a>
@@ -37574,6 +37642,7 @@ imports:
   <div class="import">
 imported by:
     <a href="#PIL.ImageShow">PIL.ImageShow</a>
+ &#8226;   <a href="#elevate.posix">elevate.posix</a>
  &#8226;   <a href="#netrc">netrc</a>
  &#8226;   <a href="#numpy.distutils._shell_utils">numpy.distutils._shell_utils</a>
  &#8226;   <a href="#numpy.distutils.ccompiler">numpy.distutils.ccompiler</a>
@@ -38237,6 +38306,7 @@ imported by:
  &#8226;   <a href="#distutils.cygwinccompiler">distutils.cygwinccompiler</a>
  &#8226;   <a href="#distutils.msvc9compiler">distutils.msvc9compiler</a>
  &#8226;   <a href="#distutils.util">distutils.util</a>
+ &#8226;   <a href="#elevate.windows">elevate.windows</a>
  &#8226;   <a href="#http.server">http.server</a>
  &#8226;   <a href="#multiprocessing.util">multiprocessing.util</a>
  &#8226;   <a href="#numpy.distutils._shell_utils">numpy.distutils._shell_utils</a>
@@ -38385,6 +38455,9 @@ imported by:
  &#8226;   <a href="#distutils.util">distutils.util</a>
  &#8226;   <a href="#doctest">doctest</a>
  &#8226;   <a href="#dummy_threading">dummy_threading</a>
+ &#8226;   <a href="#elevate">elevate</a>
+ &#8226;   <a href="#elevate.posix">elevate.posix</a>
+ &#8226;   <a href="#elevate.windows">elevate.windows</a>
  &#8226;   <a href="#email._header_value_parser">email._header_value_parser</a>
  &#8226;   <a href="#email.generator">email.generator</a>
  &#8226;   <a href="#email.iterators">email.iterators</a>
@@ -38639,6 +38712,7 @@ imported by:
  &#8226;   <a href="#urllib3.packages.ssl_match_hostname._implementation">urllib3.packages.ssl_match_hostname._implementation</a>
  &#8226;   <a href="#urllib3.util.ssl_">urllib3.util.ssl_</a>
  &#8226;   <a href="#urllib3.util.wait">urllib3.util.wait</a>
+ &#8226;   <a href="#utils">utils</a>
  &#8226;   <a href="#uu">uu</a>
  &#8226;   <a href="#uuid">uuid</a>
  &#8226;   <a href="#warnings">warnings</a>
@@ -41008,7 +41082,9 @@ imports:
  &#8226;   <a href="#clint.textui">clint.textui</a>
  &#8226;   <a href="#clint.textui.progress">clint.textui.progress</a>
  &#8226;   <a href="#database">database</a>
+ &#8226;   <a href="#os">os</a>
  &#8226;   <a href="#requests">requests</a>
+ &#8226;   <a href="#sys">sys</a>
 
   </div>
   <div class="import">
