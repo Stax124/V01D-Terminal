@@ -2,6 +2,7 @@
 try:
     import os
     import math
+    import prompt_toolkit.shortcuts.progress_bar.base as pb
     import yaml
     import platform
     from elevate import elevate
@@ -168,11 +169,11 @@ def main() -> None:  # Main loop
     
     osBased.Clear()  # Clear terminal
 
-    try:
-        session = PromptSession(completer=combinedcompleter, complete_while_typing=True, mouse_support=True, wrap_lines=True, auto_suggest=AutoSuggestFromHistory(
-        ), search_ignore_case=True)
+    session = PromptSession(completer=combinedcompleter, complete_while_typing=True, mouse_support=True, wrap_lines=True, auto_suggest=AutoSuggestFromHistory(
+    ), search_ignore_case=True)
 
-        while True:
+    while True:
+        try:
             cd = os.getcwd() # Get current working directory
             userInput = session.prompt(HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
                                             ), style=_style, complete_in_thread=config["multithreading"], bottom_toolbar=HTML(f'<b>OS:{platform.system()}    FuzzyComplete:{config["fuzzycomplete"]}     Multithreading:{config["multithreading"]}     Admin:{is_admin()}</b>'))  # Get user input (autocompetion allowed)
@@ -429,12 +430,14 @@ def main() -> None:  # Main loop
                         os.system(userInput)
 
 
-    except Exception as error:
-        print(error)
-        os.system("pause")
-        main()
+        except Exception as error:
+            print(error)
+            os.system("pause")
 
 
 if __name__ == "__main__":
-    main()  # Run
-
+    main()
+    
+    
+    
+      
