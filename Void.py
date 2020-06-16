@@ -2,7 +2,42 @@
 try:
     import os
     import math
-    import prompt_toolkit.shortcuts.progress_bar.base as pb
+    import yaml
+    import platform
+    from elevate import elevate
+    import ctypes
+
+    # Prompt-toolkit - autocompletion library
+    from prompt_toolkit import PromptSession
+    from prompt_toolkit.shortcuts import confirm
+    from prompt_toolkit.history import InMemoryHistory
+    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+    from prompt_toolkit.completion import merge_completers, PathCompleter, FuzzyCompleter
+    from prompt_toolkit.formatted_text import HTML
+    from prompt_toolkit.styles import Style
+
+    # Project stuff
+    import database
+    import osBased
+    import utils
+
+except:
+    if platform.system().lower() == "windows":
+        os.system("pip install prompt-toolkit")
+    else:
+        os.system("sudo pip3 install prompt-toolkit")
+
+    from prompt_toolkit.shortcuts import confirm
+
+    if confirm("Install dependencies ? "):
+        if platform.system().lower() == "windows":
+            os.system("pip install clint elevate os math yaml platform ctypes")
+        else:
+            os.system("sudo pip3 install clint elevate os math yaml platform ctypes")
+
+    # Reimport all dependencies
+    import os
+    import math
     import yaml
     import platform
     from elevate import elevate
@@ -20,9 +55,6 @@ try:
     import database
     import osBased
     import utils
-
-except:
-    raise ImportError
 
 # -------------------------------------------
 
@@ -166,8 +198,6 @@ def main() -> None:  # Main loop
     """
     Terminal main loop
     """
-    
-    osBased.Clear()  # Clear terminal
 
     session = PromptSession(completer=combinedcompleter, complete_while_typing=True, mouse_support=True, wrap_lines=True, auto_suggest=AutoSuggestFromHistory(
     ), search_ignore_case=True)
@@ -437,5 +467,4 @@ def main() -> None:  # Main loop
 
 if __name__ == "__main__":
     main()
-    
-    
+
