@@ -2,6 +2,7 @@
 try:
     import os
     import math
+    import sys
     import yaml
     import platform
     from elevate import elevate
@@ -22,6 +23,7 @@ try:
     import utils
 
 except:
+    # Install main lib
     if platform.system().lower() == "windows":
         os.system("pip install prompt-toolkit")
     else:
@@ -29,15 +31,19 @@ except:
 
     from prompt_toolkit.shortcuts import confirm
 
+    # Ask to install all dependencies, if denied import error will be raised
     if confirm("Install dependencies ? "):
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate os math yaml platform ctypes")
+            os.system("pip install clint elevate os math yaml platform ctypes sys")
         else:
-            os.system("sudo pip3 install clint elevate os math yaml platform ctypes")
+            os.system("sudo pip3 install clint elevate os math yaml platform ctypes sys")
+    else:
+        sys.exit()
 
     # Reimport all dependencies
     import os
     import math
+    import sys
     import yaml
     import platform
     from elevate import elevate
@@ -58,6 +64,11 @@ except:
 
 # -------------------------------------------
 
+CONFIG = r"config.yml"
+
+# -------------------------------------------
+
+# Define console style
 _style = Style.from_dict(
     {
         # Default style
@@ -76,9 +87,11 @@ _style = Style.from_dict(
         "scrollbar.button": "bg:#222222",
     }
 )
-title = "V01D Terminal" # Set title
-aliases = database.GetAliases() # Get user defined aliases
 
+title = "V01D Terminal" # Set title
+aliases = database.GetAliases() # Get user defined aliases from database
+
+# Load config or defaults
 try:
     config = yaml.safe_load(open("config.yml"))
 except:
@@ -87,8 +100,8 @@ except:
         "fuzzycomplete":True
     }
 
-CONFIG = r"config.yml"
 
+# Pick completer based on config and platform
 if config["fuzzycomplete"] and platform.system() == "Windows":
     combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.WinCompleter]))
 elif platform.system() == "Windows":
@@ -98,19 +111,23 @@ elif platform.system() == "Linux" and config["fuzzycomplete"]:
 else:
     combinedcompleter = merge_completers([PathCompleter(), database.LinuxCompleter])
 
+# ---------------------------------------------------------------------------------------------------------------------------------------------
 
-def saveToYml(data,path):
+def saveToYml(data,path) -> None:
     with open(path, "w") as file:
         doc = yaml.dump(data, file)
 
-def exist(var,index):
+def exist(var,index) -> bool:
+    "Check if var with index exist"
     try:
         var[index]
         return True
     except:
         return False
 
-def Password(): # Get password of wifi network
+def password(): 
+    "Get password of wifi network (Windows only)"
+
     os.system("netsh wlan show profiles")
 
     networkName = input("Network name > ")
@@ -118,7 +135,7 @@ def Password(): # Get password of wifi network
     os.system(f"netsh wlan show profiles {networkName} key=clear")
 
 
-def Void(_splitinput): # Open new terminal
+def void(_splitinput) -> None: # Open new terminal or configure it
     try:
         if (_splitinput[1] == "multithreading"):
             if (_splitinput[2].lower() == "true"):
@@ -141,7 +158,8 @@ def Void(_splitinput): # Open new terminal
         pass
 
 
-def is_admin():
+def is_admin() -> bool:
+    "Ask if run with elevated privileges"
     try:
         _is_admin = os.getuid() == 0
 
@@ -152,7 +170,8 @@ def is_admin():
     return _is_admin
 
 
-def Read(splitInput) -> None:  # Read file
+def read(splitInput) -> None:
+    "Prints text of file"  
     try:
         path = splitInput[1]
     except:
@@ -176,8 +195,8 @@ def Read(splitInput) -> None:  # Read file
     print(content)
     file.close()
 
-def Power() -> None: # Change Windows power shemes
-    "Change Windows 10 power scheme"
+def power() -> None:
+    "Change Windows power scheme"
     print("If you want best powerscheme paste this, then paste ID of the new scheme: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
     os.system("powercfg -list")
     _input = input("Select scheme: ")
@@ -194,7 +213,7 @@ def Power() -> None: # Change Windows power shemes
 
 # --------------------------------------------
 
-def main() -> None:  # Main loop
+def main() -> None:
     """
     Terminal main loop
     """
@@ -215,7 +234,7 @@ def main() -> None:  # Main loop
                 continue
 
             if splitInput[0].lower() == "password":
-                Password()
+                password()
                 continue
 
             if userInput.lower() == "elevate" or userInput.lower() == "admin":
@@ -269,7 +288,7 @@ def main() -> None:  # Main loop
                 continue
 
             elif userInput.lower() == "power":
-                Power()
+                power()
                 continue
 
             elif splitInput[0].lower() == "plain2string":
@@ -282,7 +301,7 @@ def main() -> None:  # Main loop
                 print(utils.PlainToString(splitInput[1], mode=mode))
                 continue
 
-            elif userInput.lower() == "help" or userInput.lower() == "/?": # Print cmd help and defined help at the same time
+            elif userInput.lower() == "help" and platform.system().lower() == "windows": # Print cmd help and defined help at the same time
                 os.system("help")
                 print("\n" +
 
@@ -358,11 +377,11 @@ def main() -> None:  # Main loop
                 continue
             
             elif splitInput[0].lower() == "read":
-                Read(splitInput)
+                read(splitInput)
                 continue
             
             elif splitInput[0].lower() == "void":
-                Void(splitInput)
+                void(splitInput)
                 continue
 
             elif splitInput[0].lower() == "lcm":
@@ -377,15 +396,15 @@ def main() -> None:  # Main loop
                 print(utils.gcd(num[0], num[1]))
                 continue
 
-            elif userInput.lower() == "open": # Open file explorer in cwd
+            elif userInput.lower() == "open" and platform.system().lower() == "windows": # Open file explorer in cwd
                 os.system("explorer .\\")
                 continue
 
-            elif userInput.lower() == "settings":  # Open file explorer in cwd
+            elif userInput.lower() == "settings" and platform.system().lower() == "windows":  # Open file explorer in cwd
                 os.system("start ms-settings:")
                 continue
 
-            elif userInput.lower() == "startup":
+            elif userInput.lower() == "startup" and platform.system().lower() == "windows":
                 os.system("explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")
 
             elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
@@ -410,7 +429,7 @@ def main() -> None:  # Main loop
                 os.chdir(uIn)
 
             elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
-                return None
+                sys.exit()
                 
 
             elif splitInput[0].lower() == "alias": # Define own function and save it
@@ -440,7 +459,7 @@ def main() -> None:  # Main loop
                     if splitInput[1].lower() == "-list":
                         print(database.downloadDict.keys())
                     else:
-                        raise EOFError
+                        raise BaseException
                 except:
                     try:
                         utils.Download(splitInput[1])
