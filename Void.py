@@ -213,13 +213,15 @@ def power() -> None:
 
 # --------------------------------------------
 
+session = PromptSession(completer=combinedcompleter, complete_while_typing=True, mouse_support=True, wrap_lines=True, auto_suggest=AutoSuggestFromHistory(
+), search_ignore_case=True)
+session.refresh_interval = 0.1
+
+
 def main() -> None:
     """
     Terminal main loop
     """
-
-    session = PromptSession(completer=combinedcompleter, complete_while_typing=True, mouse_support=True, wrap_lines=True, auto_suggest=AutoSuggestFromHistory(
-    ), search_ignore_case=True)
 
     while True:
         try:
