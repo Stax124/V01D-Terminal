@@ -1,9 +1,35 @@
 # Project V01D
+
+def _import():
+    import os
+    import math
+    import sys
+    import yaml
+    import hashlib
+    import platform
+    from elevate import elevate
+    import ctypes
+
+    # Prompt-toolkit - autocompletion library
+    from prompt_toolkit import PromptSession
+    from prompt_toolkit.shortcuts import confirm
+    from prompt_toolkit.history import InMemoryHistory
+    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+    from prompt_toolkit.completion import merge_completers, PathCompleter, FuzzyCompleter
+    from prompt_toolkit.formatted_text import HTML
+    from prompt_toolkit.styles import Style
+
+    # Project stuff
+    import database
+    import osBased
+    import utils
+
 try:
     import os
     import math
     import sys
     import yaml
+    import hashlib
     import platform
     from elevate import elevate
     import ctypes
@@ -41,26 +67,7 @@ except:
         sys.exit()
 
     # Reimport all dependencies
-    import os
-    import math
-    import sys
-    import yaml
-    import platform
-    from elevate import elevate
-    import ctypes
-
-    # Prompt-toolkit - autocompletion library
-    from prompt_toolkit import PromptSession
-    from prompt_toolkit.history import InMemoryHistory
-    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-    from prompt_toolkit.completion import merge_completers, PathCompleter, FuzzyCompleter
-    from prompt_toolkit.formatted_text import HTML
-    from prompt_toolkit.styles import Style
-
-    # Project stuff
-    import database
-    import osBased
-    import utils
+    _import()
 
 # -------------------------------------------
 
@@ -112,6 +119,18 @@ else:
     combinedcompleter = merge_completers([PathCompleter(), database.LinuxCompleter])
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------
+
+def argget(text: str) -> str:
+    "Returns string without first word"
+    text = text.split()
+    text = text[1:]
+    out = ""
+    for item in text:
+        if item != text[-1]:
+            out += item + " "
+        else:
+            out += item
+    return out
 
 def saveToYml(data,path) -> None:
     with open(path, "w") as file:
@@ -292,6 +311,36 @@ def main() -> None:
             elif userInput.lower() == "power":
                 power()
                 continue
+
+            elif splitInput[0].lower() == "sha1":
+                text = argget(userInput)
+                print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(), text)
+                continue
+
+            elif splitInput[0].lower() == "sha224":
+                text = argget(userInput)
+                print(hashlib.sha224(bytes(text, "utf-8")).hexdigest(), text)
+                continue
+
+            elif splitInput[0].lower() == "sha256":
+                text = argget(userInput)
+                print(hashlib.sha256(bytes(text, "utf-8")).hexdigest(), text)
+                continue
+
+            elif splitInput[0].lower() == "sha384":
+                text = argget(userInput)
+                print(hashlib.sha384(bytes(text, "utf-8")).hexdigest(), text)
+                continue
+
+            elif splitInput[0].lower() == "sha512":
+                text = argget(userInput)
+                print(hashlib.sha512(bytes(text, "utf-8")).hexdigest(), text)
+                continue
+
+            elif splitInput[0].lower() == "md5":
+                text = argget(userInput)
+                print(hashlib.md5(bytes(text, "utf-8")).hexdigest(), text)
+                continue  
 
             elif splitInput[0].lower() == "plain2string":
                 try:
