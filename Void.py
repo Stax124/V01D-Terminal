@@ -1,5 +1,6 @@
 # Project V01D
 
+from subprocess import call
 def _import():
     import os
     import math
@@ -171,6 +172,11 @@ def void(_splitinput) -> None: # Open new terminal or configure it
 
         if (_splitinput[1] == "start"):
             os.startfile(__file__)
+        elif _splitinput[1] == "update":
+            import pkg_resources
+            packages = [dist.project_name for dist in pkg_resources.working_set]
+            call("pip install --upgrade " + ' '.join(packages), shell=True)
+
             
         saveToYml(config,CONFIG)
     except:
