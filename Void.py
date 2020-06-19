@@ -238,6 +238,12 @@ def power() -> None:
         os.system("powercfg /setactive " + _input)
 
 
+def hashfilesum(splitInput,hashsum):
+    with open(splitInput[1], "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hashsum.update(chunk)
+
+
 # --------------------------------------------
 
 session = PromptSession(completer=combinedcompleter, complete_while_typing=True, mouse_support=True, wrap_lines=True, auto_suggest=AutoSuggestFromHistory(
@@ -354,49 +360,37 @@ def main() -> None:
 
             elif splitInput[0].lower() == "sha1sum":
                 hashsum = hashlib.sha1()
-                with open(splitInput[1], "rb") as f:
-                    for chunk in iter(lambda: f.read(4096), b""):
-                        hashsum.update(chunk)
+                hashfilesum(splitInput,hashsum)
                 print(hashsum.hexdigest())
                 continue
 
             elif splitInput[0].lower() == "sha224sum":
                 hashsum = hashlib.sha224()
-                with open(splitInput[1], "rb") as f:
-                    for chunk in iter(lambda: f.read(4096), b""):
-                        hashsum.update(chunk)
+                hashfilesum(splitInput, hashsum)
                 print(hashsum.hexdigest())
                 continue
 
             elif splitInput[0].lower() == "sha256sum":
                 hashsum = hashlib.sha256()
-                with open(splitInput[1], "rb") as f:
-                    for chunk in iter(lambda: f.read(4096), b""):
-                        hashsum.update(chunk)
+                hashfilesum(splitInput, hashsum)
                 print(hashsum.hexdigest())
                 continue
 
             elif splitInput[0].lower() == "sha384sum":
                 hashsum = hashlib.sha384()
-                with open(splitInput[1], "rb") as f:
-                    for chunk in iter(lambda: f.read(4096), b""):
-                        hashsum.update(chunk)
+                hashfilesum(splitInput, hashsum)
                 print(hashsum.hexdigest())
                 continue
 
             elif splitInput[0].lower() == "sha512sum":
                 hashsum = hashlib.sha512()
-                with open(splitInput[1], "rb") as f:
-                    for chunk in iter(lambda: f.read(4096), b""):
-                        hashsum.update(chunk)
+                hashfilesum(splitInput, hashsum)
                 print(hashsum.hexdigest())
                 continue
 
             elif splitInput[0].lower() == "md5sum":
                 hashsum = hashlib.md5()
-                with open(splitInput[1], "rb") as f:
-                    for chunk in iter(lambda: f.read(4096), b""):
-                        hashsum.update(chunk)
+                hashfilesum(splitInput, hashsum)
                 print(hashsum.hexdigest())
                 continue
 
