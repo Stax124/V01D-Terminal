@@ -144,7 +144,7 @@ def exist(var,index) -> bool:
     except:
         return False
 
-def password(): 
+def password() -> None: 
     "Get password of wifi network (Windows only)"
 
     os.system("netsh wlan show profiles")
@@ -237,10 +237,10 @@ def power() -> None:
         os.system("powercfg /setactive " + _input)
 
 
-def hashfilesum(splitInput,hashsum):
+def hashfilesum(splitInput,hashalg) -> None:
     with open(splitInput[1], "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
-            hashsum.update(chunk)
+            hashalg.update(chunk)
 
 
 # --------------------------------------------

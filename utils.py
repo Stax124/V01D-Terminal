@@ -6,6 +6,7 @@ from clint.textui import progress
 
 
 def gcd(a, b) -> float:
+    "Returs greatest common dividor"
     if b > a:
         a, b = b, a
 
@@ -17,6 +18,7 @@ def gcd(a, b) -> float:
 
 
 def lcm(x, y) -> float:
+    "Returs lowest common multiple"
     greater = 0
     if x > y:
         greater = x
@@ -29,8 +31,8 @@ def lcm(x, y) -> float:
         greater += 1
     return float(lcm)
 
-def PlainToString(text, mode):
-    
+def PlainToString(text, mode) -> str:
+    "Returns list of strings from plain text file (hello world -> 'hello','world')"
 
     split = ""
 
@@ -82,7 +84,7 @@ def Download(target) -> None:
                     done = int(50 * dl / total_length)
                     sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)))
                     sys.stdout.flush()
-            print()
+        print()
             
     except Exception as e:
         print(e)
