@@ -121,10 +121,9 @@ else:
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 
-def argget(text: str) -> str:
-    "Returns string without first word"
-    text = text.split()
-    text = text[1:]
+def argget(splitInput: str) -> str:
+    "Returns rebuild string"
+    text = splitInput
     out = ""
     for item in text:
         if item != text[-1]:
@@ -325,32 +324,32 @@ def main() -> None:
                 continue
 
             elif splitInput[0].lower() == "sha1":
-                text = argget(userInput)
+                text = argget(splitInput[1:])
                 print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(), text)
                 continue
 
             elif splitInput[0].lower() == "sha224":
-                text = argget(userInput)
+                text = argget(splitInput[1:])
                 print(hashlib.sha224(bytes(text, "utf-8")).hexdigest(), text)
                 continue
 
             elif splitInput[0].lower() == "sha256":
-                text = argget(userInput)
+                text = argget(splitInput[1:])
                 print(hashlib.sha256(bytes(text, "utf-8")).hexdigest(), text)
                 continue
 
             elif splitInput[0].lower() == "sha384":
-                text = argget(userInput)
+                text = argget(splitInput[1:])
                 print(hashlib.sha384(bytes(text, "utf-8")).hexdigest(), text)
                 continue
 
             elif splitInput[0].lower() == "sha512":
-                text = argget(userInput)
+                text = argget(splitInput[1:])
                 print(hashlib.sha512(bytes(text, "utf-8")).hexdigest(), text)
                 continue
 
             elif splitInput[0].lower() == "md5":
-                text = argget(userInput)
+                text = argget(splitInput[1:])
                 print(hashlib.md5(bytes(text, "utf-8")).hexdigest(), text)
                 continue
 
@@ -396,12 +395,11 @@ def main() -> None:
 
             elif splitInput[0].lower() == "plain2string":
                 try:
-                    i = splitInput[2]
-                    mode = i
+                    mode = splitInput[1]
                 except:
                     mode = None
 
-                print(utils.PlainToString(splitInput[1], mode=mode))
+                print(utils.PlainToString(argget(splitInput[2:]), mode=mode))
                 continue
 
             elif userInput.lower() == "help": # Print cmd help and defined help at the same time
