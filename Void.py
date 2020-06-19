@@ -8,6 +8,7 @@ def _import():
     import yaml
     import hashlib
     import platform
+    import subprocess
     from elevate import elevate
     import ctypes
 
@@ -32,6 +33,7 @@ try:
     import yaml
     import hashlib
     import platform
+    import subprocess
     from elevate import elevate
     import ctypes
 
@@ -346,7 +348,59 @@ def main() -> None:
             elif splitInput[0].lower() == "md5":
                 text = argget(userInput)
                 print(hashlib.md5(bytes(text, "utf-8")).hexdigest(), text)
-                continue  
+                continue
+
+            # ---------------------------------------------------------
+
+            elif splitInput[0].lower() == "sha1sum":
+                hashsum = hashlib.sha1()
+                with open(splitInput[1], "rb") as f:
+                    for chunk in iter(lambda: f.read(4096), b""):
+                        hashsum.update(chunk)
+                print(hashsum.hexdigest())
+                continue
+
+            elif splitInput[0].lower() == "sha224sum":
+                hashsum = hashlib.sha224()
+                with open(splitInput[1], "rb") as f:
+                    for chunk in iter(lambda: f.read(4096), b""):
+                        hashsum.update(chunk)
+                print(hashsum.hexdigest())
+                continue
+
+            elif splitInput[0].lower() == "sha256sum":
+                hashsum = hashlib.sha256()
+                with open(splitInput[1], "rb") as f:
+                    for chunk in iter(lambda: f.read(4096), b""):
+                        hashsum.update(chunk)
+                print(hashsum.hexdigest())
+                continue
+
+            elif splitInput[0].lower() == "sha384sum":
+                hashsum = hashlib.sha384()
+                with open(splitInput[1], "rb") as f:
+                    for chunk in iter(lambda: f.read(4096), b""):
+                        hashsum.update(chunk)
+                print(hashsum.hexdigest())
+                continue
+
+            elif splitInput[0].lower() == "sha512sum":
+                hashsum = hashlib.sha512()
+                with open(splitInput[1], "rb") as f:
+                    for chunk in iter(lambda: f.read(4096), b""):
+                        hashsum.update(chunk)
+                print(hashsum.hexdigest())
+                continue
+
+            elif splitInput[0].lower() == "md5sum":
+                hashsum = hashlib.md5()
+                with open(splitInput[1], "rb") as f:
+                    for chunk in iter(lambda: f.read(4096), b""):
+                        hashsum.update(chunk)
+                print(hashsum.hexdigest())
+                continue
+
+            # --------------------------------------------------------------
 
             elif splitInput[0].lower() == "plain2string":
                 try:
@@ -358,67 +412,71 @@ def main() -> None:
                 print(utils.PlainToString(splitInput[1], mode=mode))
                 continue
 
-            elif userInput.lower() == "help" and platform.system().lower() == "windows": # Print cmd help and defined help at the same time
-                os.system("help")
-                print("\n" +
+            elif userInput.lower() == "help": # Print cmd help and defined help at the same time
+                if platform.system().lower() == "windows":
+                    os.system("help")
+                    print("\n" +
 
-                    "\n MATH: \n\n"
+                        "\n MATH: \n\n"
 
-                        "   calculator availible in command line only for using only 2 numbers !! USE SPACE BETWEEN NUMBERS !!\n"
-                        "       +   -    Addition\n"
-                        "       -   -    Subtraction\n"
-                        "       *   -    Multiplication\n"
-                        "       /   -    Division\n"
-                        "       %   -    Modulus\n"
-                        "       **  -    Exponentiation\n"
-                        "       //  -    floor division\n"
-                        "       sin - sinus (input: num1 sin)\n"
-                        "       cos - cosinus (input: num1 cos)\n"
-                        "       root - number´s root (input: num2 root num1)\n"
-                        "   gcd - greatest common divisor\n"
-                        "   lcm - least common multiple\n"
+                            "   calculator availible in command line only for using only 2 numbers !! USE SPACE BETWEEN NUMBERS !!\n"
+                            "       +   -    Addition\n"
+                            "       -   -    Subtraction\n"
+                            "       *   -    Multiplication\n"
+                            "       /   -    Division\n"
+                            "       %   -    Modulus\n"
+                            "       **  -    Exponentiation\n"
+                            "       //  -    floor division\n"
+                            "       sin - sinus (input: num1 sin)\n"
+                            "       cos - cosinus (input: num1 cos)\n"
+                            "       root - number´s root (input: num2 root num1)\n"
+                            "   gcd - greatest common divisor\n"
+                            "   lcm - least common multiple\n"
 
-                    "\n COMPUTER: \n\n"
+                        "\n COMPUTER: \n\n"
 
-                        "   component - info about workstation\n"
-                        "   motherboard, cpu, gpu, ram - info about your workstation´s component\n"
+                            "   component - info about workstation\n"
+                            "   motherboard, cpu, gpu, ram - info about your workstation´s component\n"
 
-                    "\n WINDOWS DEFINED: \n\n"
+                        "\n WINDOWS DEFINED: \n\n"
 
-                        "   control - control panel\n"
-                        "   diskpart - open diskpart\n"
-                        "   msconfig - configure your system\n"
-                        "   msinfo32 - show windows configuration\n"
-                        "   regedit - tool for editing registers\n"
-                        "   sysdm.cpl - system properties\n"
-                        "   firewall - configure firewall settings\n"
-                        "   services - configure services\n"
-                        "   manager - computer management\n"
-                        "   event - event viewer\n"
+                            "   control - control panel\n"
+                            "   diskpart - open diskpart\n"
+                            "   msconfig - configure your system\n"
+                            "   msinfo32 - show windows configuration\n"
+                            "   regedit - tool for editing registers\n"
+                            "   sysdm.cpl - system properties\n"
+                            "   firewall - configure firewall settings\n"
+                            "   services - configure services\n"
+                            "   manager - computer management\n"
+                            "   event - event viewer\n"
 
-                    "\n MANAGEMENT: \n\n"
+                        "\n MANAGEMENT: \n\n"
 
-                        "   exit | quit - quit application\n"
-                        "   os - show operating system\n"
+                            "   exit | quit - quit application\n"
+                            "   os - show operating system\n"
+                        
+                        "\n ALIAS: \n\n"
+
+                            "   alias - define your own function (alias sayhello @echo Hello!!)\n"
+                            "   delalias - remove alias\n"
+                            "   aliases - show all user defined aliases\n"
+
+                        "\n OTHER FUNCTIONS \n\n"
+
+                            "   ping - never ending ping loop\n"
+                            "   pagefile - show pagefile location and size\n"
+                            "   read - read specified .txt file\n"
+                            "   power - change your Windows powerplan\n"
+                            "   download - dictionary for downloading files (download -list)\n"
+                            "   open - open file explorer in current directory\n"
+                            "   plain2string - convert plain text to strings (Usage: plain2string text/[filename] mode[line,file,none])\n"
+
+                        "\n IN DEVELOPMENT \n\n"
+                        )
+                else:
+                    subprocess.call("help", shell=True)
                     
-                    "\n ALIAS: \n\n"
-
-                        "   alias - define your own function (alias sayhello @echo Hello!!)\n"
-                        "   delalias - remove alias\n"
-                        "   aliases - show all user defined aliases\n"
-
-                    "\n OTHER FUNCTIONS \n\n"
-
-                        "   ping - never ending ping loop\n"
-                        "   pagefile - show pagefile location and size\n"
-                        "   read - read specified .txt file\n"
-                        "   power - change your Windows powerplan\n"
-                        "   download - dictionary for downloading files (download -list)\n"
-                        "   open - open file explorer in current directory\n"
-                        "   plain2string - convert plain text to strings (Usage: plain2string text/[filename] mode[line,file,none])\n"
-
-                    "\n IN DEVELOPMENT \n\n"
-                    )
                 continue
 
             elif userInput.lower() == "ping": # Never ending ping loop
