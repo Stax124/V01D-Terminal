@@ -175,6 +175,8 @@ def void(_splitinput) -> None: # Open new terminal or configure it
             import pkg_resources
             packages = [dist.project_name for dist in pkg_resources.working_set]
             call("pip install --upgrade " + ' '.join(packages), shell=True)
+        elif _splitinput[1] == "title":
+            os.system(f"title {_splitinput[2]}")
 
             
         saveToYml(config,CONFIG)
@@ -243,9 +245,15 @@ def hashfilesum(splitInput,hashsum):
 
 # --------------------------------------------
 
-session = PromptSession(completer=combinedcompleter, complete_while_typing=True, mouse_support=True, wrap_lines=True, auto_suggest=AutoSuggestFromHistory(
-), search_ignore_case=True)
-session.refresh_interval = 0.1
+session = PromptSession(completer=combinedcompleter,
+                        complete_while_typing=True,
+                        mouse_support=True,
+                        wrap_lines=True,
+                        auto_suggest=AutoSuggestFromHistory(),
+                        search_ignore_case=True,
+                        enable_open_in_editor=True,
+                        refresh_interval=0
+                        )
 
 
 def main() -> None:
@@ -256,8 +264,8 @@ def main() -> None:
     while True:
         try:
             cd = os.getcwd() # Get current working directory
-            userInput = session.prompt(HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
-                                            ), style=_style, complete_in_thread=config["multithreading"])  # Get user input (autocompetion allowed)
+            userInput = session.prompt(message=HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
+                                            ), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True)  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
             try:

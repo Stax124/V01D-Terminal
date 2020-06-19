@@ -94,7 +94,7 @@ WinCompleter = NestedCompleter.from_nested_dict(
         "admin": None,
         "cls": {"/?": None},
         "clear": None,
-        "void":{"multithreading":{"true":None,"false":None},"fuzzycomplete":{"true":None,"false":None}, "start":None,"update":None},
+        "void":{"multithreading":{"true":None,"false":None},"fuzzycomplete":{"true":None,"false":None}, "start":None,"update":None, "title":None},
         "read": None,
         "power": None,
         "password": None,
