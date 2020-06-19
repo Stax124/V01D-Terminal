@@ -87,8 +87,6 @@ _style = Style.from_dict(
         # Specific style
         "pointer": "#b20000",
         "path": "#00fff0",
-        "bottom-toolbar": "#aaaa00 bg:#242424",
-        "bottom-toolbar.text": "#aaaa00 bg:#242424",
 
         # Completor
         "completion-menu.completion": "bg:#000000 #ffffff",
@@ -260,7 +258,7 @@ def main() -> None:
         try:
             cd = os.getcwd() # Get current working directory
             userInput = session.prompt(HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
-                                            ), style=_style, complete_in_thread=config["multithreading"], bottom_toolbar=HTML(f'<b>OS:{platform.system()}    FuzzyComplete:{config["fuzzycomplete"]}     Multithreading:{config["multithreading"]}     Admin:{is_admin()}</b>'))  # Get user input (autocompetion allowed)
+                                            ), style=_style, complete_in_thread=config["multithreading"])  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
             try:
