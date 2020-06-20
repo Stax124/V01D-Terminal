@@ -4,6 +4,7 @@ import random
 import time
 import database
 import os
+from prompt_toolkit.shortcuts import confirm
 from clint.textui import progress
 
 
@@ -69,6 +70,8 @@ def Download(target) -> None:
             print("Target is not availible")
 
     try:
+        wd = os.getcwd()
+        os.chdir(os.environ["USERPROFILE"]+"\\Downloads")
         file_name = urlSplit[-1]
         with open(file_name, "wb") as f:
             print("Downloading %s" % file_name)
@@ -78,6 +81,7 @@ def Download(target) -> None:
             if total_length is None:  # no content length header
                     f.write(response.content)
             else:
+                print(f"Filesize: {int(total_length) / 1000000} MB")
                 dl = 0
                 total_length = int(total_length)
                 for data in response.iter_content(chunk_size=4096):
@@ -87,6 +91,19 @@ def Download(target) -> None:
                     sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)))
                     sys.stdout.flush()
         print()
+
+        fsplit = file_name.split(".")
+        if fsplit[-1] == "exe":
+            run = confirm("Run installer ? ")
+            if run:
+                try:
+                    os.system(f"start {file_name}")
+                except Exception as error:
+                    print(error)
+        else:
+            print(fsplit[-1])
+
+        os.chdir(wd)
             
     except Exception as e:
         print(e)
