@@ -78,6 +78,10 @@ WinCompleter = NestedCompleter.from_nested_dict(
     {
         "plain2string": {"line":None,"file":None},
         "md5": None,
+        "startup": None,
+        "open": None,
+        "settings": None,
+        "aliases": None,
         "sha1": None,
         "sha224": None,
         "sha256": None,

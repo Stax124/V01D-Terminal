@@ -531,19 +531,12 @@ def main() -> None:
 
             # Change directory based on input
             elif splitInput[0].lower() == "cd" and exist(splitInput, 1):
-                out = ""
-                for i in range(splitInput[1:].__len__()):
-                    out += splitInput[i+1] + " "
+                out = argget(splitInput[1:])
                 os.chdir(out)
                 continue
 
-            elif userInput.lower() == "cd":
-                uIn = session.prompt("path: ")
-                os.chdir(uIn)
-
             elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
                 sys.exit()
-                
 
             elif splitInput[0].lower() == "alias": # Define own function and save it
                 l = splitInput[2:]
