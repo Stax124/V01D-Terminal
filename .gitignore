@@ -1,2 +1,5 @@
+# Ignore testing file
 test.py
+
+# Ignore all python config files
 *.pyc
