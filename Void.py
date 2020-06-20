@@ -78,24 +78,6 @@ CONFIG = r"config.yml"
 
 # -------------------------------------------
 
-# Define console style
-_style = Style.from_dict(
-    {
-        # Default style
-        "": "#ff0066",
-
-        # Specific style
-        "pointer": "#b20000",
-        "path": "#00fff0",
-
-        # Completor
-        "completion-menu.completion": "bg:#000000 #ffffff",
-        "completion-menu.completion.current": "bg:#00aaaa #000000",
-        "scrollbar.background": "bg:#88aaaa",
-        "scrollbar.button": "bg:#222222",
-    }
-)
-
 title = "V01D Terminal" # Set title
 aliases = database.GetAliases() # Get user defined aliases from database
 
@@ -105,8 +87,16 @@ try:
 except:
     config = {
         "multithreading":True,
-        "fuzzycomplete":True
+        "fuzzycomplete":True,
+        "default": "#ff0066",
+        "pointer": "#b20000",
+        "path": "#00fff0",
+        "completion-menu.completion": "bg:#000000 #ffffff",
+        "completion-menu.completion.current": "bg:#00aaaa #000000",
+        "scrollbar.background": "bg:#88aaaa",
+        "scrollbar.button": "bg:#222222"
     }
+    print("config.yml not found, ignoring settings and using defaults")
 
 
 # Pick completer based on config and platform
@@ -118,6 +108,24 @@ elif platform.system() == "Linux" and config["fuzzycomplete"]:
     combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.LinuxCompleter]))
 else:
     combinedcompleter = merge_completers([PathCompleter(), database.LinuxCompleter])
+
+# Define console style
+_style = Style.from_dict(
+    {
+        # Default style
+        "": config.get("default"),
+
+        # Specific style
+        "pointer": config.get("pointer"),
+        "path": config.get("path"),
+
+        # Completor
+        "completion-menu.completion": config.get("completion-menu.completion"),
+        "completion-menu.completion.current": config.get("completion-menu.completion.current"),
+        "scrollbar.background": config.get("scrollbar.background"),
+        "scrollbar.button": config.get("scrollbar.button")
+    }
+)
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -177,7 +185,8 @@ def void(_splitinput) -> None: # Open new terminal or configure it
             call("pip install --upgrade " + ' '.join(packages), shell=True)
         elif _splitinput[1] == "title":
             os.system(f"title {_splitinput[2]}")
-
+        elif _splitinput[1] == "config":
+            print(config)
             
         saveToYml(config,CONFIG)
     except:
