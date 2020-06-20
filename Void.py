@@ -518,6 +518,12 @@ def main() -> None:
                 print(utils.gcd(num[0], num[1]))
                 continue
 
+            elif splitInput[0].lower() == "rng":
+                nums = str(splitInput[1]).split(",")
+                num = [float(nums[0]), float(nums[1])]
+                print(utils.rng(num[0], num[1]))
+                continue
+
             elif userInput.lower() == "open" and platform.system().lower() == "windows": # Open file explorer in cwd
                 os.system("explorer .\\")
                 continue

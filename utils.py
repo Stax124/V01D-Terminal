@@ -1,5 +1,7 @@
 import requests
 import sys
+import random
+import time
 import database
 import os
 from clint.textui import progress
@@ -89,6 +91,11 @@ def Download(target) -> None:
     except Exception as e:
         print(e)
         os.system("start "+ url)
+
+def rng(_min: int, _max: int) -> int:
+    "Returns random number between min and max. Min included, max excluded"
+    random.seed(time.time())
+    return random.randrange(_min, _max)
 
 if __name__ == "__main__":
     import Void
