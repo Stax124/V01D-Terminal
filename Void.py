@@ -10,7 +10,6 @@ def _import():
     import platform
     import subprocess
     from elevate import elevate
-    import ctypes
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit import PromptSession
@@ -36,7 +35,6 @@ try:
     import platform
     import subprocess
     from elevate import elevate
-    import ctypes
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit import PromptSession
@@ -65,9 +63,9 @@ except:
     # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies ? "):
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate os math yaml platform ctypes sys")
+            os.system("pip install clint elevate os math yaml platform sys")
         else:
-            os.system("sudo pip3 install clint elevate os math yaml platform ctypes sys")
+            os.system("sudo pip3 install clint elevate os math yaml platform sys")
     else:
         sys.exit()
 
