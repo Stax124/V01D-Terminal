@@ -8,6 +8,7 @@ def _import():
     import yaml
     import hashlib
     import platform
+    import ctypes
     import subprocess
     from elevate import elevate
 
@@ -33,6 +34,7 @@ try:
     import yaml
     import hashlib
     import platform
+    import ctypes
     import subprocess
     from elevate import elevate
 
@@ -63,9 +65,9 @@ except:
     # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies ? "):
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate os math yaml platform sys")
+            os.system("pip install clint elevate os math ctypes yaml platform sys")
         else:
-            os.system("sudo pip3 install clint elevate os math yaml platform sys")
+            os.system("sudo pip3 install clint elevate os math ctypes yaml platform sys")
     else:
         sys.exit()
 
