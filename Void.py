@@ -1,4 +1,4 @@
-# Project V01D
+# Project V01D-Terminal
 
 from subprocess import call
 def _import():
@@ -17,7 +17,8 @@ def _import():
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.history import InMemoryHistory
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-    from prompt_toolkit.completion import merge_completers, PathCompleter, FuzzyCompleter
+    from prompt_toolkit.completion import merge_completers, FuzzyCompleter
+    from PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
 
@@ -42,7 +43,8 @@ try:
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.history import InMemoryHistory
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-    from prompt_toolkit.completion import merge_completers, PathCompleter, FuzzyCompleter
+    from prompt_toolkit.completion import merge_completers, FuzzyCompleter
+    from PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
 
@@ -60,7 +62,7 @@ except:
 
     from prompt_toolkit.shortcuts import confirm
 
-    # Ask to install all dependencies, if denied import error will be raised
+    # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies ? "):
         if platform.system().lower() == "windows":
             os.system("pip install clint elevate os math yaml platform ctypes sys")
