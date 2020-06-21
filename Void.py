@@ -342,6 +342,8 @@ def main() -> None:
                 power()
                 continue
 
+            # Hashing ----------------------------------------------------------
+
             elif splitInput[0].lower() == "sha1":
                 text = argget(splitInput[1:])
                 print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(), text)
@@ -372,7 +374,7 @@ def main() -> None:
                 print(hashlib.md5(bytes(text, "utf-8")).hexdigest(), text)
                 continue
 
-            # ---------------------------------------------------------
+            # Hash sum -----------------------------------------------
 
             elif splitInput[0].lower() == "sha1sum":
                 hashsum = hashlib.sha1()
@@ -427,8 +429,6 @@ def main() -> None:
                     print("\n" +
 
                         "\n MATH: \n\n"
-
-                            "   calculator availible in command line only for using only 2 numbers !! USE SPACE BETWEEN NUMBERS !!\n"
                             "       +   -    Addition\n"
                             "       -   -    Subtraction\n"
                             "       *   -    Multiplication\n"
@@ -436,11 +436,9 @@ def main() -> None:
                             "       %   -    Modulus\n"
                             "       **  -    Exponentiation\n"
                             "       //  -    floor division\n"
-                            "       sin - sinus (input: num1 sin)\n"
-                            "       cos - cosinus (input: num1 cos)\n"
-                            "       root - number´s root (input: num2 root num1)\n"
                             "   gcd - greatest common divisor\n"
                             "   lcm - least common multiple\n"
+                            "   rng - random number generator (rng min[included],max[excluded])\n"
 
                         "\n COMPUTER: \n\n"
 
@@ -480,6 +478,9 @@ def main() -> None:
                             "   download - dictionary for downloading files (download -list)\n"
                             "   open - open file explorer in current directory\n"
                             "   plain2string - convert plain text to strings (Usage: plain2string text/[filename] mode[line,file,none])\n"
+                            "   md5, sha1 , sha224, sha256, sha384, sha512 - hash string\n"
+                            "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file\n"
+                            "   elevate, admin - grant admin permission for shell\n"
 
                         "\n IN DEVELOPMENT \n\n"
                         )
