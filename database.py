@@ -51,7 +51,7 @@ downloadDict = {
     "bloody6":"http://download.a4tech.com.tw:8080/BloodyMouse/Bloody7_V2020.0213_MUI.exe",
     "keydominator2":"http://download.a4tech.com.tw:8080/BloodyKeyboard/KeyDominator2_V2020.0109_MUI.exe",
     "geforceexperience":"https://uk.download.nvidia.com/GFE/GFEClient/3.20.2.34/GeForce_Experience_v3.20.2.34.exe",
-    "gimp":"https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.18-setup-2.exe",
+    "gimp": "https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.20-setup-1.exe",
     "chrome":"https://www.google.com/intl/cs_CZ/chrome/thank-you.html?statcb=1&installdataindex=empty&defaultbrowser=0#",
     "firefox":"https://download.mozilla.org/?product=firefox-stub&os=win&lang=cs",
     "operagx":"https://net.geo.opera.com/opera_gx/stable/windows?utm_tryagain=yes&utm_source=google_via_opera_com&utm_medium=ose&utm_campaign=(none)_via_opera_com_https&http_referrer=https%3A%2F%2Fwww.google.com%2F&utm_site=opera_com&utm_lastpage=opera.com/",
