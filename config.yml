@@ -3,7 +3,7 @@ completion-menu.completion.current: 'bg:#00aaaa #000000'
 default: '#ff0066'
 fuzzycomplete: true
 multithreading: true
-path: '#00fff0'
+path: '#22ff00'
 pointer: '#b20000'
 scrollbar.background: bg:#88aaaa
 scrollbar.button: bg:#222222
