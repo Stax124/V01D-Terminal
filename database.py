@@ -76,7 +76,7 @@ downloadDict = {
 
 WinCompleter = NestedCompleter.from_nested_dict(
     {
-        "plain2string": {"line":None,"file":None},
+        "plain2string": {"space":None,"file":None},
         "md5": None,
         "startup": None,
         "open": None,

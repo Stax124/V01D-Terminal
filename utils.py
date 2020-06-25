@@ -38,10 +38,8 @@ def PlainToString(text, mode) -> str:
     "Returns list of strings from plain text file (hello world -> 'hello','world')"
 
     split = ""
-
-    if mode == "line":
-        split = text.splitlines()
-    elif mode == "file":
+    
+    if mode == "file":
         try:
             f = open(text, "r")
             text = f.read()
