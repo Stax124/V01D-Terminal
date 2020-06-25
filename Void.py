@@ -480,7 +480,7 @@ def main() -> None:
                             "   power - change your Windows powerplan\n"
                             "   download - dictionary for downloading files (download -list)\n"
                             "   open - open file explorer in current directory\n"
-                            "   plain2string - convert plain text to strings (Usage: plain2string text/[filename] mode[line,file,none])\n"
+                            "   plain2string - convert plain text to strings: plain2string mode[line,file] text/[filename]\n"
                             "   md5, sha1 , sha224, sha256, sha384, sha512 - hash string\n"
                             "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file\n"
                             "   elevate, admin - grant admin permission for shell\n"

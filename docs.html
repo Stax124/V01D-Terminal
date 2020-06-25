@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V01D Terminal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet"> 
+</head>
+<body class="body">
+    <div class="main">
+        <div class="buttons">
+            <a href="index.html"><button class="button">Home</button></a>
+            <a href="https://github.com/Stax124/V01D-Terminal" target="blank"><button class="button">Download</button></a>
+            <a href="docs.html"><button class="button">Documentation</button></a>
+        </div>
+        <div class="content">
+            <H6 id="title">Documentation</H5>
+            <h1 style="text-align: center;">
+                <p>
+                    V01D-Terminal is Python powered flexible Windows terminal for everyday use
+                </p>
+            </h1>
+            <h2 style="margin-left: 10%;">
+                <p>
+                    Libraries in use: <br>
+                    <p class="documentation">
+                        os : <a href="https://docs.python.org/3/library/os.html" class="link">link</a><br>
+                        math : <a href="https://docs.python.org/3/library/math.html?highlight=math#module-math" class="link">link</a><br>
+                        sys : <a href="https://docs.python.org/3/library/sys.html?highlight=sys#module-sys" class="link">link</a><br>
+                        yaml : <a href="https://yaml.org/" class="link">link</a><br>
+                        hashlib : <a href="https://docs.python.org/3/library/hashlib.html?highlight=hashlib#module-hashlib" class="link">link</a><br>
+                        platform : <a href="https://docs.python.org/3/library/platform.html?highlight=platform#module-platform" class="link">link</a><br>
+                        subprocess : <a href="https://docs.python.org/3/library/subprocess.html?highlight=subprocess#module-subprocess" class="link">link</a><br>
+                        elevate : <a href="https://pypi.org/project/elevate/" class="link">link</a><br>
+                        prompt-toolkit : <a href="https://pypi.org/project/prompt-toolkit/" class="link">link</a><br>
+                    </p>
+                    Terminal settings: <br>
+                    <p class="documentation">
+                        void config -> prints out settings saved in config.yml <br>
+                        void multithreading [true | false] -> use threads for autocomplete menu <br>
+                        void fuzzycomplete [true | false] -> autocomplete based on characters not words <br>
+                        void start -> start new terminal <br>
+                        void update -> updates all python libraries installed <br>
+                        void title [string] -> change title of this terminal (similar to cmd "title [string]")<br>
+                    </p>
+                    Hashing: <br>
+                    <p class="documentation">
+                        Type of hashes supported: md5, sha1, sha224, sha256, sha384, sha512 <br><br>
+                        Usage: (hash) [string] or (hash)sum [file] <br><br>
+                        md5 hello world -> 5eb63bbbe01eeed093cb22bb8f5acdc3 <br>
+                        md5sum config.yml -> 1d884456db9bba914f4535bdfda4abdb <br>
+                    </p>
+                    Math: <br>
+                    <p class="documentation">
+                        + -> Add <br>
+                        - -> Subtract <br>
+                        * -> Multiply <br>
+                        / -> Divide <br>
+                        % -> Remainder <br>
+                        ** -> Amplify <br>
+                        // -> Floor divide <br><br>
+
+                        gcd -> greatest common divisor: gcd [float|int],[float|int] <br>
+                        lcm -> lowest common multiple: lcm [float|int],[float|int] <br>
+                        rng -> random number generator: rng [int](included),[int](excluded) <br>
+                    </p>
+                    PC Parts: <br>
+                    <p class="documentation">
+                        component -> basic info about all major components <br>
+                        motherboard, cpu, gpu, ram -> more detailed info about each component <br>
+                    </p>
+                    Alias: <br>
+                    <p class="documentation">
+                        alias - define your own function: alias sayhello @echo Hello!! <br>
+                        delalias - remove alias: delalias [string](name of alias) <br>
+                        aliases - show all user defined aliases <br>
+                    </p>
+                    Other: <br>
+                    <p class="documentation">
+                        ping - never ending ping loop <br>
+                        pagefile - show pagefile location and size<br>
+                        read - read specified .txt file<br>
+                        power - change your Windows powerplan<br>
+                        download - dictionary for downloading files (download -list)<br>
+                        open - open file explorer in current directory<br>
+                        plain2string - convert plain text to strings: plain2string mode[line,file] text/[filename]<br>
+                        elevate, admin - grant admin permission for shell<br>
+                    </p>
+                </p>
+            </h2>
+        </div>
+    </div>
+</body>
+</html>
