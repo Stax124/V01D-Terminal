@@ -21,6 +21,7 @@ def _import():
     from PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
+    import pkg_resources.py2_warn
 
     # Project stuff
     import database
@@ -47,6 +48,7 @@ try:
     from PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
+    import pkg_resources.py2_warn
 
     # Project stuff
     import database
@@ -611,4 +613,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    import os
+    os.system("pause")
 
