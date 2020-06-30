@@ -95,7 +95,7 @@ except:
         "fuzzycomplete":True,
         "default": "#ff0066",
         "pointer": "#b20000",
-        "path": "#00fff0",
+        "path": "#22ff00",
         "completion-menu.completion": "bg:#000000 #ffffff",
         "completion-menu.completion.current": "bg:#00aaaa #000000",
         "scrollbar.background": "bg:#88aaaa",
