@@ -187,7 +187,10 @@ def void(_splitinput) -> None: # Open new terminal or configure it
         elif _splitinput[1] == "update":
             import pkg_resources
             packages = [dist.project_name for dist in pkg_resources.working_set]
-            call("pip install --upgrade " + ' '.join(packages), shell=True)
+            if platform.system().lower() == "windows":
+                call("pip install --upgrade " + ' '.join(packages), shell=True)
+            else:
+                call("sudo pip3 install --upgrade " + ' '.join(packages), shell=True)
         elif _splitinput[1] == "title":
             os.system(f"title {_splitinput[2]}")
         elif _splitinput[1] == "config":
