@@ -5,9 +5,9 @@ import sys
 import os
 import osBased
 import pickle
+import yaml
+import importlib
 from pathlib import Path
-
-
 
 def writedata(data, filename, location, mode) -> None:
     target = os.path.join(location, filename)
@@ -39,38 +39,11 @@ __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 # --------------------------------------------------------------------
-downloadDict = {
-    "eset":"https://download.eset.com/com/eset/tools/installers/live_essp/latest/eset_smart_security_premium_live_installer.exe",
-    "afterburner":"http://download.msi.com/uti_exe/vga/MSIAfterburnerSetup.zip",
-    "steam":"https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe",
-    "vscode":"https://aka.ms/win32-x64-user-stable",
-    "discord":"https://discordapp.com/api/download?platform=win",
-    "minecraft":"https://launcher.mojang.com/download/MinecraftInstaller.msi",
-    "overwolf":"https://download.overwolf.com/install/Download?Channel=web_dl_btn",
-    "libreoffice":"https://download.documentfoundation.org/libreoffice/stable/6.4.2/win/x86_64/LibreOffice_6.4.2_Win_x64.msi",
-    "bloody6":"http://download.a4tech.com.tw:8080/BloodyMouse/Bloody7_V2020.0213_MUI.exe",
-    "keydominator2":"http://download.a4tech.com.tw:8080/BloodyKeyboard/KeyDominator2_V2020.0109_MUI.exe",
-    "geforceexperience":"https://uk.download.nvidia.com/GFE/GFEClient/3.20.2.34/GeForce_Experience_v3.20.2.34.exe",
-    "gimp": "https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.20-setup-1.exe",
-    "chrome":"https://www.google.com/intl/cs_CZ/chrome/thank-you.html?statcb=1&installdataindex=empty&defaultbrowser=0#",
-    "firefox":"https://download.mozilla.org/?product=firefox-stub&os=win&lang=cs",
-    "operagx":"https://net.geo.opera.com/opera_gx/stable/windows?utm_tryagain=yes&utm_source=google_via_opera_com&utm_medium=ose&utm_campaign=(none)_via_opera_com_https&http_referrer=https%3A%2F%2Fwww.google.com%2F&utm_site=opera_com&utm_lastpage=opera.com/",
-    "orcalevm":"https://download.virtualbox.org/virtualbox/6.1.4/VirtualBox-6.1.4-136177-Win.exe",
-    "python":"https://www.python.org/ftp/python/3.8.2/python-3.8.2.exe",
-    "winrar":"https://www.rar.cz/files/winrar-x64-580cz.exe",
-    "uplay":"http://ubi.li/4vxt9",
-    "battlenet":"https://www.battle.net/download/getInstallerForGame?os=win&locale=enUS&version=LIVE&gameProgram=BATTLENET_APP",
-    "epicgameslauncher":"https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi?productName=unrealtournament",
-    "geforcenow":"https://download.nvidia.com/gfnpc/GeForceNOW-release.exe",
-    "vlc": "http://get.videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe",
-    "notepad++": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.5/npp.7.8.5.Installer.x64.exe",
-    "Malwarebytes": "https://www.malwarebytes.com/mwb-download/thankyou/",
-    "audacity": "https://www.fosshub.com/Audacity.html?dwl=audacity-win-2.3.3.exe",
-    "tor": "https://www.torproject.org/dist/torbrowser/9.0.9/torbrowser-install-win64-9.0.9_en-US.exe",
-    "anaconda": "https://repo.anaconda.com/archive/Anaconda3-2020.02-Windows-x86_64.exe",
-    "unetbootin": "https://github.com/unetbootin/unetbootin/releases/download/677/unetbootin-windows-677.exe",
-    "aoemipartitionasistant": "https://www.diskpart.com/download-home.html"
-}
+
+try:
+    downloadDict = yaml.safe_load(open("downloadDict.yml"))
+except:
+    downloadDict = yaml.safe_load(open("..\..\downloadDict.yml"))
 
 # -----------------------------------------
 

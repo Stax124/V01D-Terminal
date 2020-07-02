@@ -88,7 +88,10 @@ aliases = database.GetAliases() # Get user defined aliases from database
 
 # Load config or defaults
 try:
-    config = yaml.safe_load(open("config.yml"))
+    try:
+        config = yaml.safe_load(open("config.yml"))
+    except:
+        config = yaml.safe_load(open("..\..\config.yml"))
 except:
     config = {
         "multithreading":True,
