@@ -15,7 +15,7 @@
             <a href="docs.html"><button class="button">Documentation</button></a>
         </div>
         <div class="content">
-            <H6 id="title">Documentation</H5>
+            <H6 id="title"><u>Documentation</u></H5>
             <h1 style="text-align: center; color: greenyellow;">
                 <p>
                     V01D-Terminal is Python powered flexible Windows terminal for everyday use
@@ -23,7 +23,7 @@
             </h1>
             <h2 style="margin-left: 10%;">
                 <p>
-                    Libraries in use: <br>
+                    <p style="color: greenyellow;">Libraries in use: <br></p>
                     <p class="documentation">
                         os : <a href="https://docs.python.org/3/library/os.html" class="link">link</a><br>
                         math : <a href="https://docs.python.org/3/library/math.html?highlight=math#module-math" class="link">link</a><br>
@@ -35,7 +35,7 @@
                         elevate : <a href="https://pypi.org/project/elevate/" class="link">link</a><br>
                         prompt-toolkit : <a href="https://pypi.org/project/prompt-toolkit/" class="link">link</a><br>
                     </p>
-                    Terminal settings: <br>
+                    <p style="color: greenyellow;">Terminal settings: <br></p>
                     <p class="documentation">
                         void config -> prints out settings saved in config.yml <br>
                         void multithreading [true | false] -> use threads for autocomplete menu <br>
@@ -44,14 +44,14 @@
                         void update -> updates all python libraries installed <br>
                         void title [string] -> change title of this terminal (similar to cmd "title [string]")<br>
                     </p>
-                    Hashing: <br>
+                    <p style="color: greenyellow;">Hashing: <br></p>
                     <p class="documentation">
                         Type of hashes supported: md5, sha1, sha224, sha256, sha384, sha512 <br><br>
                         Usage: (hash) [string] or (hash)sum [file] <br><br>
                         md5 hello world -> 5eb63bbbe01eeed093cb22bb8f5acdc3 <br>
                         md5sum config.yml -> 1d884456db9bba914f4535bdfda4abdb <br>
                     </p>
-                    Math: <br>
+                    <p style="color: greenyellow;">Math: <br></p>
                     <p class="documentation">
                         + -> Add <br>
                         - -> Subtract <br>
@@ -65,18 +65,18 @@
                         lcm -> lowest common multiple: lcm [float|int],[float|int] <br>
                         rng -> random number generator: rng [int](included),[int](excluded) <br>
                     </p>
-                    PC Parts: <br>
+                    <p style="color: greenyellow;">PC Parts: <br></p>
                     <p class="documentation">
                         component -> basic info about all major components <br>
                         motherboard, cpu, gpu, ram -> more detailed info about each component <br>
                     </p>
-                    Alias: <br>
+                    <p style="color: greenyellow;">Alias: <br></p>
                     <p class="documentation">
                         alias - define your own function: alias sayhello @echo Hello!! <br>
                         delalias - remove alias: delalias [string](name of alias) <br>
                         aliases - show all user defined aliases <br>
                     </p>
-                    Other: <br>
+                    <p style="color: greenyellow;">Other: <br></p>
                     <p class="documentation">
                         ping - never ending ping loop <br>
                         pagefile - show pagefile location and size<br>
@@ -87,7 +87,7 @@
                         plain2string - convert plain text to strings: plain2string mode[space,file] text/[filename]<br>
                         elevate, admin - grant admin permission for shell<br>
                     </p>
-                    CMD: <br>
+                    <p style="color: greenyellow;">CMD: <br></p>
                     <p class="documentation">
                         ASSOC - Displays or modifies file extension associations. <br>
                         ATTRIB - Displays or changes file attributes.<br>
@@ -185,6 +185,12 @@
                         XCOPY - Copies files and directory trees.<br>
                         WMIC - Displays WMI information inside interactive command shell.<br>
                     </p>
+                    <p style="color: greenyellow;">Settings: <br></p>
+                    <p class="documentation">
+                        config.yml -> all config parameters like colors and completion settings <br>
+                        downloadDict.yml -> dictionary for downloading programs and packages <br>
+                    </p>
+                    <div style="margin-bottom: 200px;"></div>
                 </p>
             </h2>
         </div>
