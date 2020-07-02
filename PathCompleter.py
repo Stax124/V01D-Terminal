@@ -94,3 +94,8 @@ class PathCompleter(Completer):
                 yield Completion(completion, 0, display=filename)
         except OSError:
             pass
+
+
+if __name__ == "__main__":
+    import Void
+    Void.main()

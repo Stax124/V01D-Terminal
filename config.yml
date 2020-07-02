@@ -1,6 +1,7 @@
 completion-menu.completion: 'bg:#000000 #ffffff'
 completion-menu.completion.current: 'bg:#00aaaa #000000'
 default: '#ff0066'
+user: "#ff0066"
 fuzzycomplete: true
 multithreading: true
 path: '#22ff00'

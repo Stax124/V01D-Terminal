@@ -80,6 +80,7 @@ except:
 # -------------------------------------------
 
 CONFIG = r"config.yml"
+USER = os.environ["USERNAME"]
 
 # -------------------------------------------
 
@@ -90,7 +91,8 @@ aliases = database.GetAliases() # Get user defined aliases from database
 try:
     try:
         config = yaml.safe_load(open("config.yml"))
-    except:
+    except Exception as e:
+        print(e)
         config = yaml.safe_load(open("..\..\config.yml"))
 except:
     config = {
@@ -99,6 +101,7 @@ except:
         "default": "#ff0066",
         "pointer": "#b20000",
         "path": "#22ff00",
+        "user": "#ff0066",
         "completion-menu.completion": "bg:#000000 #ffffff",
         "completion-menu.completion.current": "bg:#00aaaa #000000",
         "scrollbar.background": "bg:#88aaaa",
@@ -126,6 +129,7 @@ _style = Style.from_dict(
         # Specific style
         "pointer": config.get("pointer"),
         "path": config.get("path"),
+        "user": config.get("user"),
 
         # Completor
         "completion-menu.completion": config.get("completion-menu.completion"),
@@ -284,7 +288,7 @@ def main() -> None:
     while True:
         try:
             cd = os.getcwd() # Get current working directory
-            userInput = session.prompt(message=HTML(f"<path>{cd}</path>""<pointer> > </pointer>"
+            userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"
                                             ), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True)  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
