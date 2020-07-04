@@ -49,7 +49,7 @@ except:
 
 WinCompleter = NestedCompleter.from_nested_dict(
     {
-        "plain2string": {"space":None,"file":None},
+        "plain2string": {"space":None,"file":None,"fileline":None},
         "md5": None,
         "startup": None,
         "open": None,

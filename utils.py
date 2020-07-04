@@ -46,8 +46,16 @@ def PlainToString(text, mode) -> str:
             split = text.split()
         except:
             print("File not found")
+    elif mode == "fileline":
+        try:
+            f = open(text, "r")
+            text = f.read()
+            split = text.split("\n")
+        except:
+            print("File not found")
     else:
         split = text.split()
+
 
     out = ""
 
