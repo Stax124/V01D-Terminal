@@ -22,6 +22,7 @@ def _import():
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
     import pkg_resources.py2_warn
+    from prompt_toolkit.output.color_depth import ColorDepth
 
     # Project stuff
     import database
@@ -49,6 +50,7 @@ try:
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
     import pkg_resources.py2_warn
+    from prompt_toolkit.output.color_depth import ColorDepth
 
     # Project stuff
     import database
@@ -276,7 +278,8 @@ session = PromptSession(completer=combinedcompleter,
                         auto_suggest=AutoSuggestFromHistory(),
                         search_ignore_case=True,
                         enable_open_in_editor=True,
-                        refresh_interval=0
+                        refresh_interval=0,
+                        color_depth=ColorDepth.TRUE_COLOR
                         )
 
 
@@ -289,7 +292,7 @@ def main() -> None:
         try:
             cd = os.getcwd() # Get current working directory
             userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"
-                                            ), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True)  # Get user input (autocompetion allowed)
+                                            ), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
             splitInput = userInput.split() # Split input to get key words
 
             try:

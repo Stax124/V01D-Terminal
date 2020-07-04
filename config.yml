@@ -4,7 +4,7 @@ default: '#ff0066'
 user: "#ff0066"
 fuzzycomplete: true
 multithreading: true
-path: '#22ff00'
+path: '#6ffc03'
 pointer: '#b20000'
 scrollbar.background: bg:#88aaaa
 scrollbar.button: bg:#222222
