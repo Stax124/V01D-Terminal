@@ -154,7 +154,7 @@ def argget(splitInput: str) -> str:
 
 def saveToYml(data,path) -> None:
     with open(path, "w") as file:
-        doc = yaml.dump(data, file)
+        yaml.dump(data, file)
 
 def exist(var,index) -> bool:
     "Check if var with index exist"
@@ -521,6 +521,10 @@ def main() -> None:
             
             elif splitInput[0].lower() == "void":
                 void(splitInput)
+                continue
+
+            elif splitInput[0].lower() == "compile":
+                subprocess.call("pyinstaller .\Void.py --noconfirm",shell=True)
                 continue
 
             elif splitInput[0].lower() == "lcm":
