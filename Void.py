@@ -31,7 +31,6 @@ def _import():
 
 try:
     import os
-    import math
     import sys
     import yaml
     import hashlib
@@ -43,7 +42,6 @@ try:
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
-    from prompt_toolkit.history import InMemoryHistory
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
     from prompt_toolkit.completion import merge_completers, FuzzyCompleter
     from PathCompleter import PathCompleter

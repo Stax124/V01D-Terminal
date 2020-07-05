@@ -5,7 +5,6 @@ import time
 import database
 import os
 from prompt_toolkit.shortcuts import confirm
-from clint.textui import progress
 
 
 def gcd(a, b) -> float:
