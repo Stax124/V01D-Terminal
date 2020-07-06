@@ -1,0 +1,10 @@
+completion-menu.completion: 'bg:#000000 #ffffff'
+completion-menu.completion.current: 'bg:#00aaaa #000000'
+default: '#ff0066'
+fuzzycomplete: true
+multithreading: true
+path: '#6ffc03'
+pointer: '#b20000'
+scrollbar.background: bg:#88aaaa
+scrollbar.button: bg:#222222
+user: '#ff0066'
