@@ -2,6 +2,7 @@
 
 from subprocess import call
 def _import():
+    from termcolor import colored
     import os
     import math
     import sys
@@ -30,6 +31,7 @@ def _import():
     import utils
 
 try:
+    from termcolor import colored
     import os
     import sys
     import yaml
@@ -360,32 +362,36 @@ def main() -> None:
 
             elif splitInput[0].lower() == "sha1":
                 text = argget(splitInput[1:])
-                print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(), text)
+                print(colored(hashlib.sha1(bytes(text, "utf-8")).hexdigest(), "green"), colored(text, "red"))
                 continue
 
             elif splitInput[0].lower() == "sha224":
                 text = argget(splitInput[1:])
-                print(hashlib.sha224(bytes(text, "utf-8")).hexdigest(), text)
+                print(colored(hashlib.sha224(bytes(text, "utf-8")).hexdigest(), "green"), colored(text, "red"))
                 continue
 
             elif splitInput[0].lower() == "sha256":
                 text = argget(splitInput[1:])
-                print(hashlib.sha256(bytes(text, "utf-8")).hexdigest(), text)
+                print(colored(hashlib.sha256(bytes(text, "utf-8")
+                                             ).hexdigest(), "green"), colored(text, "red"))
                 continue
 
             elif splitInput[0].lower() == "sha384":
                 text = argget(splitInput[1:])
-                print(hashlib.sha384(bytes(text, "utf-8")).hexdigest(), text)
+                print(colored(hashlib.sha384(bytes(text, "utf-8")
+                                             ).hexdigest(), "green"), colored(text, "red"))
                 continue
 
             elif splitInput[0].lower() == "sha512":
                 text = argget(splitInput[1:])
-                print(hashlib.sha512(bytes(text, "utf-8")).hexdigest(), text)
+                print(colored(hashlib.sha512(bytes(text, "utf-8")
+                                             ).hexdigest(), "green"), colored(text, "red"))
                 continue
 
             elif splitInput[0].lower() == "md5":
                 text = argget(splitInput[1:])
-                print(hashlib.md5(bytes(text, "utf-8")).hexdigest(), text)
+                print(colored(hashlib.md5(bytes(text, "utf-8")
+                                          ).hexdigest(), "green"), colored(text, "red"))
                 continue
 
             # Hash sum -----------------------------------------------
@@ -393,37 +399,37 @@ def main() -> None:
             elif splitInput[0].lower() == "sha1sum":
                 hashsum = hashlib.sha1()
                 hashfilesum(splitInput,hashsum)
-                print(hashsum.hexdigest())
+                print(colored(hashsum.hexdigest(),"green"))
                 continue
 
             elif splitInput[0].lower() == "sha224sum":
                 hashsum = hashlib.sha224()
                 hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
+                print(colored(hashsum.hexdigest(), "green"))
                 continue
 
             elif splitInput[0].lower() == "sha256sum":
                 hashsum = hashlib.sha256()
                 hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
+                print(colored(hashsum.hexdigest(),"green"))
                 continue
 
             elif splitInput[0].lower() == "sha384sum":
                 hashsum = hashlib.sha384()
                 hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
+                print(colored(hashsum.hexdigest(), "green"))
                 continue
 
             elif splitInput[0].lower() == "sha512sum":
                 hashsum = hashlib.sha512()
                 hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
+                print(colored(hashsum.hexdigest(), "green"))
                 continue
 
             elif splitInput[0].lower() == "md5sum":
                 hashsum = hashlib.md5()
                 hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
+                print(colored(hashsum.hexdigest(), "green"))
                 continue
 
             # --------------------------------------------------------------
@@ -440,7 +446,7 @@ def main() -> None:
             elif userInput.lower() == "help": # Print cmd help and defined help at the same time
                 if platform.system().lower() == "windows":
                     os.system("help")
-                    print("\n" +
+                    print(colored("\n" +
 
                         "\n MATH: \n\n"
                             "       +   -    Addition\n"
@@ -496,8 +502,8 @@ def main() -> None:
                             "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file\n"
                             "   elevate, admin - grant admin permission for shell\n"
 
-                        "\n IN DEVELOPMENT \n\n"
-                        )
+                        "\n IN DEVELOPMENT \n\n", "green"
+                    ))
                 else:
                     subprocess.call("help", shell=True)
                     
@@ -508,7 +514,7 @@ def main() -> None:
                 continue
 
             elif userInput.lower() == "os": # Show os
-                print(osBased.Os())
+                print(colored(osBased.Os(),"blue"))
                 continue
 
             elif userInput.lower() == "clear" or userInput.lower() == "cls": # Clear terminal
@@ -524,25 +530,25 @@ def main() -> None:
                 continue
 
             elif splitInput[0].lower() == "compile":
-                subprocess.call("pyinstaller .\Void.py --noconfirm",shell=True)
+                subprocess.call('auto-py-to-exe', shell=True)
                 continue
 
             elif splitInput[0].lower() == "lcm":
                 nums = str(splitInput[1]).split(",")
                 num = [float(nums[0]),float(nums[1])]
-                print(utils.lcm(num[0],num[1]))
+                print(colored(utils.lcm(num[0],num[1]),"magenta"))
                 continue
 
             elif splitInput[0].lower() == "gcd":
                 nums = str(splitInput[1]).split(",")
                 num = [float(nums[0]), float(nums[1])]
-                print(utils.gcd(num[0], num[1]))
+                print(colored(utils.gcd(num[0], num[1]), "magenta"))
                 continue
 
             elif splitInput[0].lower() == "rng":
                 nums = str(splitInput[1]).split(",")
                 num = [float(nums[0]), float(nums[1])]
-                print(utils.rng(num[0], num[1]))
+                print(colored(utils.rng(num[0], num[1]),"magenta"))
                 continue
 
             elif userInput.lower() == "open" and platform.system().lower() == "windows": # Open file explorer in cwd
@@ -561,7 +567,7 @@ def main() -> None:
                     import pwned
                     print(pwned.lookup_pwned_api(splitInput[1]))
                 except:
-                    print("Error")
+                    print(colored("Error","red"))
                 
                 continue
 
@@ -590,11 +596,12 @@ def main() -> None:
                     aliases.pop(splitInput[1])
                     database.WriteAliases(aliases)
                 except:
-                    print("Name is not in list ! \nUsage: delalias [name]")
+                    print(colored("Name is not in list ! \nUsage: delalias [name]","red"))
                 
 
             elif userInput.lower() == "aliases": # Show alias dictionary
-                print(aliases)
+                _out = aliases
+                print(colored(aliases, "yellow"))
 
             elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror) or download straight to active folder
                 try:
@@ -606,13 +613,13 @@ def main() -> None:
                     try:
                         utils.Download(splitInput[1])
                     except:
-                        print("Not found\nTry: download -list")
+                        print(colored("Not found\nTry: download -list", "red"))
 
 
             else:
                 try: # Calculator
                     output = eval(userInput.lower())
-                    print(float(output))
+                    print(colored(float(output), "magenta"))
                 except: # Try if input is alias
                     try:
                         value = aliases.get(userInput)
@@ -622,7 +629,7 @@ def main() -> None:
 
 
         except Exception as error:
-            print(error)
+            print(colored(error, "red"))
             os.system("pause")
 
 
