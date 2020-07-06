@@ -1,4 +1,1 @@
-*.html linguist-language=Python
-*.toc linguist-language=Python
-*.tcl linguist-language=Python
-*.c linguist-language=Python
+* linguist-language=Python
