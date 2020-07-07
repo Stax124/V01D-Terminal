@@ -292,6 +292,7 @@ def main() -> None:
 
             try:
                 splitInput[0]
+                arg = argget(splitInput[1:])
             except:
                 continue
 
@@ -567,9 +568,14 @@ def main() -> None:
                 continue
 
             # Change directory based on input
-            elif splitInput[0].lower() == "cd" and exist(splitInput, 1):
-                out = argget(splitInput[1:])
-                os.chdir(out)
+            elif splitInput[0].lower() == "cd" and arg:
+                if arg.startswith("%"):
+                    env = arg.split("%")[1]
+                    path = os.environ[env]
+                    os.chdir(path)
+                else:
+                    path = argget(splitInput[1:])
+                    os.chdir(path)
                 continue
 
             elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
