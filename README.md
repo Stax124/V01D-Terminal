@@ -5,7 +5,7 @@
 Easy to use **Windows** terminal made by **Stax124**
 
 Sha256sum of dist/Void/Void.exe:
-**bd76461225e42b307127b1c8d1a028c2e24ae80be7ac21fa3ad69874ec2e00d4**
+**ae1a1b02d8dbe148be9912435f9897a76f27e12384923d2ae7edb204dbe09971**
 
 V01D-Terminal is **Python** based terminal application build on Prompt-toolkit library.
 

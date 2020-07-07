@@ -5,7 +5,6 @@ def _import():
     from termcolor import colored
     import os
     import math
-    import sys
     import yaml
     import hashlib
     import platform
@@ -16,13 +15,11 @@ def _import():
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
-    from prompt_toolkit.history import InMemoryHistory
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
     from prompt_toolkit.completion import merge_completers, FuzzyCompleter
     from PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
-    import pkg_resources.py2_warn
     from prompt_toolkit.output.color_depth import ColorDepth
 
     # Project stuff
@@ -33,7 +30,6 @@ def _import():
 try:
     from termcolor import colored
     import os
-    import sys
     import yaml
     import hashlib
     import platform
@@ -49,7 +45,6 @@ try:
     from PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
-    import pkg_resources.py2_warn
     from prompt_toolkit.output.color_depth import ColorDepth
 
     # Project stuff
@@ -70,11 +65,11 @@ except:
     # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies ? "):
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate os math ctypes yaml platform sys")
+            os.system("pip install clint elevate os math ctypes yaml platform")
         else:
-            os.system("sudo pip3 install clint elevate os math ctypes yaml platform sys")
+            os.system("sudo pip3 install clint elevate os math ctypes yaml platform")
     else:
-        sys.exit()
+        exit()
 
     # Reimport all dependencies
     _import()
@@ -304,7 +299,7 @@ def main() -> None:
                 password()
                 continue
 
-            if userInput.lower() == "elevate" or userInput.lower() == "admin":
+            elif userInput.lower() == "elevate" or userInput.lower() == "admin":
                 elevate()
                 continue
 
@@ -578,7 +573,7 @@ def main() -> None:
                 continue
 
             elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
-                sys.exit()
+                exit()
 
             elif splitInput[0].lower() == "alias": # Define own function and save it
                 l = splitInput[2:]
