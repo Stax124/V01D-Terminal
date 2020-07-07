@@ -1,13 +1,13 @@
 # Project V01D-Terminal
-
 from subprocess import call
+import platform
+import os
+
 def _import():
     from termcolor import colored
-    import os
     import math
     import yaml
     import hashlib
-    import platform
     import ctypes
     import subprocess
     from elevate import elevate
@@ -29,10 +29,8 @@ def _import():
 
 try:
     from termcolor import colored
-    import os
     import yaml
     import hashlib
-    import platform
     import ctypes
     import subprocess
     from elevate import elevate
@@ -65,9 +63,10 @@ except:
     # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies ? "):
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate os math ctypes yaml platform")
+            os.system("pip install termcolor clint elevate os math ctypes yaml platform")
         else:
-            os.system("sudo pip3 install clint elevate os math ctypes yaml platform")
+            os.system(
+                "sudo pip3 install termcolor clint elevate os math ctypes yaml platform")
     else:
         exit()
 
@@ -77,7 +76,10 @@ except:
 # -------------------------------------------
 
 CONFIG = r"config.yml"
-USER = os.environ["USERNAME"]
+try:
+    USER = os.environ["USERNAME"]
+except:
+    USER = "ERROR"
 
 # -------------------------------------------
 
