@@ -42,8 +42,9 @@
     display: block;
 }
 
-.body {
+body {
     background-image: url(img/background.png);
+    background-color: #222222;
     font-family: 'Roboto', sans-serif;
     background-size: cover;
 }

@@ -68,7 +68,7 @@ except:
             os.system(
                 "sudo pip3 install termcolor clint elevate os math ctypes yaml platform")
     else:
-        exit()
+        exit(0)
 
     # Reimport all dependencies
     _import()
@@ -581,7 +581,7 @@ def main() -> None:
                 continue
 
             elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
-                exit()
+                exit(0)
 
             elif splitInput[0].lower() == "alias": # Define own function and save it
                 l = splitInput[2:]
