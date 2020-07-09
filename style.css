@@ -25,7 +25,7 @@
 	top:1px;
 }
 
-.buttons {
+.top-bar {
     margin: auto;
     margin-top: 20px;
     width: max-content;
@@ -33,7 +33,6 @@
 
 #title {
     font-size: 300%;
-    font-family: 'Roboto', sans-serif;
     text-align: center;
     margin-top: 100px;
     color: greenyellow;
@@ -41,7 +40,6 @@
 
 .content {
     color: #e2e2e2;
-    font-family: 'Roboto', sans-serif;
     display: block;
 }
 
@@ -57,9 +55,7 @@ body {
 }
 
 .image {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 25%;
     width: 50%;
 }
 
