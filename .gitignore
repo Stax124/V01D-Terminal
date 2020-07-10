@@ -2,6 +2,9 @@
 test.py
 test
 
+# Ignore hashcat
+hashcat
+
 # Ignore all python config files
 *.pyc
 __pycache__/database.cpython-38.pyc
