@@ -630,7 +630,8 @@ def main() -> None:
                     except: # Pass input to cmd to decide
                         os.system(userInput)
 
-
+        except KeyboardInterrupt:
+            pass
         except Exception as error:
             print(colored(error, "red"))
             os.system("pause")

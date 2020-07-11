@@ -36,7 +36,10 @@ class PathCompleter(Completer):
         text = document.text_before_cursor
         try:
             text = text.split()
-            text = text[-1]
+            if text[0] != text[-1]:
+                text = text[-1]
+            else:
+                text = ""
         except:
             text = document.text_before_cursor
 
