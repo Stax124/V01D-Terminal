@@ -2,8 +2,8 @@
 test.py
 test
 
-# Ignore hashcat
-hashcat
+# Ignore utils
+utils
 
 # Ignore all python config files
 *.pyc
