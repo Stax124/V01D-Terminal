@@ -315,25 +315,37 @@ def main() -> None:
                 continue
 
             elif userInput.lower() == "ram":
-                os.system("wmic MEMORYCHIP get BankLabel, DeviceLocator, MemoryType, TypeDetail, Capacity, Speed")
-                os.system("wmic memorychip list full")
+                utils.memory()
                 continue
 
             elif userInput.lower() == "cpu":
-                os.system("wmic cpu get caption, deviceid, name, numberofcores, maxclockspeed, status")
+                utils.cpu()
                 continue
 
             elif userInput.lower() == "gpu":
-                os.system("wmic path win32_VideoController get Name")
-                os.system("wmic path win32_VideoController get /all")
+                utils.gpu()
+                continue
+
+            elif userInput.lower() == "network":
+                utils.network()
+                continue
+
+            elif userInput.lower() == "disk":
+                utils.disk()
+                continue
+
+            elif userInput.lower() == "bootinfo":
+                utils.bootinfo()
                 continue
 
             elif userInput.lower() == "component":
-                os.system("wmic cpu get caption, deviceid, name, numberofcores, maxclockspeed, status")
-                os.system("wmic baseboard get product,Manufacturer,version,serialnumber")
-                os.system("wmic path win32_VideoController get Name")
-                os.system("wmic MEMORYCHIP get BankLabel, DeviceLocator, MemoryType, TypeDetail, Capacity, Speed")
-                os.system("wmic memorychip list full")
+                utils.sysinfo()
+                utils.cpu()
+                utils.gpu()
+                utils.memory()
+                utils.bootinfo()
+                utils.disk()
+                utils.network()
                 continue
 
             elif userInput.lower() == "firewall":
@@ -461,7 +473,7 @@ def main() -> None:
                         "\n COMPUTER: \n\n"
 
                             "   component - info about workstation\n"
-                            "   motherboard, cpu, gpu, ram - info about your workstation´s component\n"
+                            "   motherboard, cpu, gpu, ram, disk, network, bootinfo - info about your workstation´s component\n"
 
                         "\n WINDOWS DEFINED: \n\n"
 
@@ -622,7 +634,7 @@ def main() -> None:
             else:
                 try: # Calculator
                     output = eval(userInput.lower())
-                    print(colored(float(output), "magenta"))
+                    print(float(output))
                 except: # Try if input is alias
                     try:
                         value = aliases.get(userInput)
