@@ -1,6 +1,6 @@
 # V01D-Terminal
 
-![Terminal](img/Autocompletion.png)
+![Terminal](img/Autocompletion.png) 
 
 Easy to use **Windows** terminal made by **Stax124**
 
