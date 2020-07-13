@@ -4,7 +4,7 @@ import platform
 import os
 
 def _import():
-    import math
+    from sys import exit as _exit
     import yaml
     import hashlib
     import ctypes
@@ -27,6 +27,7 @@ def _import():
     import utils
 
 try:
+    from sys import exit as _exit
     import yaml
     import hashlib
     import ctypes
@@ -501,12 +502,12 @@ def main() -> None:
                             "   power - change your Windows powerplan\n"
                             "   download - dictionary for downloading files (download -list)\n"
                             "   open - open file explorer in current directory\n"
-                            "   plain2string - convert plain text to strings: plain2string mode[line,file] text/[filename]\n"
+                            "   plain2string - convert plain text to strings: plain2string mode[space,file, fileline] text/[filename]\n"
                             "   md5, sha1 , sha224, sha256, sha384, sha512 - hash string\n"
                             "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file\n"
                             "   elevate, admin - grant admin permission for shell\n"
 
-                        "\n IN DEVELOPMENT \n\n", "green"
+                        "\n IN DEVELOPMENT \n\n"
                     )
                 else:
                     subprocess.call("help", shell=True)
@@ -546,7 +547,7 @@ def main() -> None:
             elif splitInput[0].lower() == "gcd":
                 nums = str(splitInput[1]).split(",")
                 num = [float(nums[0]), float(nums[1])]
-                print(utils.gcd(num[0], num[1]), "magenta")
+                print(utils.gcd(num[0], num[1]))
                 continue
 
             elif splitInput[0].lower() == "rng":
@@ -587,7 +588,7 @@ def main() -> None:
                 continue
 
             elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
-                exit(0)
+                _exit()
 
             elif splitInput[0].lower() == "alias": # Define own function and save it
                 l = splitInput[2:]
@@ -622,7 +623,7 @@ def main() -> None:
                     try:
                         utils.Download(splitInput[1])
                     except:
-                        print("Not found\nTry: download -list", "red")
+                        print("Not found\nTry: download -list")
 
 
             else:
@@ -639,7 +640,7 @@ def main() -> None:
         except KeyboardInterrupt:
             pass
         except Exception as error:
-            print(error, "red")
+            print(error)
             os.system("pause")
 
 
