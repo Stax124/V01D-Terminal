@@ -508,7 +508,7 @@ def main() -> None:
                         "\n IN DEVELOPMENT \n\n"
                     )
                 else:
-                    subprocess.call("help", shell=True)
+                    call("help", shell=True)
                     
                 continue
 
@@ -533,7 +533,7 @@ def main() -> None:
                 continue
 
             elif splitInput[0].lower() == "compile":
-                subprocess.call('auto-py-to-exe', shell=True)
+                call('auto-py-to-exe', shell=True)
                 continue
 
             elif splitInput[0].lower() == "lcm":
