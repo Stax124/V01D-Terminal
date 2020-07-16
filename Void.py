@@ -2,6 +2,7 @@
 from subprocess import call
 import platform
 import os
+import sys
 
 def _import():
     from sys import exit as _exit
@@ -262,6 +263,349 @@ def hashfilesum(splitInput,hashalg) -> None:
         for chunk in iter(lambda: f.read(4096), b""):
             hashalg.update(chunk)
 
+arg = sys.argv[1:]
+# --------------------------------------------
+
+def switch(userInput,splitInput) -> None:
+    if splitInput[0].lower() == "password":
+        password()
+        return
+
+    elif userInput.lower() == "elevate" or userInput.lower() == "admin":
+        elevate()
+        return
+
+    elif userInput.lower() == "pagefile":
+        os.system("wmic pagefile list")
+        return
+
+    elif userInput.lower() == "motherboard":
+        os.system("wmic baseboard get product,Manufacturer,version,serialnumber")
+        return
+
+    elif userInput.lower() == "ram":
+        utils.memory()
+        return
+
+    elif userInput.lower() == "cpu":
+        utils.cpu()
+        return
+
+    elif userInput.lower() == "gpu":
+        utils.gpu()
+        return
+
+    elif userInput.lower() == "network":
+        utils.network()
+        return
+
+    elif userInput.lower() == "disk":
+        utils.disk()
+        return
+
+    elif userInput.lower() == "bootinfo":
+        utils.bootinfo()
+        return
+
+    elif userInput.lower() == "component":
+        utils.sysinfo()
+        utils.cpu()
+        utils.gpu()
+        utils.memory()
+        utils.bootinfo()
+        utils.disk()
+        utils.network()
+        return
+
+    elif userInput.lower() == "firewall":
+        os.system("WF.msc")
+        return
+
+    elif userInput.lower() == "services":
+        os.system("services.msc")
+        return
+
+    elif userInput.lower() == "manager":
+        os.system("compmgmt.msc")
+        return
+
+    elif userInput.lower() == "event":
+        os.system("eventvwr.msc")
+        return
+
+    elif userInput.lower() == "power":
+        power()
+        return
+
+    # Hashing ----------------------------------------------------------
+
+    elif splitInput[0].lower() == "sha1":
+        text = argget(splitInput[1:])
+        print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(),text)
+        return
+
+    elif splitInput[0].lower() == "sha224":
+        text = argget(splitInput[1:])
+        print(hashlib.sha224(bytes(text, "utf-8")).hexdigest(),text)
+        return
+
+    elif splitInput[0].lower() == "sha256":
+        text = argget(splitInput[1:])
+        print(hashlib.sha256(bytes(text, "utf-8")).hexdigest(),text)
+        return
+
+    elif splitInput[0].lower() == "sha384":
+        text = argget(splitInput[1:])
+        print(hashlib.sha384(bytes(text, "utf-8")).hexdigest(),text)
+        return
+
+    elif splitInput[0].lower() == "sha512":
+        text = argget(splitInput[1:])
+        print(hashlib.sha512(bytes(text, "utf-8")).hexdigest(),text)
+        return
+
+    elif splitInput[0].lower() == "md5":
+        text = argget(splitInput[1:])
+        print(hashlib.md5(bytes(text, "utf-8")).hexdigest(),text)
+        return
+
+    # Hash sum -----------------------------------------------
+
+    elif splitInput[0].lower() == "sha1sum":
+        hashsum = hashlib.sha1()
+        hashfilesum(splitInput,hashsum)
+        print(hashsum.hexdigest())
+        return
+
+    elif splitInput[0].lower() == "sha224sum":
+        hashsum = hashlib.sha224()
+        hashfilesum(splitInput, hashsum)
+        print(hashsum.hexdigest())
+        return
+
+    elif splitInput[0].lower() == "sha256sum":
+        hashsum = hashlib.sha256()
+        hashfilesum(splitInput, hashsum)
+        print(hashsum.hexdigest())
+        return
+
+    elif splitInput[0].lower() == "sha384sum":
+        hashsum = hashlib.sha384()
+        hashfilesum(splitInput, hashsum)
+        print(hashsum.hexdigest())
+        return
+
+    elif splitInput[0].lower() == "sha512sum":
+        hashsum = hashlib.sha512()
+        hashfilesum(splitInput, hashsum)
+        print(hashsum.hexdigest())
+        return
+
+    elif splitInput[0].lower() == "md5sum":
+        hashsum = hashlib.md5()
+        hashfilesum(splitInput, hashsum)
+        print(hashsum.hexdigest())
+        return
+
+    # --------------------------------------------------------------
+
+    elif splitInput[0].lower() == "plain2string":
+        try:
+            mode = splitInput[1]
+        except:
+            mode = None
+
+        print(utils.PlainToString(argget(splitInput[2:]), mode=mode))
+        return
+
+    elif userInput.lower() == "help" or userInput.find("-h") != -1 or userInput.find("--help") != -1: # Print cmd help and defined help at the same time
+        if platform.system().lower() == "windows":
+            os.system("help")
+            print("\n" +
+
+                "\n MATH: \n\n"
+                    "       +   -    Addition\n"
+                    "       -   -    Subtraction\n"
+                    "       *   -    Multiplication\n"
+                    "       /   -    Division\n"
+                    "       %   -    Modulus\n"
+                    "       **  -    Exponentiation\n"
+                    "       //  -    floor division\n"
+                    "   gcd - greatest common divisor\n"
+                    "   lcm - least common multiple\n"
+                    "   rng - random number generator (rng min[included],max[excluded])\n"
+
+                "\n COMPUTER: \n\n"
+
+                    "   component - info about workstation\n"
+                    "   motherboard, cpu, gpu, ram, disk, network, bootinfo - info about your workstation´s component\n"
+
+                "\n WINDOWS DEFINED: \n\n"
+
+                    "   control - control panel\n"
+                    "   diskpart - open diskpart\n"
+                    "   msconfig - configure your system\n"
+                    "   msinfo32 - show windows configuration\n"
+                    "   regedit - tool for editing registers\n"
+                    "   sysdm.cpl - system properties\n"
+                    "   firewall - configure firewall settings\n"
+                    "   services - configure services\n"
+                    "   manager - computer management\n"
+                    "   event - event viewer\n"
+
+                "\n MANAGEMENT: \n\n"
+
+                    "   exit | quit - quit application\n"
+                    "   os - show operating system\n"
+                
+                "\n ALIAS: \n\n"
+
+                    "   alias - define your own function (alias sayhello @echo Hello!!)\n"
+                    "   delalias - remove alias\n"
+                    "   aliases - show all user defined aliases\n"
+
+                "\n OTHER FUNCTIONS \n\n"
+
+                    "   ping - never ending ping loop\n"
+                    "   pagefile - show pagefile location and size\n"
+                    "   read - read specified .txt file\n"
+                    "   power - change your Windows powerplan\n"
+                    "   download - dictionary for downloading files (download -list)\n"
+                    "   open - open file explorer in current directory\n"
+                    "   plain2string - convert plain text to strings: plain2string mode[space,file, fileline] text/[filename]\n"
+                    "   md5, sha1 , sha224, sha256, sha384, sha512 - hash string\n"
+                    "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file\n"
+                    "   elevate, admin - grant admin permission for shell\n"
+
+                "\n IN DEVELOPMENT \n\n"
+            )
+        else:
+            call("help", shell=True)
+            
+        return
+
+    elif userInput.lower() == "ping": # Never ending ping loop
+        os.system("start ping google.com -t")
+        return
+
+    elif userInput.lower() == "os": # Show os
+        print(osBased.Os())
+        return
+
+    elif userInput.lower() == "clear" or userInput.lower() == "cls": # Clear terminal
+        osBased.Clear()
+        return
+    
+    elif splitInput[0].lower() == "read":
+        read(splitInput)
+        return
+    
+    elif splitInput[0].lower() == "void":
+        void(splitInput)
+        return
+
+    elif splitInput[0].lower() == "compile":
+        call('auto-py-to-exe', shell=True)
+        return
+
+    elif splitInput[0].lower() == "lcm":
+        nums = str(splitInput[1]).split(",")
+        num = [float(nums[0]),float(nums[1])]
+        print(utils.lcm(num[0],num[1]))
+        return
+
+    elif splitInput[0].lower() == "gcd":
+        nums = str(splitInput[1]).split(",")
+        num = [float(nums[0]), float(nums[1])]
+        print(utils.gcd(num[0], num[1]))
+        return
+
+    elif splitInput[0].lower() == "rng":
+        nums = str(splitInput[1]).split(",")
+        num = [float(nums[0]), float(nums[1])]
+        print(utils.rng(num[0], num[1]))
+        return
+
+    elif userInput.lower() == "open" and platform.system().lower() == "windows": # Open file explorer in cwd
+        os.system("explorer .\\")
+        return
+
+    elif userInput.lower() == "settings" and platform.system().lower() == "windows":  # Open file explorer in cwd
+        os.system("start ms-settings:")
+        return
+
+    elif userInput.lower() == "startup" and platform.system().lower() == "windows":
+        os.system("explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")
+
+    elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
+        try:
+            import pwned
+            print(pwned.lookup_pwned_api(splitInput[1]))
+        except:
+            print("Error")
+        
+        return
+
+    # Change directory based on input
+    elif splitInput[0].lower() == "cd" and arg:
+        if arg.startswith("%"):
+            env = arg.split("%")[1]
+            path = os.environ[env]
+            os.chdir(path)
+        else:
+            path = argget(splitInput[1:])
+            os.chdir(path)
+        return
+
+    elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
+        _exit()
+
+    elif splitInput[0].lower() == "alias": # Define own function and save it
+        l = splitInput[2:]
+        complete = ""
+        for i in l:
+            complete += i + " "
+        aliases[splitInput[1]] = complete
+        database.WriteAliases(aliases)
+        return
+
+        
+
+    elif splitInput[0].lower() == "delalias": # Remove alias from dictionary and update save
+        try:
+            aliases.pop(splitInput[1])
+            database.WriteAliases(aliases)
+        except:
+            print("Name is not in list ! \nUsage: delalias [name]")
+        
+
+    elif userInput.lower() == "aliases": # Show alias dictionary
+        _out = aliases
+        print(aliases)
+
+    elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror) or download straight to active folder
+        try:
+            if splitInput[1].lower() == "-list":
+                print(database.downloadDict.keys())
+            else:
+                raise BaseException
+        except:
+            try:
+                utils.Download(splitInput[1])
+            except:
+                print("Not found\nTry: download -list")
+
+
+    else:
+        try: # Calculator
+            output = eval(userInput.lower())
+            print(float(output))
+        except: # Try if input is alias
+            try:
+                value = aliases.get(userInput)
+                os.system(value)
+            except: # Pass input to cmd to decide
+                os.system(userInput)
 
 # --------------------------------------------
 
@@ -276,373 +620,38 @@ session = PromptSession(completer=combinedcompleter,
                         color_depth=ColorDepth.TRUE_COLOR
                         )
 
+# ---------------------------------------------
 
 def main() -> None:
     """
     Terminal main loop
     """
-
-    while True:
-        try:
-            cd = os.getcwd() # Get current working directory
-            userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"
-                                            ), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
-            splitInput = userInput.split() # Split input to get key words
-
+    
+    if sys.argv[1:] != []:
+        switch(argget(sys.argv[1:]),sys.argv[1:])
+    else:
+        while True:
             try:
-                splitInput[0]
-                arg = argget(splitInput[1:])
-            except:
-                continue
+                cd = os.getcwd() # Get current working directory
+                userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"
+                                                ), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                splitInput = userInput.split() # Split input to get key words
 
-            if splitInput[0].lower() == "password":
-                password()
-                continue
-
-            elif userInput.lower() == "elevate" or userInput.lower() == "admin":
-                elevate()
-                continue
-
-            elif userInput.lower() == "pagefile":
-                os.system("wmic pagefile list")
-                continue
-
-            elif userInput.lower() == "motherboard":
-                os.system("wmic baseboard get product,Manufacturer,version,serialnumber")
-                continue
-
-            elif userInput.lower() == "ram":
-                utils.memory()
-                continue
-
-            elif userInput.lower() == "cpu":
-                utils.cpu()
-                continue
-
-            elif userInput.lower() == "gpu":
-                utils.gpu()
-                continue
-
-            elif userInput.lower() == "network":
-                utils.network()
-                continue
-
-            elif userInput.lower() == "disk":
-                utils.disk()
-                continue
-
-            elif userInput.lower() == "bootinfo":
-                utils.bootinfo()
-                continue
-
-            elif userInput.lower() == "component":
-                utils.sysinfo()
-                utils.cpu()
-                utils.gpu()
-                utils.memory()
-                utils.bootinfo()
-                utils.disk()
-                utils.network()
-                continue
-
-            elif userInput.lower() == "firewall":
-                os.system("WF.msc")
-                continue
-
-            elif userInput.lower() == "services":
-                os.system("services.msc")
-                continue
-
-            elif userInput.lower() == "manager":
-                os.system("compmgmt.msc")
-                continue
-
-            elif userInput.lower() == "event":
-                os.system("eventvwr.msc")
-                continue
-
-            elif userInput.lower() == "power":
-                power()
-                continue
-
-            # Hashing ----------------------------------------------------------
-
-            elif splitInput[0].lower() == "sha1":
-                text = argget(splitInput[1:])
-                print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(),text)
-                continue
-
-            elif splitInput[0].lower() == "sha224":
-                text = argget(splitInput[1:])
-                print(hashlib.sha224(bytes(text, "utf-8")).hexdigest(),text)
-                continue
-
-            elif splitInput[0].lower() == "sha256":
-                text = argget(splitInput[1:])
-                print(hashlib.sha256(bytes(text, "utf-8")).hexdigest(),text)
-                continue
-
-            elif splitInput[0].lower() == "sha384":
-                text = argget(splitInput[1:])
-                print(hashlib.sha384(bytes(text, "utf-8")).hexdigest(),text)
-                continue
-
-            elif splitInput[0].lower() == "sha512":
-                text = argget(splitInput[1:])
-                print(hashlib.sha512(bytes(text, "utf-8")).hexdigest(),text)
-                continue
-
-            elif splitInput[0].lower() == "md5":
-                text = argget(splitInput[1:])
-                print(hashlib.md5(bytes(text, "utf-8")).hexdigest(),text)
-                continue
-
-            # Hash sum -----------------------------------------------
-
-            elif splitInput[0].lower() == "sha1sum":
-                hashsum = hashlib.sha1()
-                hashfilesum(splitInput,hashsum)
-                print(hashsum.hexdigest())
-                continue
-
-            elif splitInput[0].lower() == "sha224sum":
-                hashsum = hashlib.sha224()
-                hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
-                continue
-
-            elif splitInput[0].lower() == "sha256sum":
-                hashsum = hashlib.sha256()
-                hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
-                continue
-
-            elif splitInput[0].lower() == "sha384sum":
-                hashsum = hashlib.sha384()
-                hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
-                continue
-
-            elif splitInput[0].lower() == "sha512sum":
-                hashsum = hashlib.sha512()
-                hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
-                continue
-
-            elif splitInput[0].lower() == "md5sum":
-                hashsum = hashlib.md5()
-                hashfilesum(splitInput, hashsum)
-                print(hashsum.hexdigest())
-                continue
-
-            # --------------------------------------------------------------
-
-            elif splitInput[0].lower() == "plain2string":
                 try:
-                    mode = splitInput[1]
+                    splitInput[0]
+                    arg = argget(splitInput[1:])
                 except:
-                    mode = None
+                    continue
 
-                print(utils.PlainToString(argget(splitInput[2:]), mode=mode))
-                continue
+                switch(userInput=userInput, splitInput=splitInput)
 
-            elif userInput.lower() == "help": # Print cmd help and defined help at the same time
-                if platform.system().lower() == "windows":
-                    os.system("help")
-                    print("\n" +
-
-                        "\n MATH: \n\n"
-                            "       +   -    Addition\n"
-                            "       -   -    Subtraction\n"
-                            "       *   -    Multiplication\n"
-                            "       /   -    Division\n"
-                            "       %   -    Modulus\n"
-                            "       **  -    Exponentiation\n"
-                            "       //  -    floor division\n"
-                            "   gcd - greatest common divisor\n"
-                            "   lcm - least common multiple\n"
-                            "   rng - random number generator (rng min[included],max[excluded])\n"
-
-                        "\n COMPUTER: \n\n"
-
-                            "   component - info about workstation\n"
-                            "   motherboard, cpu, gpu, ram, disk, network, bootinfo - info about your workstation´s component\n"
-
-                        "\n WINDOWS DEFINED: \n\n"
-
-                            "   control - control panel\n"
-                            "   diskpart - open diskpart\n"
-                            "   msconfig - configure your system\n"
-                            "   msinfo32 - show windows configuration\n"
-                            "   regedit - tool for editing registers\n"
-                            "   sysdm.cpl - system properties\n"
-                            "   firewall - configure firewall settings\n"
-                            "   services - configure services\n"
-                            "   manager - computer management\n"
-                            "   event - event viewer\n"
-
-                        "\n MANAGEMENT: \n\n"
-
-                            "   exit | quit - quit application\n"
-                            "   os - show operating system\n"
-                        
-                        "\n ALIAS: \n\n"
-
-                            "   alias - define your own function (alias sayhello @echo Hello!!)\n"
-                            "   delalias - remove alias\n"
-                            "   aliases - show all user defined aliases\n"
-
-                        "\n OTHER FUNCTIONS \n\n"
-
-                            "   ping - never ending ping loop\n"
-                            "   pagefile - show pagefile location and size\n"
-                            "   read - read specified .txt file\n"
-                            "   power - change your Windows powerplan\n"
-                            "   download - dictionary for downloading files (download -list)\n"
-                            "   open - open file explorer in current directory\n"
-                            "   plain2string - convert plain text to strings: plain2string mode[space,file, fileline] text/[filename]\n"
-                            "   md5, sha1 , sha224, sha256, sha384, sha512 - hash string\n"
-                            "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file\n"
-                            "   elevate, admin - grant admin permission for shell\n"
-
-                        "\n IN DEVELOPMENT \n\n"
-                    )
-                else:
-                    call("help", shell=True)
-                    
-                continue
-
-            elif userInput.lower() == "ping": # Never ending ping loop
-                os.system("start ping google.com -t")
-                continue
-
-            elif userInput.lower() == "os": # Show os
-                print(osBased.Os())
-                continue
-
-            elif userInput.lower() == "clear" or userInput.lower() == "cls": # Clear terminal
-                osBased.Clear()
-                continue
-            
-            elif splitInput[0].lower() == "read":
-                read(splitInput)
-                continue
-            
-            elif splitInput[0].lower() == "void":
-                void(splitInput)
-                continue
-
-            elif splitInput[0].lower() == "compile":
-                call('auto-py-to-exe', shell=True)
-                continue
-
-            elif splitInput[0].lower() == "lcm":
-                nums = str(splitInput[1]).split(",")
-                num = [float(nums[0]),float(nums[1])]
-                print(utils.lcm(num[0],num[1]))
-                continue
-
-            elif splitInput[0].lower() == "gcd":
-                nums = str(splitInput[1]).split(",")
-                num = [float(nums[0]), float(nums[1])]
-                print(utils.gcd(num[0], num[1]))
-                continue
-
-            elif splitInput[0].lower() == "rng":
-                nums = str(splitInput[1]).split(",")
-                num = [float(nums[0]), float(nums[1])]
-                print(utils.rng(num[0], num[1]))
-                continue
-
-            elif userInput.lower() == "open" and platform.system().lower() == "windows": # Open file explorer in cwd
-                os.system("explorer .\\")
-                continue
-
-            elif userInput.lower() == "settings" and platform.system().lower() == "windows":  # Open file explorer in cwd
-                os.system("start ms-settings:")
-                continue
-
-            elif userInput.lower() == "startup" and platform.system().lower() == "windows":
-                os.system("explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")
-
-            elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
-                try:
-                    import pwned
-                    print(pwned.lookup_pwned_api(splitInput[1]))
-                except:
-                    print("Error")
-                
-                continue
-
-            # Change directory based on input
-            elif splitInput[0].lower() == "cd" and arg:
-                if arg.startswith("%"):
-                    env = arg.split("%")[1]
-                    path = os.environ[env]
-                    os.chdir(path)
-                else:
-                    path = argget(splitInput[1:])
-                    os.chdir(path)
-                continue
-
-            elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
-                _exit()
-
-            elif splitInput[0].lower() == "alias": # Define own function and save it
-                l = splitInput[2:]
-                complete = ""
-                for i in l:
-                    complete += i + " "
-                aliases[splitInput[1]] = complete
-                database.WriteAliases(aliases)
-                continue
-
-                
-
-            elif splitInput[0].lower() == "delalias": # Remove alias from dictionary and update save
-                try:
-                    aliases.pop(splitInput[1])
-                    database.WriteAliases(aliases)
-                except:
-                    print("Name is not in list ! \nUsage: delalias [name]")
-                
-
-            elif userInput.lower() == "aliases": # Show alias dictionary
-                _out = aliases
-                print(aliases)
-
-            elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror) or download straight to active folder
-                try:
-                    if splitInput[1].lower() == "-list":
-                        print(database.downloadDict.keys())
-                    else:
-                        raise BaseException
-                except:
-                    try:
-                        utils.Download(splitInput[1])
-                    except:
-                        print("Not found\nTry: download -list")
-
-
-            else:
-                try: # Calculator
-                    output = eval(userInput.lower())
-                    print(float(output))
-                except: # Try if input is alias
-                    try:
-                        value = aliases.get(userInput)
-                        os.system(value)
-                    except: # Pass input to cmd to decide
-                        os.system(userInput)
-
-        except KeyboardInterrupt:
-            pass
-        except Exception as error:
-            print(error)
-            os.system("pause")
+            except KeyboardInterrupt:
+                pass
+            except Exception as error:
+                print(error)
+                os.system("pause")
 
 
 if __name__ == "__main__":
     main()
-    os.system("pause")
 
