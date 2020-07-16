@@ -8,7 +8,6 @@ def _import():
     import yaml
     import hashlib
     import ctypes
-    import subprocess
     from elevate import elevate
 
     # Prompt-toolkit - autocompletion library
@@ -31,7 +30,6 @@ try:
     import yaml
     import hashlib
     import ctypes
-    import subprocess
     from elevate import elevate
 
     # Prompt-toolkit - autocompletion library
