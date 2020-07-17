@@ -1,5 +1,6 @@
 # Ignore testing file
 test.py
+check.py
 test
 
 # Ignore utils

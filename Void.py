@@ -199,10 +199,18 @@ def void(_splitinput) -> None: # Open new terminal or configure it
             os.system(f"title {_splitinput[2]}")
         elif _splitinput[1] == "config":
             print(config)
+    except:
+        print("""
+Usage: Void.py|V01D-Terminal.exe [-h] [command]
+
+V01D-Terminal, easy to use Windows terminal with autocompletion
+
+positional arguments:
+    -h          Show help
+    command     Command that shell will execute
+""")
             
         saveToYml(config,CONFIG)
-    except:
-        pass
 
 
 def is_admin() -> bool:
@@ -263,10 +271,13 @@ def hashfilesum(splitInput,hashalg) -> None:
         for chunk in iter(lambda: f.read(4096), b""):
             hashalg.update(chunk)
 
-arg = sys.argv[1:]
 # --------------------------------------------
 
 def switch(userInput,splitInput) -> None:
+    try:
+        arg = argget(splitInput[1:])
+    except:
+        pass
     if splitInput[0].lower() == "password":
         password()
         return
@@ -639,7 +650,6 @@ def main() -> None:
 
                 try:
                     splitInput[0]
-                    arg = argget(splitInput[1:])
                 except:
                     continue
 
