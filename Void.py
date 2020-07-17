@@ -416,7 +416,7 @@ def switch(userInput,splitInput) -> None:
             mode = None
 
         print(utils.PlainToString(argget(splitInput[2:]), mode=mode))
-        return
+        return 
 
     elif userInput.lower() == "help" or userInput.find("-h") == 0 or userInput.find("--help") == 0: # Print cmd help and defined help at the same time
         if platform.system().lower() == "windows":
