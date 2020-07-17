@@ -8,6 +8,9 @@ utils
 # Ignore build
 Compiled/
 
+# Other
+config.json
+
 # Ignore all python config files
 *.pyc
 __pycache__/database.cpython-38.pyc
