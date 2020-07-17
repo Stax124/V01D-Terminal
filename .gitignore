@@ -5,6 +5,9 @@ test
 # Ignore utils
 utils
 
+# Ignore build
+Compiled/
+
 # Ignore all python config files
 *.pyc
 __pycache__/database.cpython-38.pyc
