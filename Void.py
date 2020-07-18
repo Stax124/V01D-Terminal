@@ -218,7 +218,6 @@ def is_admin() -> bool:
     try:
         _is_admin = os.getuid() == 0
 
-
     except AttributeError:
         _is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
 
@@ -226,29 +225,39 @@ def is_admin() -> bool:
 
 
 def read(splitInput) -> None:
-    "Prints text of file"  
-    try:
-        path = splitInput[1]
-    except:
-        print("Incorrrect path. Use path [pathToFile]")
-        return
-    
-    print("\n")
-    
-    try:
-        file = open(path)
-    except:
-        print("File not found")
-        return
-    
-    try:
-        content = file.read()
-    except:
-        print("File unreadable")
-        return
-    
-    print(content)
-    file.close()
+    "Prints text of file"
+    if splitInput == []:
+        print("""
+Usage: read [target]
+
+Print .txt, .py and other text filetypes from terminal
+
+positional arguments:       
+    target     File to read
+""")
+    else:
+        try:
+            path = splitInput[1]
+        except:
+            print("Incorrrect path. Use path [pathToFile]")
+            return
+        
+        print("\n")
+        
+        try:
+            file = open(path)
+        except:
+            print("File not found")
+            return
+        
+        try:
+            content = file.read()
+        except:
+            print("File unreadable")
+            return
+        
+        print(content)
+        file.close()
 
 def power() -> None:
     "Change Windows power scheme"
@@ -421,10 +430,7 @@ def switch(userInput,splitInput) -> None:
     # --------------------------------------------------------------
 
     elif splitInput[0].lower() == "plain2string":
-        try:
-            mode = splitInput[1]
-        except:
-            mode = None
+        mode = splitInput[-1]
 
         print(utils.PlainToString(argget(splitInput[2:]), mode=mode))
         return 
@@ -604,8 +610,15 @@ def switch(userInput,splitInput) -> None:
             try:
                 utils.Download(splitInput[1])
             except:
-                print("Not found\nTry: download -list")
+                print("""
+Usage: download [-list] [target]
 
+Print .txt, .py and other text filetypes from terminal
+
+positional arguments:       
+    -list       Show dictionary of URLs
+    target      URL or key from 'download -list'
+""")
 
     else:
         try: # Calculator

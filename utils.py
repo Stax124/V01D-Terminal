@@ -57,8 +57,22 @@ def PlainToString(text, mode) -> str:
             split = text.split("\n")
         except:
             print("File not found")
-    else:
+    elif mode == "line":
         split = text.split()
+    else:
+        print("""
+Usage: plain2string [mode] [file|text]
+
+Print .txt, .py and other text filetypes from terminal
+
+positional arguments:   
+    mode    file        Split text in file by ' '
+            line        Split text by ' '
+            fileline    Split text in file by '\\n'
+
+    file    Source file (only works with 'file','fileline')
+    text    String to split (only works with 'line')
+""")
 
 
     out = ""
