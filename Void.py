@@ -79,6 +79,9 @@ try:
 except:
     USER = "ERROR"
 
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__))) + "\\V01D-Terminal.exe"
+
 # -------------------------------------------
 
 title = "V01D Terminal" # Set title
@@ -187,7 +190,7 @@ def void(_splitinput) -> None: # Open new terminal or configure it
             print(f"Fuzzycomplete: {config['fuzzycomplete']}")
 
         if (_splitinput[1] == "start"):
-            os.startfile(__file__)
+            os.system(f"start {__location__}")
         elif _splitinput[1] == "update":
             import pkg_resources
             packages = [dist.project_name for dist in pkg_resources.working_set]
@@ -600,6 +603,18 @@ def switch(userInput,splitInput) -> None:
         _out = aliases
         print(aliases)
 
+    elif userInput.lower() == "eval": # Show alias dictionary
+        while True:
+            try:
+                _eval = session.prompt(message=HTML(f"<user>{USER}</user> <path>eval</path>""<pointer> > </pointer>"), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR, completer=None)
+                if _eval.lower() == "quit" or _eval.lower() == "exit":
+                    break
+                else:
+                    eval(_eval)
+            except Exception as e:
+                print(e)
+        return
+
     elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror) or download straight to active folder
         try:
             if splitInput[1].lower() == "-list":
@@ -651,7 +666,7 @@ def main() -> None:
     Terminal main loop
     """
     
-    if sys.argv[1:] != []:
+    if sys.argv[1:] != [] and sys.argv[1] != "start":
         switch(argget(sys.argv[1:]),sys.argv[1:])
     else:
         while True:
