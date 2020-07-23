@@ -433,9 +433,7 @@ def switch(userInput,splitInput) -> None:
     # --------------------------------------------------------------
 
     elif splitInput[0].lower() == "plain2string":
-        mode = splitInput[-1]
-
-        print(utils.PlainToString(argget(splitInput[2:]), mode=mode))
+        print(utils.PlainToString(argget(splitInput[2:]), mode=splitInput[1]))
         return 
 
     elif userInput.lower() == "help" or userInput.find("-h") == 0 or userInput.find("--help") == 0: # Print cmd help and defined help at the same time
@@ -573,7 +571,10 @@ def switch(userInput,splitInput) -> None:
             path = os.environ[env]
             os.chdir(path)
         else:
-            path = argget(splitInput[1:])
+            if '"' in arg:
+                path = argget(splitInput[1:]).split('"')[-2]
+            else:
+                path = argget(splitInput[1:])
             os.chdir(path)
         return
 

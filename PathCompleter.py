@@ -35,11 +35,13 @@ class PathCompleter(Completer):
     ) -> Iterable[Completion]:
         text = document.text_before_cursor
         try:
-            text = text.split()
-            if text[0] != text[-1]:
-                text = text[-1]
+            if "'" in text:
+                text = text.split("'")
+            if '"' in text:
+                text = text.split('"')
             else:
-                text = ""
+                text = text.split()
+            text = text[-1]
         except:
             text = document.text_before_cursor
 
