@@ -614,7 +614,7 @@ def switch(userInput,splitInput) -> None:
                 if _eval.lower() == "quit" or _eval.lower() == "exit":
                     break
                 else:
-                    eval(_eval)
+                    print(eval(str(_eval)))
             except Exception as e:
                 print(e)
         return
