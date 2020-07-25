@@ -99,7 +99,7 @@ WinCompleter = NestedCompleter.from_nested_dict(
         "ping": {"/?": None, "-t": None, "-a": None, "-n": None, "-l": None, "-f": None, "-i": None, "-v": None, "-r": None, "-s": None, "-j": None, "-k": None, "-w": None, "-R": None, "-S": None, "-C": None, "-p": None, "-4": None, "-6": None},
         "os":None,
         "pwned":None,
-        "cd":{"/?":None},
+        "cd":{"/?":None,'""':None},
         "exit": {"/?": None, "/B": None},
         "quit":None,
         "alias":None,

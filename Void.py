@@ -79,8 +79,11 @@ try:
 except:
     USER = "ERROR"
 
-__location__ = os.path.realpath(
-    os.path.join(os.getcwd(), os.path.dirname(__file__))) + "\\V01D-Terminal.exe"
+defPath = os.getcwd()
+
+__location__ = defPath + "\\V01D-Terminal.exe"
+
+
 
 # -------------------------------------------
 
