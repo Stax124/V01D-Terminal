@@ -244,6 +244,10 @@ positional arguments:
     else:
         try:
             path = splitInput[1]
+            if '"' in path:
+                path = path.split('"')[1]
+            elif "'" in path:
+                path = path.split("'")[1]
         except:
             print("Incorrrect path. Use path [pathToFile]")
             return
