@@ -34,6 +34,7 @@ class PathCompleter(Completer):
         self, document: Document, complete_event: CompleteEvent
     ) -> Iterable[Completion]:
         text = document.text_before_cursor
+        _text = text
         try:
             if "'" in text:
                 text = text.split("'")
@@ -41,7 +42,10 @@ class PathCompleter(Completer):
                 text = text.split('"')
             else:
                 text = text.split()
-            text = text[-1]
+            if _text.endswith(" "):
+                text = ""
+            else:
+                text = text[-1]
         except:
             text = document.text_before_cursor
 
@@ -89,7 +93,7 @@ class PathCompleter(Completer):
                     # For directories, add a slash to the filename.
                     # (We don't add them to the `completion`. Users can type it
                     # to trigger the autocompletion themselves.)
-                    filename += "/"
+                    filename += "\\"
                 elif self.only_directories:
                     continue
 
