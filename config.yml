@@ -5,7 +5,7 @@ default: '#ff0066'
 fuzzycomplete: true
 mouseSupport: true
 multithreading: true
-path: '#6ffc03'
+path: '#22ff00'
 pointer: '#b20000'
 scrollbar.background: bg:#88aaaa
 scrollbar.button: bg:#222222

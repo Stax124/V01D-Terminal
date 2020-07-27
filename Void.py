@@ -51,7 +51,8 @@ try:
     import utils
 
 
-except:
+except Exception as e:
+    print(e)
     # Install main lib
     if platform.system().lower() == "windows":
         os.system("pip install prompt-toolkit")
@@ -84,7 +85,9 @@ defPath = os.getcwd()
 
 __location__ = defPath + "\\V01D-Terminal.exe"
 
-CONFIG = defPath + "\\config.yml"
+CONFIG = defPath + r"\config.yml"
+
+VERSION = "v0.4.0"
 
 # -------------------------------------------
 
@@ -93,7 +96,8 @@ aliases = database.GetAliases() # Get user defined aliases from database
 
 # Load config or defaults
 try:
-    config = yaml.safe_load(open("config.yml"))
+    config = yaml.safe_load(open(CONFIG))
+    type(config.keys())
 except:
     config = {
         "welcome":True,
@@ -113,17 +117,14 @@ except:
         "scrollbar.button": "bg:#222222"
     }
     print("config.yml not found, ignoring settings and using defaults")
+    saveToYml(config,CONFIG)
 
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and platform.system() == "Windows":
-    combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.WinCompleter]))
-elif platform.system() == "Windows":
-    combinedcompleter = merge_completers([PathCompleter(), database.WinCompleter])
-elif platform.system() == "Linux" and config["fuzzycomplete"]:
-    combinedcompleter = FuzzyCompleter(merge_completers([PathCompleter(), database.LinuxCompleter]))
+    combinedcompleter = FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter()]))
 else:
-    combinedcompleter = merge_completers([PathCompleter(), database.LinuxCompleter])
+    combinedcompleter = merge_completers([database.WinCompleter, PathCompleter()])
 
 # Define console style
 _style = Style.from_dict(
@@ -178,8 +179,9 @@ Latest release: {utils.version()}
             """)
 
 def saveToYml(data,path) -> None:
-    with open(path, "w") as file:
-        yaml.dump(data, file)
+    with open(path, "w") as f:
+        f.flush()
+        yaml.dump(data, f)
 
 def exist(var,index) -> bool:
     "Check if var with index exist"
@@ -206,25 +208,63 @@ def void(_splitinput) -> None: # Open new terminal or configure it
                 config["multithreading"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["multithreading"] = False
-            print(f"Multithreading: {config['multithreading']}")
-        if (_splitinput[1] == "fuzzycomplete"):
+            print(f"multithreading: {config['multithreading']}")
+
+        elif (_splitinput[1] == "fuzzycomplete"):
             if (_splitinput[2].lower() == "true"):
                 config["fuzzycomplete"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["fuzzycomplete"] = False
-            print(f"Fuzzycomplete: {config['fuzzycomplete']}")
+            print(f"fuzzycomplete: {config['fuzzycomplete']}")
 
-        if (_splitinput[1] == "start"):
+        elif (_splitinput[1] == "mouseSupport"):
+            if (_splitinput[2].lower() == "true"):
+                config["mouseSupport"] = True
+            elif (_splitinput[2].lower() == "false"):
+                config["mouseSupport"] = False
+            print(f"mouseSupport: {config['fuzzycomplete']}")
+
+        elif (_splitinput[1] == "completeWhileTyping"):
+            if (_splitinput[2].lower() == "true"):
+                config["completeWhileTyping"] = True
+            elif (_splitinput[2].lower() == "false"):
+                config["completeWhileTyping"] = False
+            print(f"completeWhileTyping: {config['fuzzycomplete']}")
+
+        elif (_splitinput[1] == "wrapLines"):
+            if (_splitinput[2].lower() == "true"):
+                config["wrapLines"] = True
+            elif (_splitinput[2].lower() == "false"):
+                config["wrapLines"] = False
+            print(f"wrapLines: {config['fuzzycomplete']}")
+
+        elif (_splitinput[1] == "welcome"):
+            if (_splitinput[2].lower() == "true"):
+                config["welcome"] = True
+            elif (_splitinput[2].lower() == "false"):
+                config["welcome"] = False
+            print(f"welcome: {config['fuzzycomplete']}")
+
+        elif (_splitinput[1] == "start"):
             os.system(f"start {__location__}")
-        elif _splitinput[1] == "update":
+
+        elif (_splitinput[1] == "version"):
+            if _splitinput[2] == "latest":
+                print(utils.version())
+            elif _splitinput[2] == "local":
+                print(VERSION)
+
+        elif _splitinput[1] == "updatePythonPackages":
             import pkg_resources
             packages = [dist.project_name for dist in pkg_resources.working_set]
             if platform.system().lower() == "windows":
                 call("pip install --upgrade " + ' '.join(packages), shell=True)
             else:
                 call("sudo pip3 install --upgrade " + ' '.join(packages), shell=True)
+
         elif _splitinput[1] == "title":
-            os.system(f"title {_splitinput[2]}")
+            os.system(f"title {_splitinput[-1]}")
+
         elif _splitinput[1] == "config":
             print(config)
     except:
@@ -246,7 +286,7 @@ optional arguments:
     command     Command that shell will execute
 """)
             
-        saveToYml(config,CONFIG)
+    saveToYml(config,CONFIG)
 
 
 def is_admin() -> bool:
@@ -708,7 +748,7 @@ def main() -> None:
     Terminal main loop
     """
     
-    if sys.argv[1:] != [] and sys.argv[1] != "start":
+    if sys.argv[1:] != []:
         switch(argget(sys.argv[1:]),sys.argv[1:])
     else:
         if config.get("welcome"):
