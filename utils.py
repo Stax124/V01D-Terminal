@@ -38,6 +38,13 @@ def lcm(x, y) -> float:
         greater += 1
     return float(lcm)
 
+def version() -> str:
+    url = "https://api.github.com/repos/Stax124/V01D-Terminal/releases/latest"
+    response = requests.get(url)
+    content = response.json()
+
+    return content.get('html_url').split('/')[-1]
+
 def PlainToString(text, mode) -> str:
     "Returns list of strings from plain text file (hello world -> 'hello','world')"
 

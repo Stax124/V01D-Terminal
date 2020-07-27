@@ -7,6 +7,7 @@ import sys
 def _import():
     from sys import exit as _exit
     import yaml
+    import datetime
     import hashlib
     import ctypes
     from elevate import elevate
@@ -29,6 +30,7 @@ def _import():
 try:
     from sys import exit as _exit
     import yaml
+    import datetime
     import hashlib
     import ctypes
     from elevate import elevate
@@ -73,7 +75,6 @@ except:
 
 # -------------------------------------------
 
-CONFIG = r"config.yml"
 try:
     USER = os.environ["USERNAME"]
 except:
@@ -83,7 +84,7 @@ defPath = os.getcwd()
 
 __location__ = defPath + "\\V01D-Terminal.exe"
 
-
+CONFIG = defPath + "\\config.yml"
 
 # -------------------------------------------
 
@@ -92,15 +93,16 @@ aliases = database.GetAliases() # Get user defined aliases from database
 
 # Load config or defaults
 try:
-    try:
-        config = yaml.safe_load(open("config.yml"))
-    except Exception as e:
-        print(e)
-        config = yaml.safe_load(open("..\..\config.yml"))
+    config = yaml.safe_load(open("config.yml"))
 except:
     config = {
+        "welcome":True,
         "multithreading":True,
         "fuzzycomplete":True,
+        "completeWhileTyping":True,
+        "wrapLines":True,
+        "mouseSupport":True,
+        "searchIgnoreCase":True,
         "default": "#ff0066",
         "pointer": "#b20000",
         "path": "#22ff00",
@@ -154,6 +156,26 @@ def argget(splitInput: str) -> str:
         else:
             out += item
     return out
+
+def welcome() -> None:
+    print(f"""
+██╗   ██╗ ██████╗ ██╗██████╗     ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
+██║   ██║██╔═══██╗██║██╔══██╗    ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
+██║   ██║██║   ██║██║██║  ██║       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
+╚██╗ ██╔╝██║   ██║██║██║  ██║       ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
+ ╚████╔╝ ╚██████╔╝██║██████╔╝       ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
+  ╚═══╝   ╚═════╝ ╚═╝╚═════╝        ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+
+Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users
+
+This help will be shown only once
+
+Time: {datetime.datetime.now()}
+
+Latest release: {utils.version()}
+
+'help' - show available commands
+            """)
 
 def saveToYml(data,path) -> None:
     with open(path, "w") as file:
@@ -521,6 +543,10 @@ def switch(userInput,splitInput) -> None:
         os.system("start ping google.com -t")
         return
 
+    elif userInput.lower() == "welcome": # Show welcome screen
+        welcome()
+        return
+
     elif userInput.lower() == "os": # Show os
         print(osBased.Os())
         return
@@ -665,11 +691,11 @@ positional arguments:
 # --------------------------------------------
 
 session = PromptSession(completer=combinedcompleter,
-                        complete_while_typing=True,
-                        mouse_support=True,
-                        wrap_lines=True,
+                        complete_while_typing=config.get("completeWhileTyping"),
+                        mouse_support=config.get("mouseSupport"),
+                        wrap_lines=config.get("wrapLines"),
                         auto_suggest=AutoSuggestFromHistory(),
-                        search_ignore_case=True,
+                        search_ignore_case=config.get("searchIgnoreCase"),
                         enable_open_in_editor=True,
                         refresh_interval=0,
                         color_depth=ColorDepth.TRUE_COLOR
@@ -685,6 +711,10 @@ def main() -> None:
     if sys.argv[1:] != [] and sys.argv[1] != "start":
         switch(argget(sys.argv[1:]),sys.argv[1:])
     else:
+        if config.get("welcome"):
+            welcome()
+            config["welcome"] = False
+            saveToYml(config,CONFIG)
         while True:
             try:
                 cd = os.getcwd() # Get current working directory
