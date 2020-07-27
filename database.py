@@ -70,7 +70,7 @@ WinCompleter = NestedCompleter.from_nested_dict(
         "compile": None,
         "cls": {"/?": None},
         "clear": None,
-        "void":{"config":None,"multithreading":{"true":None,"false":None},"mouseSupport":{"true":None,"false":None},"fuzzycomplete":{"true":None,"false":None},"completeWhileTyping":{"true":None,"false":None},"wrapLines":{"true":None,"false":None},"welcome":{"true":None,"false":None}, "start":None,"updatePythonPackages":None, "title":None},
+        "void":{"config":None,"multithreading":{"true":None,"false":None},"version":{"latest":None,"local":None},"mouseSupport":{"true":None,"false":None},"fuzzycomplete":{"true":None,"false":None},"completeWhileTyping":{"true":None,"false":None},"wrapLines":{"true":None,"false":None},"welcome":{"true":None,"false":None}, "start":None,"updatePythonPackages":None, "title":None},
         "read": None,
         "power": None,
         "password": None,
