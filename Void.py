@@ -1,4 +1,5 @@
 # Project V01D-Terminal
+
 from subprocess import call
 import platform
 import os
@@ -692,7 +693,7 @@ def switch(userInput,splitInput) -> None:
                 if _eval.lower() == "quit" or _eval.lower() == "exit":
                     break
                 else:
-                    print(eval(str(_eval)))
+                    eval(compile(_eval,"<string>","exec"))
             except Exception as e:
                 print(e)
         return
@@ -702,18 +703,20 @@ def switch(userInput,splitInput) -> None:
             if splitInput[1].lower() == "-list":
                 print(database.downloadDict.keys())
             else:
-                raise BaseException
+                raise
         except:
             try:
-                utils.Download(splitInput[1])
-            except:
+                utils.download(splitInput[1])
+            except Exception as e:
+                print(e)
                 print("""
 Usage: download [-list] [target]
 
-Print .txt, .py and other text filetypes from terminal
+Downloads files based on URL or dictionary
 
-positional arguments:       
+optional arguments:       
     -list       Show dictionary of URLs
+positional arguments
     target      URL or key from 'download -list'
 """)
 
@@ -738,7 +741,7 @@ session = PromptSession(completer=combinedcompleter,
                         search_ignore_case=config.get("searchIgnoreCase"),
                         enable_open_in_editor=True,
                         refresh_interval=0,
-                        color_depth=ColorDepth.TRUE_COLOR
+                        color_depth=ColorDepth.TRUE_COLOR,
                         )
 
 # ---------------------------------------------

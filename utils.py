@@ -8,6 +8,7 @@ import sys
 import random
 import time
 import database
+from download import Download
 import os
 from prompt_toolkit.shortcuts import confirm
 
@@ -89,56 +90,9 @@ positional arguments:
 
     return(out)
 
-def Download(target) -> None:
-    try:
-        url = database.downloadDict.get(target)
-        urlSplit = url.split("/")
-    except:
-        try:
-            url = target
-            urlSplit = url.split("/")
-        except:
-            print("Target is not availible")
-
-    try:
-        wd = os.getcwd()
-        os.chdir(os.environ["USERPROFILE"]+"\\Downloads")
-        file_name = urlSplit[-1]
-        with open(file_name, "wb") as f:
-            print("Downloading %s" % file_name)
-            response = requests.get(url, stream=True)
-            total_length = response.headers.get('content-length')
-
-            if total_length is None:  # no content length header
-                    f.write(response.content)
-            else:
-                print(f"Filesize: {int(total_length) / 1000000} MB")
-                dl = 0
-                total_length = int(total_length)
-                for data in response.iter_content(chunk_size=4096):
-                    dl += len(data)
-                    f.write(data)
-                    done = int(50 * dl / total_length)
-                    sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)))
-                    sys.stdout.flush()
-        print()
-
-        fsplit = file_name.split(".")
-        if fsplit[-1] == "exe":
-            run = confirm("Run installer ? ")
-            if run:
-                try:
-                    os.system(f"start {file_name}")
-                except Exception as error:
-                    print(error)
-        else:
-            print(fsplit[-1])
-
-        os.chdir(wd)
-            
-    except Exception as e:
-        print(e)
-        os.system("start "+ url)
+def download(target) -> None:
+    d = Download(promptinstall=True, dictionarypath=["downloadDict.yml"], startifexeption=True, returnexeption=True)
+    d.download(target=target)
 
 def rng(_min: int, _max: int) -> int:
     "Returns random number between min and max. Min included, max excluded"
@@ -155,11 +109,11 @@ def get_size(bytes, suffix="B"):
     """
     Scale bytes to its proper format
     e.g:
-        1253656 => '1.20MB'
-        1253656678 => '1.17GB'
+        1253656 => '1.20MiB'
+        1253656678 => '1.17GiB'
     """
     factor = 1024
-    for unit in ["", "K", "M", "G", "T", "P"]:
+    for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi"]:
         if bytes < factor:
             return f"{bytes:.2f}{unit}{suffix}"
         bytes /= factor
