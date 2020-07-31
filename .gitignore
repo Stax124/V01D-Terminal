@@ -11,6 +11,7 @@ Compiled/
 
 # Other
 config.json
+commands.txt
 
 # Ignore all python config files
 *.pyc

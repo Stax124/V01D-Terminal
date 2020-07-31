@@ -1,6 +1,7 @@
 import os
 import sys
 import requests
+import platform
 import yaml
 
 class Download():
@@ -29,7 +30,10 @@ class Download():
 
         try:
             wd = os.getcwd()
-            os.chdir(os.environ["USERPROFILE"]+"\\Downloads")
+            if platform.system() == "Windows":
+                os.chdir(os.environ["USERPROFILE"]+"\\Downloads")
+            else:
+                os.chdir("/tmp")
             fileName = urlSplit[-1]
             with open(fileName, "wb") as f:
                 print(f"Downloading {fileName}")
@@ -60,10 +64,7 @@ class Download():
                             os.system(f"start {fileName}")
                         except Exception as error:
                             print(error)
-                else:
-                    print(fsplit[-1])
-
-                os.chdir(wd)
+            os.chdir(wd)
                 
         except Exception as e:
             if self.returnexeption:

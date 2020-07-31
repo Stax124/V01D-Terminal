@@ -7,6 +7,7 @@ mouseSupport: true
 multithreading: true
 path: '#22ff00'
 pointer: '#b20000'
+downloadDict: 'downloadDict.yml'
 scrollbar.background: bg:#88aaaa
 scrollbar.button: bg:#222222
 searchIgnoreCase: true

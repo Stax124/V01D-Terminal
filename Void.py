@@ -65,10 +65,10 @@ except Exception as e:
     # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies ? "):
         if platform.system().lower() == "windows":
-            os.system("pip install termcolor clint elevate os math ctypes yaml platform")
+            os.system("pip install clint elevate yaml")
         else:
             os.system(
-                "sudo pip3 install termcolor clint elevate os math ctypes yaml platform")
+                "sudo pip3 install clint elevate yaml")
     else:
         exit(0)
 
@@ -78,7 +78,10 @@ except Exception as e:
 # -------------------------------------------
 
 try:
-    USER = os.environ["USERNAME"]
+    if platform.system() == "Windows":
+        USER = os.environ["USERNAME"]
+    else:
+        USER = os.environ["USER"]
 except:
     USER = "ERROR"
 
@@ -86,13 +89,16 @@ defPath = os.getcwd()
 
 __location__ = defPath + "\\V01D-Terminal.exe"
 
-CONFIG = defPath + r"\config.yml"
+if platform.system() == "Windows":
+    CONFIG = defPath + r"\config.yml"
+else:
+    CONFIG = defPath + r"/config.yml"
 
 VERSION = "v0.4.0"
 
 # -------------------------------------------
 
-title = "V01D Terminal" # Set title
+title = "Void Terminal" # Set title
 aliases = database.GetAliases() # Get user defined aliases from database
 
 # Load config or defaults
@@ -102,6 +108,7 @@ try:
 except:
     config = {
         "welcome":True,
+        "downloadDict":("downloadDict.yml"),
         "multithreading":True,
         "fuzzycomplete":True,
         "completeWhileTyping":True,
@@ -120,12 +127,17 @@ except:
     print("config.yml not found, ignoring settings and using defaults")
     saveToYml(config,CONFIG)
 
+DOWNLOAD = config.get("downloadDict").split()
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and platform.system() == "Windows":
     combinedcompleter = FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter()]))
-else:
+elif platform.system() == "Windows":
     combinedcompleter = merge_completers([database.WinCompleter, PathCompleter()])
+elif platform.system() == "Linux" and config["fuzzycomplete"]:
+    combinedcompleter = FuzzyCompleter(merge_completers([database.LinuxCompleter, PathCompleter()]))
+else:
+    combinedcompleter = merge_completers([database.LinuxCompleter, PathCompleter()])
 
 # Define console style
 _style = Style.from_dict(
@@ -183,14 +195,6 @@ def saveToYml(data,path) -> None:
     with open(path, "w") as f:
         f.flush()
         yaml.dump(data, f)
-
-def exist(var,index) -> bool:
-    "Check if var with index exist"
-    try:
-        var[index]
-        return True
-    except:
-        return False
 
 def password() -> None: 
     "Get password of wifi network (Windows only)"
@@ -408,7 +412,7 @@ def switch(userInput,splitInput) -> None:
         utils.bootinfo()
         return
 
-    elif userInput.lower() == "component":
+    elif userInput.lower() == "component" and platform.system().lower() == "windows":
         utils.sysinfo()
         utils.cpu()
         utils.gpu()
@@ -664,12 +668,15 @@ def switch(userInput,splitInput) -> None:
         _exit()
 
     elif splitInput[0].lower() == "alias": # Define own function and save it
-        l = splitInput[2:]
-        complete = ""
-        for i in l:
-            complete += i + " "
-        aliases[splitInput[1]] = complete
-        database.WriteAliases(aliases)
+        if splitInput[1] == "-list":
+            print(aliases)
+        else:
+            l = splitInput[2:]
+            complete = ""
+            for i in l:
+                complete += i + " "
+            aliases[splitInput[1]] = complete
+            database.WriteAliases(aliases)
         return
 
         
@@ -680,11 +687,6 @@ def switch(userInput,splitInput) -> None:
             database.WriteAliases(aliases)
         except:
             print("Name is not in list ! \nUsage: delalias [name]")
-        
-
-    elif userInput.lower() == "aliases": # Show alias dictionary
-        _out = aliases
-        print(aliases)
 
     elif userInput.lower() == "eval": # Show alias dictionary
         while True:
@@ -701,7 +703,8 @@ def switch(userInput,splitInput) -> None:
     elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror) or download straight to active folder
         try:
             if splitInput[1].lower() == "-list":
-                print(database.downloadDict.keys())
+                for i in DOWNLOAD:
+                    print(dict(yaml.safe_load(open(i))).keys())
             else:
                 raise
         except:
@@ -729,7 +732,10 @@ positional arguments
                 value = aliases.get(userInput)
                 os.system(value)
             except: # Pass input to cmd to decide
-                os.system(userInput)
+                if platform.system() == "Windows":
+                    os.system(userInput)
+                else:
+                    os.system(f'bash -c "{userInput}"')
 
 # --------------------------------------------
 

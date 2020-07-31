@@ -4,6 +4,7 @@ import os
 import pickle
 import utils
 import yaml
+import platform
 from pathlib import Path
 
 def writedata(data, filename, location, mode) -> None:
@@ -37,22 +38,16 @@ __location__ = os.path.realpath(
 
 # --------------------------------------------------------------------
 
-try:
-    downloadDict = yaml.safe_load(open("downloadDict.yml"))
-except:
-    downloadDict = yaml.safe_load(open("..\..\downloadDict.yml"))
-
-# -----------------------------------------
-
-WinCompleter = NestedCompleter.from_nested_dict(
+if platform.system() == "Windows":
+    WinCompleter = NestedCompleter.from_nested_dict(
     {
         "plain2string": {"space":None,"file":None,"fileline":None},
         "eval": None,
         "md5": None,
+        "welcome":None,
         "startup": None,
         "open": None,
         "settings": None,
-        "aliases": None,
         "sha1": None,
         "sha224": None,
         "sha256": None,
@@ -102,7 +97,7 @@ WinCompleter = NestedCompleter.from_nested_dict(
         "cd":{"/?":None,'""':None},
         "exit": {"/?": None, "/B": None},
         "quit":None,
-        "alias":None,
+        "alias":{"-list":None},
         "delalias": None,
         "+": None,
         "-": None,
@@ -194,6 +189,15 @@ WinCompleter = NestedCompleter.from_nested_dict(
         "wmic": {"/?": None, "/NAMESPACE": None, "/ROLE": None, "/NODE": None, "/IMPLEMENT": None, "/AUTHLEVEL": None, "/LOCALE": None, "/PRIVILIGES": None, "/TRACE": None, "/RECORD": None, "/INTERACTIVE": None, "/FAILFAST": None, "/USER": None, "/PASSWORD": None, "/OUTPUT": None, "/APPEND": None, "/AGGREGATE": None, "/AUTHORITY": None, "ALIAS": None, "BASEBOARD": None, "BIOS": None, "BOOTCONFIG": None, "CDROM": None, "COMPUTERSYSTEM": None, "CPU": None, "CSPRODUCT": None, "DATAFILE": None, "DCOMAPP": None, "DESKTOP": None, "DESKTOPMONITOR": None, "DEVICEMEMORYADDRESS": None, "DISKDRIVE": None, "DISKQUOTA": None, "DMACHANNEL": None, "ENVIROMENT": None, "FSDIR": None, "GROUP": None, "IDECONTROLLER": None, "IRQ": None, "JOB": None, "LOADORDER": None, "LOGICALDISK": None, "LOGON": None, "MEMCACHE": None, "MEMORYCHIP": None, "MEMPHYSICAL": None, "NETCLIENT": None, "NETLOGIN": None, "NETPROTOCOL": None, "NETUSE": None, "NIC": None, "NICCONFIG": None, "NTDOMAIN": None, "NTEVENT": None, "NTEVENTLOG": None, "ONBOARDDEVICE": None, "OS": None, "PAGEFILE": None, "PAGEFILESET": None, "PARTITION": None, "PORT": None, "PORTCONNECTOR": None, "PRINTER": None, "PRINTERCONFIG": None, "PRINTJOB": None, "PROCESS": None, "PRODUCT": None, "QFE": None, "QUOTASETTING": None, "RDACCOUNT": None, "RDNIC": None, "RDPERMISSIONS": None, "RDTOGGLE": None, "RECOVEROS": None, "REGISTRY": None, "SCSICONTROLLER": None, "SERVER": None, "SERVICE": None, "SHADOWCOPY": None, "SHADOWSTORAGE": None, "SHARE": None, "SOFTWAREELEMENT": None, "SOFTWAREFEATURE": None, "SOUNDDEV": None, "STARTUP": None, "SYSACCOUNT": None, "SYSDRIVER": None, "SYSTEMENCLOSURE": None, "SYSTEMSLOT": None, "TAPEDRIVE": None, "TEMPERATURE": None, "TIMEZONE": None, "UPS": None, "USERACCOUNT": None, "VOLTAGE": None, "VOLUME": None, "VOLUMEQUOTASETTING": None, "VOLUMEUSERQUOTA": None, "WMISET": None},
     }
 )
+
+if platform.system() == "Linux":
+    if os.path.exists("commands.txt") == False:
+        os.system('bash -c "compgen -c >commands.txt"')
+    f = open("commands.txt","r")
+    l = f.read()
+    LinuxCompleter = WordCompleter(l.splitlines() + ["md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download"])
+else:
+    LinuxCompleter = None
 
 # ----------------------------------------------------------------------------
 
