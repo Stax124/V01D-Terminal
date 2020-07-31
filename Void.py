@@ -94,7 +94,7 @@ if platform.system() == "Windows":
 else:
     CONFIG = defPath + r"/config.yml"
 
-VERSION = "v0.4.0"
+VERSION = "v0.5.0"
 
 # -------------------------------------------
 
