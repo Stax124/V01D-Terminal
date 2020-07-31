@@ -57,7 +57,7 @@ class Download():
 
             if self.promptinstall:
                 fsplit = fileName.split(".")
-                if fsplit[-1] == "exe":
+                if fsplit[-1] == "exe" or fsplit[-1] == "msi":
                     run = confirm("Run installer ? ")
                     if run:
                         try:

@@ -709,7 +709,8 @@ def switch(userInput,splitInput) -> None:
                 raise
         except:
             try:
-                utils.download(splitInput[1])
+                for item in splitInput[1:]:
+                    utils.download(item)
             except Exception as e:
                 print(e)
                 print("""
