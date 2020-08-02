@@ -214,7 +214,7 @@ def cryptocurrency(splitinput) -> None:
     elif splitinput[-1].lower() == "binance-coin" or splitinput[-1].lower() == "bnb":
         os.system("curl rate.sx/bnb")
     else:
-        print("Invalid argument")
+        os.system("curl rate.sx")
 
 def password() -> None: 
     "Get password of wifi network (Windows only)"
@@ -428,6 +428,7 @@ def switch(userInput,splitInput) -> None:
             os.system("curl ipinfo.io/"+splitInput[1])
         except:
             os.system("curl ipinfo.io")
+        print()
         return
 
     elif splitInput[0].lower() == "qrcode":
