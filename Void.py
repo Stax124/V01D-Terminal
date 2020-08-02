@@ -101,11 +101,16 @@ VERSION = "v0.5.0"
 title = "Void Terminal" # Set title
 aliases = database.GetAliases() # Get user defined aliases from database
 
+def saveToYml(data,path) -> None:
+    with open(path, "w") as f:
+        f.flush()
+        yaml.safe_dump(data, f)
+
 # Load config or defaults
 try:
     config = yaml.safe_load(open(CONFIG))
     type(config.keys())
-except:
+except Exception as e:
     config = {
         "welcome":True,
         "downloadDict":("downloadDict.yml"),
@@ -125,9 +130,10 @@ except:
         "scrollbar.button": "bg:#222222"
     }
     print("config.yml not found, ignoring settings and using defaults")
+    print(e)
     saveToYml(config,CONFIG)
 
-DOWNLOAD = config.get("downloadDict").split()
+DOWNLOAD = list(config.get("downloadDict"))
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and platform.system() == "Windows":
@@ -190,11 +196,6 @@ Latest release: {utils.version()}
 
 'help' - show available commands
             """)
-
-def saveToYml(data,path) -> None:
-    with open(path, "w") as f:
-        f.flush()
-        yaml.dump(data, f)
 
 def cryptocurrency(splitinput) -> None:
     if splitinput[-1].lower() == "bitcoin" or splitinput[-1].lower() == "btc":
@@ -769,7 +770,9 @@ def switch(userInput,splitInput) -> None:
         try:
             if splitInput[1].lower() == "-list":
                 for i in DOWNLOAD:
-                    print(dict(yaml.safe_load(open(i))).keys())
+                    try:
+                        print(dict(yaml.safe_load(open(i))).keys())
+                    except: pass
             else:
                 raise
         except:

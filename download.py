@@ -14,9 +14,11 @@ class Download():
         self.buildmaindict()
     def buildmaindict(self):
         for i in self.dictionarypath:
-            downloadDict = dict(yaml.safe_load(open(i)))
-            for key in downloadDict.keys():
-                self.maindict[key] = downloadDict.get(key)
+            try:
+                downloadDict = dict(yaml.safe_load(open(i)))
+                for key in downloadDict.keys():
+                    self.maindict[key] = downloadDict.get(key)
+            except: print(f"{i} cannot be loaded (file doesn't exist or is empty), consider removing it from config.yml")
     def download(self,target):
         try:
             url = self.maindict.get(target)
@@ -52,7 +54,6 @@ class Download():
                         done = int(50 * dl / total_length)
                         sys.stdout.write(f"\r#{'=' * done}{' ' * (50-done)}#   {done*2}%   {int(((dl / total_length) * total_length) / 1000000)} MB")
                         sys.stdout.flush()
-            os.chdir(wd)
             print()
 
             if self.promptinstall:
@@ -64,15 +65,17 @@ class Download():
                             os.system(f"start {fileName}")
                         except Exception as error:
                             print(error)
+
             os.chdir(wd)
                 
         except Exception as e:
+            if self.startifexeption:
+                os.system("start " + url)
             if self.returnexeption:
                 return e
             else:
                 print(e)
-            if self.startifexeption:
-                os.system("start " + url)
+            
 
 if __name__ == "__main__":
     import Void

@@ -2,7 +2,8 @@ completeWhileTyping: true
 completion-menu.completion: 'bg:#000000 #ffffff'
 completion-menu.completion.current: 'bg:#00aaaa #000000'
 default: '#ff0066'
-downloadDict: downloadDict.yml
+downloadDict:
+- downloadDict.yml
 fuzzycomplete: true
 mouseSupport: true
 multithreading: true
