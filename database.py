@@ -42,6 +42,7 @@ if platform.system() == "Windows":
     WinCompleter = NestedCompleter.from_nested_dict(
     {
         "plain2string": {"space":None,"file":None,"fileline":None},
+        "cryptocurrency":{"bitcoin":None,"btc":None,"etherium":None,"eth":None,"ripple":None,"xrp":None,"tether":None,"usdt":None,"bitcoin-cash":None,"bch":None,"litecoin":None,"ltc":None,"cardano":None,"ada":None,"binance-coin":None,"bnb":None},
         "eval": None,
         "md5": None,
         "welcome":None,

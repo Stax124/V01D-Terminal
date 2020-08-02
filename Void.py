@@ -196,6 +196,26 @@ def saveToYml(data,path) -> None:
         f.flush()
         yaml.dump(data, f)
 
+def cryptocurrency(splitinput) -> None:
+    if splitinput[-1].lower() == "bitcoin" or splitinput[-1].lower() == "btc":
+        os.system("curl rate.sx/btc")
+    elif splitinput[-1].lower() == "etherium" or splitinput[-1].lower() == "eth":
+        os.system("curl rate.sx/eth")
+    elif splitinput[-1].lower() == "ripple" or splitinput[-1].lower() == "xrp":
+        os.system("curl rate.sx/xrp")
+    elif splitinput[-1].lower() == "tether" or splitinput[-1].lower() == "usdt":
+        os.system("curl rate.sx/usdt")
+    elif splitinput[-1].lower() == "bitcoin-cash" or splitinput[-1].lower() == "bch":
+        os.system("curl rate.sx/bch")
+    elif splitinput[-1].lower() == "litecoin" or splitinput[-1].lower() == "lct":
+        os.system("curl rate.sx/ltc")
+    elif splitinput[-1].lower() == "cardano" or splitinput[-1].lower() == "ada":
+        os.system("curl rate.sx/ada")
+    elif splitinput[-1].lower() == "binance-coin" or splitinput[-1].lower() == "bnb":
+        os.system("curl rate.sx/bnb")
+    else:
+        print("Invalid argument")
+
 def password() -> None: 
     "Get password of wifi network (Windows only)"
 
@@ -378,6 +398,14 @@ def switch(userInput,splitInput) -> None:
 
     elif userInput.lower() == "elevate" or userInput.lower() == "admin":
         elevate()
+        return
+
+    elif splitInput[0].lower() == "cryptocurrency":
+        cryptocurrency(splitInput)
+        return
+
+    elif userInput.lower() == "weather":
+        os.system("curl wttr.in")
         return
 
     elif userInput.lower() == "pagefile":
