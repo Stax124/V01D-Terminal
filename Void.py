@@ -404,8 +404,44 @@ def switch(userInput,splitInput) -> None:
         cryptocurrency(splitInput)
         return
 
-    elif userInput.lower() == "weather":
-        os.system("curl wttr.in")
+    elif splitInput[0].lower() == "weather":
+        try:
+            os.system("curl wttr.in/"+splitInput[1])
+        except:
+            os.system("curl wttr.in")
+        return
+
+    elif splitInput[0].lower() == "covid19":
+        try:
+            os.system("curl https://corona-stats.online/"+splitInput[1])
+        except:
+            os.system("curl https://corona-stats.online/")
+        return
+
+    elif userInput.lower() == "ip":
+        os.system("curl api.ipify.org")
+        print()
+        return
+
+    elif splitInput[0].lower() == "geoip":
+        try:
+            os.system("curl ipinfo.io/"+splitInput[1])
+        except:
+            os.system("curl ipinfo.io")
+        return
+
+    elif splitInput[0].lower() == "qrcode":
+        try:
+            os.system("curl qrenco.de/"+splitInput[1])
+        except:
+            print("Invalid argument")
+        return
+
+    elif splitInput[0].lower() == "stonks":
+        try:
+            os.system("curl stonks.icu/"+splitInput[1])
+        except:
+            print("Invalid argument: stonks amd/intl/tsla")
         return
 
     elif userInput.lower() == "pagefile":
