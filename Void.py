@@ -388,13 +388,17 @@ def hashfilesum(splitInput,hashalg) -> None:
 
 # --------------------------------------------
 
-def switch(userInput,splitInput) -> None:
+def switch(userInput,splitInput,lastdir) -> None:
     try:
         arg = argget(splitInput[1:])
     except:
         pass
     if splitInput[0].lower() == "password":
         password()
+        return
+
+    if userInput.lower() == "back":
+        os.chdir(lastdir)
         return
 
     elif userInput.lower() == "elevate" or userInput.lower() == "admin":
@@ -825,7 +829,7 @@ def main() -> None:
     """
     Terminal main loop
     """
-    
+
     if sys.argv[1:] != []:
         switch(argget(sys.argv[1:]),sys.argv[1:])
     else:
@@ -835,6 +839,10 @@ def main() -> None:
             saveToYml(config,CONFIG)
         while True:
             try:
+                try:
+                    lastdir = cd
+                except:
+                    lastdir = ""
                 cd = os.getcwd() # Get current working directory
                 userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"
                                                 ), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
@@ -845,7 +853,7 @@ def main() -> None:
                 except:
                     continue
 
-                switch(userInput=userInput, splitInput=splitInput)
+                switch(userInput=userInput, splitInput=splitInput, lastdir=lastdir)
 
             except KeyboardInterrupt:
                 pass
