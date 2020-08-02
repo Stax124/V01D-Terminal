@@ -27,6 +27,7 @@ class Download():
             try:
                 url = target
                 urlSplit = url.split("/")
+                requests.get(url)
             except:
                 return ConnectionRefusedError
 
