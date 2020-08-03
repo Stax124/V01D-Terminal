@@ -41,8 +41,8 @@ __location__ = os.path.realpath(
 if platform.system() == "Windows":
     WinCompleter = NestedCompleter.from_nested_dict(
     {
-        "plain2string": {"space":None,"file":None,"fileline":None},
-        "cryptocurrency":{"bitcoin":None,"btc":None,"etherium":None,"eth":None,"ripple":None,"xrp":None,"tether":None,"usdt":None,"bitcoin-cash":None,"bch":None,"litecoin":None,"ltc":None,"cardano":None,"ada":None,"binance-coin":None,"bnb":None},
+        "plain2string": {"line":None,"file":None,"fileline":None},
+        "cryptocurrency":{"btc":None,"eth":None,"xrp":None,"usdt":None,"bch":None,"ltc":None,"ada":None,"bnb":None},
         "eval": None,
         "weather": None,
         "covid19": None,

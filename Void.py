@@ -197,26 +197,6 @@ Latest release: {utils.version()}
 'help' - show available commands
             """)
 
-def cryptocurrency(splitinput) -> None:
-    if splitinput[-1].lower() == "bitcoin" or splitinput[-1].lower() == "btc":
-        os.system("curl rate.sx/btc")
-    elif splitinput[-1].lower() == "etherium" or splitinput[-1].lower() == "eth":
-        os.system("curl rate.sx/eth")
-    elif splitinput[-1].lower() == "ripple" or splitinput[-1].lower() == "xrp":
-        os.system("curl rate.sx/xrp")
-    elif splitinput[-1].lower() == "tether" or splitinput[-1].lower() == "usdt":
-        os.system("curl rate.sx/usdt")
-    elif splitinput[-1].lower() == "bitcoin-cash" or splitinput[-1].lower() == "bch":
-        os.system("curl rate.sx/bch")
-    elif splitinput[-1].lower() == "litecoin" or splitinput[-1].lower() == "lct":
-        os.system("curl rate.sx/ltc")
-    elif splitinput[-1].lower() == "cardano" or splitinput[-1].lower() == "ada":
-        os.system("curl rate.sx/ada")
-    elif splitinput[-1].lower() == "binance-coin" or splitinput[-1].lower() == "bnb":
-        os.system("curl rate.sx/bnb")
-    else:
-        os.system("curl rate.sx")
-
 def password() -> None: 
     "Get password of wifi network (Windows only)"
 
@@ -301,9 +281,9 @@ def void(_splitinput) -> None: # Open new terminal or configure it
             import pkg_resources
             packages = [dist.project_name for dist in pkg_resources.working_set]
             if platform.system().lower() == "windows":
-                call("pip install --upgrade " + ' '.join(packages), shell=True)
+                call("pip install --upgrade --use-feature=2020-resolver" + ' '.join(packages), shell=True)
             else:
-                call("sudo pip3 install --upgrade " + ' '.join(packages), shell=True)
+                call("sudo pip3 install --upgrade --use-feature=2020-resolver" + ' '.join(packages), shell=True)
 
         elif _splitinput[1] == "title":
             os.system(f"title {_splitinput[-1]}")
@@ -423,7 +403,10 @@ def switch(userInput,splitInput,lastdir) -> None:
         return
 
     elif splitInput[0].lower() == "cryptocurrency":
-        cryptocurrency(splitInput)
+        try:
+            os.system("curl rate.sx/"+splitInput[1])
+        except:
+            os.system("curl rate.sx")
         return
 
     elif splitInput[0].lower() == "weather":
