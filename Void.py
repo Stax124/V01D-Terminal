@@ -274,6 +274,23 @@ def void(_splitinput) -> None: # Open new terminal or configure it
         elif (_splitinput[1] == "start"):
             os.system(f"start {__location__}")
 
+        elif (_splitinput[1] == "license"):
+            try:
+                if _splitinput[2] == "full":
+                    if platform.system() == "Windows":
+                        f = open(defPath +"\LICENSE")
+                        print(f.read())
+                    else:
+                        f = open(defPath +"/LICENSE")
+                        print(f.read())
+            except Exception as e:
+                print("""
+    Void-Terminal  Copyright (C) 2020  Tomáš Novák
+    This program comes with ABSOLUTELY NO WARRANTY;
+    This is free software, and you are welcome to redistribute it
+    under certain conditions; type `void license full' for details.
+            """)
+
         elif (_splitinput[1] == "version"):
             if _splitinput[2] == "latest":
                 print(utils.version())
