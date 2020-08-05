@@ -87,6 +87,8 @@ except:
 
 defPath = os.getcwd()
 
+LASTDIR = ""
+
 __location__ = defPath + "\\V01D-Terminal.exe"
 
 if platform.system() == "Windows":
@@ -166,7 +168,7 @@ _style = Style.from_dict(
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 
-def argget(splitInput: str) -> str:
+def argget(splitInput: list) -> str:
     "Returns rebuild string"
     text = splitInput
     out = ""
@@ -385,7 +387,8 @@ def hashfilesum(splitInput,hashalg) -> None:
 
 # --------------------------------------------
 
-def switch(userInput,splitInput,lastdir) -> None:
+def switch(userInput,splitInput) -> None:
+    global LASTDIR
     try:
         arg = argget(splitInput[1:])
     except:
@@ -395,7 +398,10 @@ def switch(userInput,splitInput,lastdir) -> None:
         return
 
     if userInput.lower() == "back":
-        os.chdir(lastdir)
+        __placeholder = os.getcwd()
+        os.chdir(LASTDIR)
+        if __placeholder != LASTDIR:
+            LASTDIR = __placeholder
         return
 
     elif userInput.lower() == "elevate" or userInput.lower() == "admin":
@@ -722,6 +728,8 @@ def switch(userInput,splitInput,lastdir) -> None:
 
     # Change directory based on input
     elif splitInput[0].lower() == "cd" and arg:
+        if os.getcwd() != LASTDIR:
+            LASTDIR = os.getcwd()
         if arg.startswith("%"):
             env = arg.split("%")[1]
             path = os.environ[env]
@@ -839,10 +847,6 @@ def main() -> None:
             saveToYml(config,CONFIG)
         while True:
             try:
-                try:
-                    lastdir = cd
-                except:
-                    lastdir = ""
                 cd = os.getcwd() # Get current working directory
                 userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"
                                                 ), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
@@ -853,7 +857,7 @@ def main() -> None:
                 except:
                     continue
 
-                switch(userInput=userInput, splitInput=splitInput, lastdir=lastdir)
+                switch(userInput=userInput, splitInput=splitInput)
 
             except KeyboardInterrupt:
                 pass
