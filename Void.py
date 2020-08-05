@@ -452,15 +452,16 @@ def switch(userInput,splitInput) -> None:
         return
 
     elif splitInput[0].lower() == "shorten":
-        os.system(f"curl -F shorten={splitInput[1]} https://ttm.sh")
+        os.system(f'curl -F shorten="{splitInput[1]}" https://ttm.sh')
         return
 
     elif splitInput[0].lower() == "transfer":
-        os.system(f"curl -F file=@{splitInput[1]} https://ttm.sh")
+        os.system(f'curl -F file=@"{argget(splitInput[1:])}" https://ttm.sh')
         return
 
     elif splitInput[0].lower() == "dns":
         os.system("curl -L https://edns.ip-api.com/json")
+        print()
         return
 
     elif splitInput[0].lower() == "speedtest":
