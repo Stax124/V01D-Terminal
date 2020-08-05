@@ -8,6 +8,7 @@ import sys
 def _import():
     from sys import exit as _exit
     import yaml
+    import requests
     import datetime
     import hashlib
     import ctypes
@@ -33,6 +34,7 @@ try:
     import yaml
     import datetime
     import hashlib
+    import requests
     import ctypes
     from elevate import elevate
 
@@ -65,10 +67,10 @@ except Exception as e:
     # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies ? "):
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate yaml")
+            os.system("pip install clint elevate yaml requests psutil GPUtil tabulate pickle pathlib typing")
         else:
             os.system(
-                "sudo pip3 install clint elevate yaml")
+                "sudo pip3 install clint elevate yaml requests pickle pathlib typing")
     else:
         exit(0)
 
@@ -406,6 +408,63 @@ def switch(userInput,splitInput) -> None:
 
     elif userInput.lower() == "elevate" or userInput.lower() == "admin":
         elevate()
+        return
+
+    elif splitInput[0].lower() == "cheat":
+        text = splitInput[1:]
+        out = ""
+        for item in text:
+            if item != text[-1]:
+                out += item + "/"
+            else:
+                out += item
+        os.system(f"curl cht.sh/{out}")
+        return
+
+    elif splitInput[0].lower() == "checklastvid":
+        os.system(f'curl -s "https://decapi.me/youtube/latest_video?user={argget(splitInput[1:])}"')
+        print()
+        return
+
+    elif splitInput[0].lower() == "checklasttweet":
+        os.system(f'curl -s "https://decapi.me/twitter/latest?name={argget(splitInput[1:])}"')
+        print()
+        return
+
+    elif splitInput[0].lower() == "checktwitchonline":
+        os.system(f'curl -s "https://decapi.me/twitch/uptime?channel={argget(splitInput[1:])}"')
+        print()
+        return
+
+    elif splitInput[0].lower() == "fileconvert":
+        os.system(f'curl "http://c.docverter.com/convert" -F from={splitInput[1]} -F to={splitInput[2]} -F "input_files[]=@{splitInput[3]}" -o "{splitInput[4]}"')
+        return
+
+    elif splitInput[0].lower() == "ping.gg":
+        try:
+            os.system("curl ping.gg/"+splitInput[1])
+        except:
+            os.system("curl ping.gg")
+        return
+
+    elif splitInput[0].lower() == "guid":
+        os.system("curl givemeguid.com")
+        return
+
+    elif splitInput[0].lower() == "shorten":
+        os.system(f"curl -F shorten={splitInput[1]} https://ttm.sh")
+        return
+
+    elif splitInput[0].lower() == "transfer":
+        os.system(f"curl -F file=@{splitInput[1]} https://ttm.sh")
+        return
+
+    elif splitInput[0].lower() == "dns":
+        os.system("curl -L https://edns.ip-api.com/json")
+        return
+
+    elif splitInput[0].lower() == "speedtest":
+        os.system("curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -")
         return
 
     elif splitInput[0].lower() == "cryptocurrency":
