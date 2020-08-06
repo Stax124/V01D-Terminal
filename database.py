@@ -212,8 +212,9 @@ if platform.system() == "Linux":
     if os.path.exists("commands.txt") == False:
         os.system('bash -c "compgen -c >commands.txt"')
     f = open("commands.txt","r")
-    l = f.read()
-    LinuxCompleter = WordCompleter(l.splitlines() + ["md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download"])
+    l = f.read().splitlines()
+    l = list(dict.fromkeys(l))
+    LinuxCompleter = WordCompleter(l + ["md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download","cheat","checklastvid","checklasttweet","checktwitchonline","fileconverter","ping.gg","guid","dns","shorten","transfer","speedtest","weather","covid19","ip","geoip","qrcode","stonks","welcome"])
 else:
     LinuxCompleter = None
 

@@ -65,7 +65,7 @@ except Exception as e:
     from prompt_toolkit.shortcuts import confirm
 
     # Ask to install all dependencies, if denied, import error will be raised
-    if confirm("Install dependencies ? "):
+    if confirm("Install dependencies: "):
         if platform.system().lower() == "windows":
             os.system("pip install clint elevate yaml requests psutil GPUtil tabulate pickle pathlib typing")
         else:
@@ -79,6 +79,7 @@ except Exception as e:
 
 # -------------------------------------------
 
+# Get Username
 try:
     if platform.system() == "Windows":
         USER = os.environ["USERNAME"]
@@ -89,21 +90,25 @@ except:
 
 defPath = os.getcwd()
 
+# For use in "back"
 LASTDIR = ""
 
+# Path to executable
 __location__ = defPath + "\\V01D-Terminal.exe"
 
+# Find config file
 if platform.system() == "Windows":
     CONFIG = defPath + r"\config.yml"
 else:
     CONFIG = defPath + r"/config.yml"
 
-VERSION = "v0.5.0"
+# Local version
+VERSION = "v0.6.0"
 
 # -------------------------------------------
 
-title = "Void Terminal" # Set title
-aliases = database.GetAliases() # Get user defined aliases from database
+os.system("Void Terminal")  # Set title
+aliases = database.GetAliases() # Get user alias from database
 
 def saveToYml(data,path) -> None:
     with open(path, "w") as f:
@@ -135,9 +140,9 @@ except Exception as e:
     }
     print("config.yml not found, ignoring settings and using defaults")
     print(e)
-    saveToYml(config,CONFIG)
+    saveToYml(config,CONFIG) # Create new config file
 
-DOWNLOAD = list(config.get("downloadDict"))
+DOWNLOAD = list(config.get("downloadDict")) # Get all download dictionaries
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and platform.system() == "Windows":
@@ -255,6 +260,12 @@ def void(_splitinput) -> None: # Open new terminal or configure it
                 config["welcome"] = False
             print(f"welcome: {config['fuzzycomplete']}")
 
+        elif (_splitinput[1] == "linux") and platform.system() == "Linux":
+            if (_splitinput[2].lower() == "generate"):
+                target = "commands.txt"
+                os.system(f'bash -c "compgen -c >{target}"')
+                print(f"generated: {target}")
+
         elif (_splitinput[1] == "start"):
             os.system(f"start {__location__}")
 
@@ -304,7 +315,7 @@ def void(_splitinput) -> None: # Open new terminal or configure it
   ╚═══╝   ╚═════╝ ╚═╝╚═════╝        ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
                                                                                                   
 
-Usage: V01D-Terminal.exe [command] [-h]
+Usage: V01D-Terminal.exe [command | -h | --help]
 
 V01D-Terminal, easy to use Windows terminal with autocompletion
 
@@ -449,6 +460,7 @@ def switch(userInput,splitInput) -> None:
 
     elif splitInput[0].lower() == "guid":
         os.system("curl givemeguid.com")
+        print()
         return
 
     elif splitInput[0].lower() == "shorten":
@@ -513,7 +525,7 @@ def switch(userInput,splitInput) -> None:
         try:
             os.system("curl stonks.icu/"+splitInput[1])
         except:
-            print("Invalid argument: stonks amd/intl/tsla")
+            print("Invalid argument: eg. stonks amd/intl/tsla")
         return
 
     elif userInput.lower() == "pagefile":
@@ -667,9 +679,9 @@ def switch(userInput,splitInput) -> None:
                     "       %   -    Modulus\n"
                     "       **  -    Exponentiation\n"
                     "       //  -    floor division\n"
-                    "   gcd - greatest common divisor\n"
-                    "   lcm - least common multiple\n"
-                    "   rng - random number generator (rng min[included],max[excluded])\n"
+                    "   gcd - greatest common divisor: gcd [value],[value]\n"
+                    "   lcm - least common multiple: lcm [value],[value]\n"
+                    "   rng - random number generator: rng [min(included)],[max(excluded)]\n"
 
                 "\n COMPUTER: \n\n"
 
@@ -696,22 +708,39 @@ def switch(userInput,splitInput) -> None:
                 
                 "\n ALIAS: \n\n"
 
-                    "   alias - define your own function (alias sayhello @echo Hello!!)\n"
-                    "   delalias - remove alias\n"
-                    "   aliases - show all user defined aliases\n"
+                    "   alias - define your own function: alias [name | -list] [command(if name)]\n"
+                    "   delalias - remove alias: delalias [name]\n"
 
                 "\n OTHER FUNCTIONS \n\n"
 
                     "   ping - never ending ping loop\n"
                     "   pagefile - show pagefile location and size\n"
-                    "   read - read specified .txt file\n"
+                    "   read - read specified .txt file: read [target]\n"
                     "   power - change your Windows powerplan\n"
-                    "   download - dictionary for downloading files (download -list)\n"
+                    "   download - dictionary for downloading files: download [-list | target | URL]\n"
                     "   open - open file explorer in current directory\n"
                     "   plain2string - convert plain text to strings: plain2string mode[space,file, fileline] text/[filename]\n"
                     "   md5, sha1 , sha224, sha256, sha384, sha512 - hash string\n"
-                    "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file\n"
+                    "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file: (function) [target]\n"
                     "   elevate, admin - grant admin permission for shell\n"
+                    "   cheat - programmer cheat sheet: cheat [querry]\n"
+                    "   checklastvid - get last youtube video of specified channel: checklastvid [channel]\n"
+                    "   checklasttweet - get last tweet of specified user: checklasttweet [channel]\n"
+                    "   checktwitchonline - get information about specified twitch channel: checklastvid [channel]\n"
+                    "   fileconverter - convert files to other types: fileconverter [input type] [output type] [target] [new file name]\n"
+                    "   ping.gg - server monitoring utility\n"
+                    "   guid - generate random GUID\n"
+                    "   dns - get dns information\n"
+                    "   shorten - make url shorter: shorten [target]\n"
+                    "   transfer - temporarily upload a file to server: transfer [target]\n"
+                    "   speedtest - check internet connection speed\n"
+                    "   weather - check weather, if no location specified, check local weather: weather [location(optional) | moon(optional)]\n"
+                    "   covid19 - display status of current covid19 situation in country: covid19 [location(optional)]\n"
+                    "   ip - get your external IP address\n"
+                    "   geoip - get your external IP address and location: geoip [target(optional)]\n"
+                    "   qrcode - make qrcode out of user input: qrcode [text]\n"
+                    "   stonks - get stock information: stonks [target]\n"
+                    "   cryptocurrency - get cryptocurrency information: cryptocurrency [currency | currency@time | :help]\n"
 
                 "\n IN DEVELOPMENT \n\n"
             )
@@ -810,6 +839,11 @@ def switch(userInput,splitInput) -> None:
             print(aliases)
         else:
             l = splitInput[2:]
+            try:
+                splitInput[2]
+            except:
+                print("No command specified")
+                return
             complete = ""
             for i in l:
                 complete += i + " "

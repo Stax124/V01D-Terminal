@@ -3130,10 +3130,14 @@ iptest3.exe
 ipython.exe
 ipython3.exe
 isort.exe
+jupyter-bundlerextension.exe
 jupyter-kernel.exe
 jupyter-kernelspec.exe
+jupyter-nbextension.exe
+jupyter-notebook.exe
 jupyter-qtconsole.exe
 jupyter-run.exe
+jupyter-serverextension.exe
 jupyter-trust.exe
 markdown_py.exe
 mp3
