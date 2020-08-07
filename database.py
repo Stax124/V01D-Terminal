@@ -210,7 +210,7 @@ if platform.system() == "Windows":
 
 if platform.system() == "Linux":
     if os.path.exists("commands.txt") == False:
-        os.system('bash -c "compgen -c >commands.txt"')
+        os.system(f'bash -c "compgen -c >{defPath}/commands.txt"')
     f = open("commands.txt","r")
     l = f.read().splitlines()
     l = list(dict.fromkeys(l))

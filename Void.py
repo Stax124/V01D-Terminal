@@ -107,7 +107,7 @@ VERSION = "v0.6.0"
 
 # -------------------------------------------
 
-os.system("Void Terminal")  # Set title
+os.system("title Void Terminal")  # Set title
 aliases = database.GetAliases() # Get user alias from database
 
 def saveToYml(data,path) -> None:
@@ -263,7 +263,7 @@ def void(_splitinput) -> None: # Open new terminal or configure it
         elif (_splitinput[1] == "linux") and platform.system() == "Linux":
             if (_splitinput[2].lower() == "generate"):
                 target = "commands.txt"
-                os.system(f'bash -c "compgen -c >{target}"')
+                os.system(f'bash -c "compgen -c >{defPath+"/"+target}"')
                 print(f"generated: {target}")
 
         elif (_splitinput[1] == "start"):
