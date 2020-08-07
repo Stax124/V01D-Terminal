@@ -933,7 +933,14 @@ def main() -> None:
     """
 
     if sys.argv[1:] != []:
-        switch(argget(sys.argv[1:]),sys.argv[1:])
+        a = argget(sys.argv[1:])
+
+        if '"' in a:
+            a = a.split('"')
+        if "'" in a:
+            a = a.split("'")
+
+        switch(a,sys.argv[1:])
     else:
         if config.get("welcome"):
             welcome()
