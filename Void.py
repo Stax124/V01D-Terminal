@@ -107,7 +107,9 @@ VERSION = "v0.6.0"
 
 # -------------------------------------------
 
-os.system("title Void Terminal")  # Set title
+if platform.system().lower() == "windows":
+    os.system("title Void-Terminal")
+
 aliases = database.GetAliases() # Get user alias from database
 
 def saveToYml(data,path) -> None:
