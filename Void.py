@@ -3,6 +3,7 @@
 from subprocess import call
 import platform
 import os
+import threading
 import sys
 
 def _import():
@@ -67,10 +68,10 @@ except Exception as e:
     # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies: "):
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate yaml requests psutil GPUtil tabulate pickle pathlib typing")
+            os.system("pip install clint elevate yaml requests psutil GPUtil tabulate pickle pathlib typing pynput")
         else:
             os.system(
-                "sudo pip3 install clint elevate yaml requests pickle pathlib typing")
+                "sudo pip3 install clint elevate yaml requests pickle pathlib typing pynput")
     else:
         exit(0)
 
@@ -970,5 +971,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    mainThread = threading.Thread(target=main)
+    mainThread.start()
+    
 
