@@ -68,10 +68,10 @@ except Exception as e:
     # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies: "):
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate yaml requests psutil GPUtil tabulate pickle pathlib typing pynput")
+            os.system("pip install clint elevate yaml requests psutil gputil tabulate pickle pathlib typing pynput")
         else:
             os.system(
-                "sudo pip3 install clint elevate yaml requests pickle pathlib typing pynput")
+                "sudo pip3 install clint elevate yaml requests pickle pathlib typing pynput tabulate psutil gputil")
     else:
         exit(0)
 
@@ -563,7 +563,7 @@ def switch(userInput,splitInput) -> None:
         utils.bootinfo()
         return
 
-    elif userInput.lower() == "component" and platform.system().lower() == "windows":
+    elif userInput.lower() == "component":
         utils.sysinfo()
         utils.cpu()
         utils.gpu()
