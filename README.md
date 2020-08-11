@@ -1,13 +1,16 @@
 # V01D-Terminal
 
-![GitHub](https://img.shields.io/github/license/Stax124/V01D-Terminal?style=for-the-badge)
+[![GitHub](https://img.shields.io/github/license/Stax124/V01D-Terminal?style=for-the-badge)](https://github.com/Stax124/V01D-Terminal/blob/master/LICENSE)
 ![GitHub](https://img.shields.io/github/last-commit/Stax124/V01D-Terminal?style=for-the-badge)
-![GitHub](https://img.shields.io/website?down_color=orange&down_message=offline&style=for-the-badge&up_color=green&up_message=online&url=https%3A%2F%2Fstax124.github.io%2FV01D-Terminal%2F)
+[![GitHub](https://img.shields.io/website?down_color=orange&down_message=offline&style=for-the-badge&up_color=green&up_message=online&url=https%3A%2F%2Fstax124.github.io%2FV01D-Terminal%2F)](https://stax124.github.io/V01D-Terminal/)
 ![GitHub](https://img.shields.io/github/downloads/Stax124/V01D-Terminal/total?color=%230000ff&logo=GitHub&style=for-the-badge)
-![GitHub](https://img.shields.io/github/v/release/Stax124/V01D-Terminal?label=Stable&style=for-the-badge)
-![GitHub](https://img.shields.io/github/v/release/Stax124/V01D-Terminal?include_prereleases&label=latest&style=for-the-badge)
+[![GitHub](https://img.shields.io/github/v/release/Stax124/V01D-Terminal?label=Stable&style=for-the-badge)](https://github.com/Stax124/V01D-Terminal/releases)
+[![GitHub](https://img.shields.io/github/v/release/Stax124/V01D-Terminal?include_prereleases&label=latest&style=for-the-badge)](https://github.com/Stax124/V01D-Terminal/releases)
 
-![Terminal](img/Autocompletion.png) 
+
+<p align="center">
+  <img src="img/Autocompletion.png">
+</p>
 
 Easy to use **Windows** terminal made by **Stax124**
 
