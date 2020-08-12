@@ -816,8 +816,12 @@ def switch(userInput,splitInput) -> None:
         print(utils.rng(num[0], num[1]))
         return
 
-    elif userInput.lower() == "open" and platform.system().lower() == "windows": # Open file explorer in cwd
-        os.system("explorer .\\")
+    elif splitInput[0].lower() == "open" and platform.system().lower() == "windows": # Open file explorer in cwd
+        target = argget(splitInput[1:])
+        if target != "":
+            os.system(f"explorer {target}")
+        else:
+            os.system("explorer .\\")
         return
 
     elif userInput.lower() == "settings" and platform.system().lower() == "windows":  # Open file explorer in cwd
