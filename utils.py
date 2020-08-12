@@ -68,7 +68,7 @@ def ytvid(url):
     else:
         parent_dir = "/tmp"
 
-    print(f"Downloading {yt.title} to {startdir}, Please wait...")
+    print(f"Downloading {yt.title} to {os.getcwd()}, Please wait...")
     vids[vnum].download()
     os.chdir(startdir)
 
