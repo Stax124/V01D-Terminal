@@ -5,6 +5,7 @@ default: '#ff0066'
 downloadDict:
 - downloadDict.yml
 fuzzycomplete: true
+mode: POWERSHELL
 mouseSupport: true
 multithreading: true
 path: '#22ff00'

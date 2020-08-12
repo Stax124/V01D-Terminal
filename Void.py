@@ -124,6 +124,7 @@ try:
     type(config.keys())
 except Exception as e:
     config = {
+        "mode":"CMD",
         "welcome":True,
         "downloadDict":("downloadDict.yml"),
         "multithreading":True,
@@ -146,6 +147,7 @@ except Exception as e:
     saveToYml(config,CONFIG) # Create new config file
 
 DOWNLOAD = list(config.get("downloadDict")) # Get all download dictionaries
+MODE = config.get("mode","CMD")
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and platform.system() == "Windows":
@@ -262,6 +264,13 @@ def void(_splitinput) -> None: # Open new terminal or configure it
             elif (_splitinput[2].lower() == "false"):
                 config["welcome"] = False
             print(f"welcome: {config['fuzzycomplete']}")
+
+        elif (_splitinput[1] == "mode"):
+            if (_splitinput[2].lower() == "powershell"):
+                config["mode"] = "POWERSHELL"
+            elif (_splitinput[2].lower() == "cmd"):
+                config["mode"] = "CMD"
+            print(f"mode: {config['mode']}")
 
         elif (_splitinput[1] == "linux") and platform.system() == "Linux":
             if (_splitinput[2].lower() == "generate"):
@@ -928,7 +937,10 @@ positional arguments
                 os.system(value)
             except: # Pass input to cmd to decide
                 if platform.system() == "Windows":
-                    os.system(userInput)
+                    if MODE == "CMD":
+                        os.system(userInput)
+                    elif MODE == "POWERSHELL":
+                        os.system(f"powershell -Command {userInput}")
                 else:
                     os.system(f'bash -c "{userInput}"')
 
