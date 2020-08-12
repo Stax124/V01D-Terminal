@@ -774,6 +774,10 @@ def switch(userInput,splitInput) -> None:
         welcome()
         return
 
+    elif splitInput[0].lower() == "sizeof": # Show welcome screen
+        print(os.path.getsize(argget(splitInput[1:])) / 1000000,"MB")
+        return
+
     elif userInput.lower() == "os": # Show os
         print(osBased.Os())
         return
@@ -836,16 +840,11 @@ def switch(userInput,splitInput) -> None:
     elif splitInput[0].lower() == "cd" and arg:
         if os.getcwd() != LASTDIR:
             LASTDIR = os.getcwd()
-        if arg.startswith("%"):
-            env = arg.split("%")[1]
-            path = os.environ[env]
-            os.chdir(path)
+        if '"' in arg:
+            path = argget(splitInput[1:]).split('"')[-2]
         else:
-            if '"' in arg:
-                path = argget(splitInput[1:]).split('"')[-2]
-            else:
-                path = argget(splitInput[1:])
-            os.chdir(path)
+            path = argget(splitInput[1:])
+        os.chdir(path)
         return
 
     elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
@@ -968,8 +967,20 @@ def main() -> None:
                 cd = os.getcwd() # Get current working directory
                 userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"
                                                 ), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                
                 splitInput = userInput.split() # Split input to get key words
 
+                for i in splitInput:
+                    if i.find("%") != -1:
+                        spl = i.split("%")[1]
+                        env = os.environ[spl]
+                        splitInput[splitInput.index(i)] = splitInput[splitInput.index(i)].replace(f"%{spl}%",env)
+                
+                rebuild = argget(splitInput)
+
+                if userInput != rebuild:
+                    userInput = rebuild
+                
                 try:
                     splitInput[0]
                 except:

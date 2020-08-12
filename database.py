@@ -46,6 +46,7 @@ if platform.system() == "Windows":
         "plain2string": {"line":None,"file":None,"fileline":None},
         "cryptocurrency":{"btc":None,"eth":None,"xrp":None,"usdt":None,"bch":None,"ltc":None,"ada":None,"bnb":None},
         "eval": None,
+        "sizeof": None,
         "cheat": None,
         "checklastvid": None,
         "checklasttweet": None,
@@ -115,7 +116,7 @@ if platform.system() == "Windows":
         "os":None,
         "pwned":None,
         "cd":{"/?":None,'""':None},
-        "exit": {"/?": None, "/B": None},
+    #   "exit": {"/?": None, "/B": None},
         "quit":None,
         "alias":{"-list":None},
         "delalias": None,
@@ -220,7 +221,7 @@ if platform.system() == "Linux":
     f = open("commands.txt","r")
     l = f.read().splitlines()
     l = list(dict.fromkeys(l))
-    LinuxCompleter = WordCompleter(l + ["md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download","cheat","checklastvid","checklasttweet","checktwitchonline","fileconverter","ping.gg","guid","dns","shorten","transfer","speedtest","weather","covid19","ip","geoip","qrcode","stonks","welcome"])
+    LinuxCompleter = WordCompleter(l + ["sizeof","md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download","cheat","checklastvid","checklasttweet","checktwitchonline","fileconverter","ping.gg","guid","dns","shorten","transfer","speedtest","weather","covid19","ip","geoip","qrcode","stonks","welcome"])
 else:
     LinuxCompleter = None
 
