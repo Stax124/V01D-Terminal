@@ -1,3 +1,6 @@
+from __future__ import print_function
+from subprocess import call
+from sys import argv
 from datetime import datetime
 import platform
 import psutil
@@ -5,6 +8,7 @@ import GPUtil
 from tabulate import tabulate
 import requests
 import sys
+import pytube
 import random
 import time
 import database
@@ -45,6 +49,28 @@ def version() -> str:
     content = response.json()
 
     return content.get('html_url').split('/')[-1]
+
+def ytvid(url):
+    startdir = os.getcwd()
+    downloads = os.environ["USERPROFILE"]+"\\Downloads"
+    os.chdir(downloads)
+
+    yt = pytube.YouTube(url)
+    vids = yt.streams.filter(file_extension = "mp4")
+
+    for i in range(len(vids)):
+        print(i,'. ',vids[i])
+
+    vnum = int(input("Enter video index: "))
+
+    if platform.system() == 'Windows':
+        parent_dir = downloads
+    else:
+        parent_dir = "/tmp"
+
+    print(f"Downloading {yt.title} to {startdir}, Please wait...")
+    vids[vnum].download()
+    os.chdir(startdir)
 
 def PlainToString(text, mode) -> str:
     "Returns list of strings from plain text file (hello world -> 'hello','world')"

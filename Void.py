@@ -68,10 +68,10 @@ except Exception as e:
     # Ask to install all dependencies, if denied, import error will be raised
     if confirm("Install dependencies: "):
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate yaml requests psutil gputil tabulate pickle pathlib typing pynput")
+            os.system("pip install clint elevate yaml requests psutil gputil tabulate pickle pathlib typing pynput pytube3")
         else:
             os.system(
-                "sudo pip3 install clint elevate yaml requests pickle pathlib typing pynput tabulate psutil gputil")
+                "sudo pip3 install clint elevate yaml requests pickle pathlib typing pynput tabulate psutil gputil pytube3")
     else:
         exit(0)
 
@@ -149,9 +149,9 @@ DOWNLOAD = list(config.get("downloadDict")) # Get all download dictionaries
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and platform.system() == "Windows":
-    combinedcompleter = FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter()]))
+    combinedcompleter = FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter]))
 elif platform.system() == "Windows":
-    combinedcompleter = merge_completers([database.WinCompleter, PathCompleter()])
+    combinedcompleter = merge_completers([database.WinCompleter, PathCompleter(), winWordCompleter])
 elif platform.system() == "Linux" and config["fuzzycomplete"]:
     combinedcompleter = FuzzyCompleter(merge_completers([database.LinuxCompleter, PathCompleter()]))
 else:
@@ -295,6 +295,15 @@ def void(_splitinput) -> None: # Open new terminal or configure it
             elif _splitinput[2] == "local":
                 print(VERSION)
 
+        elif (_splitinput[1] == "install"):
+            if _splitinput[2] == "chocolatey":
+                if is_admin() == True and platform.system().lower() == "windows":
+                    os.system("powershell -Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))")
+                elif platform.system() == "Windows":
+                    print("Rerun with administrative privileges: use 'admin' or 'elevate'")
+                else:
+                    print("Only available on Windows")
+
         elif _splitinput[1] == "updatePythonPackages":
             import pkg_resources
             packages = [dist.project_name for dist in pkg_resources.working_set]
@@ -422,6 +431,10 @@ def switch(userInput,splitInput) -> None:
 
     elif userInput.lower() == "elevate" or userInput.lower() == "admin":
         elevate()
+        return
+
+    elif splitInput[0].lower() == "ytdown":
+        utils.ytvid(splitInput[1])
         return
 
     elif splitInput[0].lower() == "cheat":
@@ -744,6 +757,7 @@ def switch(userInput,splitInput) -> None:
                     "   qrcode - make qrcode out of user input: qrcode [text]\n"
                     "   stonks - get stock information: stonks [target]\n"
                     "   cryptocurrency - get cryptocurrency information: cryptocurrency [currency | currency@time | :help]\n"
+                    "   ytdown - download youtube video (if you want both audio and video, download both and then combine them on youselves): ytdown [url]\n"
 
                 "\n IN DEVELOPMENT \n\n"
             )
