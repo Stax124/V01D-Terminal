@@ -795,6 +795,11 @@ def switch(userInput,splitInput) -> None:
         print(os.path.getsize(argget(splitInput[1:])) / 1000000,"MB")
         return
 
+    elif splitInput[0].lower() == "currencyconverter": # Show welcome screen
+        rate = utils.currencyconverter(splitInput[1].upper(), splitInput[2].upper())
+        print(f"{(rate * float(splitInput[3])).__round__(2)} {splitInput[2]}")
+        return
+
     elif userInput.lower() == "os": # Show os
         print(osBased.Os())
         return

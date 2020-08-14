@@ -72,6 +72,14 @@ def ytvid(url):
     vids[vnum].download()
     os.chdir(startdir)
 
+def currencyconverter(base:str,othercurrency:str) -> float:
+    "Returns rate between currencies"
+    response = requests.get(f"https://api.exchangeratesapi.io/latest?base={base}")
+    content = response.json()
+    rates = content.get("rates")
+    rate = rates.get(othercurrency)
+    return rate
+
 def PlainToString(text, mode) -> str:
     "Returns list of strings from plain text file (hello world -> 'hello','world')"
 
