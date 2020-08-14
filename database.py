@@ -82,7 +82,7 @@ if platform.system() == "Windows":
         "sha256sum": None,
         "sha384sum": None,
         "sha512sum": None,
-        "help": {"/?": None},
+        # "help": {"/?": None},
         "elevate": None,
         "admin": None,
         "compile": None,

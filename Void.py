@@ -114,9 +114,12 @@ if platform.system().lower() == "windows":
 aliases = database.GetAliases() # Get user alias from database
 
 def saveToYml(data,path) -> None:
-    with open(path, "w") as f:
-        f.flush()
-        yaml.safe_dump(data, f)
+    try:
+        with open(path, "w") as f:
+            f.flush()
+            yaml.safe_dump(data, f)
+    except:
+        print(f"Unable to save data to {path}")
 
 # Load config or defaults
 try:
@@ -142,9 +145,14 @@ except Exception as e:
         "scrollbar.background": "bg:#88aaaa",
         "scrollbar.button": "bg:#222222"
     }
-    print("config.yml not found, ignoring settings and using defaults")
     print(e)
-    saveToYml(config,CONFIG) # Create new config file
+    try:
+        if os.path.exists(CONFIG):
+            saveToYml(config,CONFIG) # Create new config file
+        else:
+            if confirm("config.yml not found, ignoring settings and using defaults, would you like to save new config? "): saveToYml(config,CONFIG) # Create new config file
+    except:
+        print(f"Error writing config file, please check if you are not starting Terminal from PATH, otherwise you dont have permission to write in this folder {CONFIG}")
 
 DOWNLOAD = list(config.get("downloadDict")) # Get all download dictionaries
 MODE = config.get("mode","CMD")
@@ -989,8 +997,6 @@ def main() -> None:
     else:
         if config.get("welcome"):
             welcome()
-            config["welcome"] = False
-            saveToYml(config,CONFIG)
         while True:
             try:
                 cd = os.getcwd() # Get current working directory
