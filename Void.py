@@ -104,7 +104,7 @@ else:
     CONFIG = defPath + r"/config.yml"
 
 # Local version
-VERSION = "v0.6.0"
+VERSION = "v0.6.3"
 
 # -------------------------------------------
 
@@ -431,6 +431,13 @@ def switch(userInput,splitInput) -> None:
         password()
         return
 
+    if splitInput[0] == "downloadeta":
+        target = float(splitInput[1]) * 1000000000
+        speed = float(splitInput[2]) * 1000000
+
+        print(f"ETA: {((target / speed) / 60 / 60).__round__(3)} h")
+        return
+
     if userInput.lower() == "back":
         __placeholder = os.getcwd()
         os.chdir(LASTDIR)
@@ -725,6 +732,7 @@ def switch(userInput,splitInput) -> None:
                     "   services - configure services\n"
                     "   manager - computer management\n"
                     "   event - event viewer\n"
+                    "   dxdiag - DirectX diagnostics tool\n"
 
                 "\n MANAGEMENT: \n\n"
 
@@ -737,7 +745,7 @@ def switch(userInput,splitInput) -> None:
                     "   delalias - remove alias: delalias [name]\n"
 
                 "\n OTHER FUNCTIONS \n\n"
-
+                    "   downloadeta - calculate estimated time of arival: downloadeta [target(GB)] [speed(MB)]\n"
                     "   ping - never ending ping loop\n"
                     "   pagefile - show pagefile location and size\n"
                     "   read - read specified .txt file: read [target]\n"

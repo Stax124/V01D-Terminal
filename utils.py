@@ -144,6 +144,19 @@ def get_size(bytes, suffix="B"):
             return f"{bytes:.2f}{unit}{suffix}"
         bytes /= factor
 
+def get_from_size(bytes, suffix="B"):
+    """
+    Scale bytes to its proper format
+    e.g:
+        1253656 => '1.20MiB'
+        1253656678 => '1.17GiB'
+    """
+    factor = 1024
+    for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi"]:
+        if bytes < factor:
+            return f"{bytes:.2f}{unit}{suffix}"
+        bytes *= factor
+
 def gpu() -> None:
     "Print GPU information"
     print("="*40, "GPU Details", "="*40)
