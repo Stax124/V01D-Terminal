@@ -4,6 +4,7 @@ from sys import argv
 from datetime import datetime
 import platform
 import psutil
+import screen_brightness_control as screen
 import GPUtil
 from tabulate import tabulate
 import requests
@@ -71,6 +72,14 @@ def ytvid(url):
     print(f"Downloading {yt.title} to {os.getcwd()}, Please wait...")
     vids[vnum].download()
     os.chdir(startdir)
+
+def setbrightness(value:int):
+    "Set screen brightness to value between 0 and 100"
+    screen.set_brightness(value)
+
+def getbrightness():
+    "Get brightness of monitor"
+    print(f"Brightness: {screen.get_brightness()}")
 
 def currencyconverter(base:str,othercurrency:str) -> float:
     "Returns rate between currencies"

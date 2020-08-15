@@ -56,27 +56,34 @@ try:
 
 
 except Exception as e:
-    print(e)
-    # Install main lib
-    if platform.system().lower() == "windows":
-        os.system("pip install prompt-toolkit")
-    else:
-        os.system("sudo pip3 install prompt-toolkit")
-
-    from prompt_toolkit.shortcuts import confirm
-
-    # Ask to install all dependencies, if denied, import error will be raised
-    if confirm("Install dependencies: "):
+    if sys.executable.find("Python") != -1:
+        print(e)
+        # Install main lib
         if platform.system().lower() == "windows":
-            os.system("pip install clint elevate yaml requests psutil gputil tabulate pickle pathlib typing pynput pytube3")
+            os.system("pip install prompt-toolkit")
         else:
-            os.system(
-                "sudo pip3 install clint elevate yaml requests pickle pathlib typing pynput tabulate psutil gputil pytube3")
-    else:
-        exit(0)
+            os.system("sudo pip3 install prompt-toolkit")
 
-    # Reimport all dependencies
-    _import()
+        from prompt_toolkit.shortcuts import confirm
+
+        # Ask to install all dependencies, if denied, import error will be raised
+        if confirm("Install dependencies: "):
+            if platform.system().lower() == "windows":
+                os.system("pip install clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
+            else:
+                os.system(
+                    "sudo pip3 install clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
+        else:
+            exit(0)
+
+        # Reimport all dependencies
+        _import()
+    else:
+        print(e)
+        if platform.system() == "Windows":
+            os.system("pause")
+        else:
+            os.system("bash -c pause")
 
 # -------------------------------------------
 
@@ -188,16 +195,9 @@ _style = Style.from_dict(
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 
-def argget(splitInput: list) -> str:
+def argget(_splitInput: list) -> str:
     "Returns rebuild string"
-    text = splitInput
-    out = ""
-    for item in text:
-        if item != text[-1]:
-            out += item + " "
-        else:
-            out += item
-    return out
+    return " ".join(_splitInput)
 
 def welcome() -> None:
     print(f"""
@@ -459,6 +459,13 @@ def switch(userInput,splitInput) -> None:
 
     elif splitInput[0].lower() == "ytdown":
         utils.ytvid(splitInput[1])
+        return
+
+    elif splitInput[0].lower() == "brightness":
+        try:
+            utils.setbrightness(splitInput[1])
+        except:
+            utils.getbrightness()
         return
 
     elif splitInput[0].lower() == "cheat":
@@ -1011,7 +1018,7 @@ def main() -> None:
                         env = os.environ[spl]
                         splitInput[splitInput.index(i)] = splitInput[splitInput.index(i)].replace(f"%{spl}%",env)
                 
-                rebuild = argget(splitInput)
+                rebuild = " ".join(splitInput)
 
                 if userInput != rebuild:
                     userInput = rebuild
@@ -1031,7 +1038,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    mainThread = threading.Thread(target=main)
-    mainThread.start()
+    main()
     
 
