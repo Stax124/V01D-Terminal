@@ -1038,6 +1038,10 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    if config.get("multithreading"):
+        main()
+    else:
+        mainThread = threading.Thread(target=main)
+        mainThread.start()
     
 
