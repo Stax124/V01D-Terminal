@@ -4,6 +4,7 @@ from sys import argv
 from datetime import datetime
 import platform
 import psutil
+import socket
 import screen_brightness_control as screen
 import GPUtil
 from tabulate import tabulate
@@ -314,3 +315,59 @@ def network() -> None:
     net_io = psutil.net_io_counters()
     print(f"Total Bytes Sent: {get_size(net_io.bytes_sent)}")
     print(f"Total Bytes Received: {get_size(net_io.bytes_recv)}")
+
+def decimal_to_binary(num: int) -> str:
+
+    """
+        Convert an Integer Decimal Number to a Binary Number as str.
+        >>> decimal_to_binary(0)
+        '0b0'
+        >>> decimal_to_binary(2)
+        '0b10'
+        >>> decimal_to_binary(7)
+        '0b111'
+        >>> decimal_to_binary(35)
+        '0b100011'
+        >>> # negatives work too
+        >>> decimal_to_binary(-2)
+        '-0b10'
+        >>> # other floats will error
+        >>> decimal_to_binary(16.16) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        TypeError: 'float' object cannot be interpreted as an integer
+        >>> # strings will error as well
+        >>> decimal_to_binary('0xfffff') # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        TypeError: 'str' object cannot be interpreted as an integer
+    """
+
+    if type(num) == float:
+        raise TypeError("'float' object cannot be interpreted as an integer")
+    if type(num) == str:
+        raise TypeError("'str' object cannot be interpreted as an integer")
+
+    if num == 0:
+        return "0b0"
+
+    negative = False
+
+    if num < 0:
+        negative = True
+        num = -num
+
+    binary = []
+    while num > 0:
+        binary.insert(0, num % 2)
+        num >>= 1
+
+    if negative:
+        return "-0b" + "".join(str(e) for e in binary)
+
+    return "0b" + "".join(str(e) for e in binary)
+
+def convert(splitInput:str):
+    if splitInput[1].lower() == "decimal":
+        if splitInput[2].lower() == "binary":
+            print(decimal_to_binary(int(splitInput[3])))

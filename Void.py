@@ -457,6 +457,9 @@ def switch(userInput,splitInput) -> None:
         elevate()
         return
 
+    elif splitInput[0].lower() == "convert":
+        utils.convert(splitInput)
+
     elif splitInput[0].lower() == "ytdown":
         utils.ytvid(splitInput[1])
         return
