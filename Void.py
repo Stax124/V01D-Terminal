@@ -3,7 +3,6 @@
 from subprocess import call
 import platform
 import os
-import threading
 import sys
 
 def _import():
@@ -1041,10 +1040,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    if config.get("multithreading"):
-        main()
-    else:
-        mainThread = threading.Thread(target=main)
-        mainThread.start()
+    main()
     
 

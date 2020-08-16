@@ -145,7 +145,7 @@ if platform.system() == "Windows":
     #     "cmd": {"/?": None, "/C": None, "/K": None, "/S": None, "/Q": None,  "/D": None, "/A": None, "/U": None, "/T": None, "/E": None, "/F": None, "/V": None},
     #     "comp": {"/?": None, "/D": None, "/A": None, "/L": None, "/N": None, "/C": None, "/OFF": None, "/M": None},
     #     "compact": {"/?": None, "/C": None, "/U": None, "/S": None, "/A": None, "/I": None, "/F": None, "/Q": None, "/EXE": None, "/CompactOs": None, "/WinDir": None},
-        "convert": {"decimal":{"hexadecimal":None,"octal": None, "binary":None},"roman":{"int": None}},
+        "convert": {"decimal":{"hexadecimal":None,"octal": None, "binary":None},"roman":{"int": None},"celsius":{"kelvin": None,"fahrenheint": None,"rankine": None},"fahrenheint":{"kelvin": None,"celsius": None,"rankine": None},"kelvin":{"celsius": None,"fahrenheint": None,"rankine": None},"rankine":{"kelvin": None,"fahrenheint": None,"celsius": None},"color":{"rgb": None,"hex": None,"list": None}},
     #     "copy": {"/?": None, "/A": None, "/B": None, "/D": None, "/V": None, "/N": None, "/Y": None, "/Z": None, "/L": None},
     #     "date": {"/?": None, "/T": None},
     #     "del": {"/?": None, "/P": None, "/F": None, "/S": None, "/Q": None, "/A": None},

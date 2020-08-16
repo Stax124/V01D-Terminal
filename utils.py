@@ -4,7 +4,7 @@ from sys import argv
 from datetime import datetime
 import platform
 import psutil
-import socket
+import webcolors
 import math
 import screen_brightness_control as screen
 import GPUtil
@@ -432,7 +432,6 @@ def decimal_to_hexadecimal(decimal):
         hexadecimal = "-" + hexadecimal
     return hexadecimal
 
-
 def decimal_to_octal(num: int) -> str:
     """Convert a Decimal Number to an Octal Number.
     >>> all(decimal_to_octal(i) == oct(i) for i
@@ -471,6 +470,42 @@ def roman_to_int(roman: str) -> int:
             place += 1
     return total
 
+def celsius_to_fahrenheit(celsius: float) -> float:
+    return round((float(celsius) * 9 / 5) + 32)
+
+def celsius_to_kelvin(celsius: float) -> float:
+    return round(float(celsius) + 273.15)
+
+def celsius_to_rankine(celsius: float) -> float:
+    return round((float(celsius) * 9 / 5) + 491.67)
+
+def fahrenheit_to_celsius(fahrenheit: float) -> float:
+    return round((float(fahrenheit) - 32) * 5 / 9)
+
+def fahrenheit_to_kelvin(fahrenheit: float) -> float:
+    return round(((float(fahrenheit) - 32) * 5 / 9) + 273.15)
+
+def fahrenheit_to_rankine(fahrenheit: float) -> float:
+    return round(float(fahrenheit) + 459.67)
+
+def kelvin_to_celsius(kelvin: float) -> float:
+    return round(float(kelvin) - 273.15)
+
+def kelvin_to_fahrenheit(kelvin: float) -> float:
+    return round(((float(kelvin) - 273.15) * 9 / 5) + 32)
+
+def kelvin_to_rankine(kelvin: float) -> float:
+    return round((float(kelvin) * 9 / 5))
+
+def rankine_to_celsius(rankine: float) -> float:
+    return round((float(rankine) - 491.67) * 5 / 9)
+
+def rankine_to_fahrenheit(rankine: float) -> float:
+    return round(float(rankine) - 459.67)
+
+def rankine_to_kelvin(rankine: float) -> float:
+    return round((float(rankine) * 5 / 9))
+
 def convert(splitInput:str):
     if splitInput[1].lower() == "decimal":
         if splitInput[2].lower() == "binary":
@@ -479,9 +514,40 @@ def convert(splitInput:str):
             print(decimal_to_hexadecimal(int(splitInput[3])))
         if splitInput[2].lower() == "octal":
             print(decimal_to_octal(int(splitInput[3])))
-    if splitInput[1].lower() == "roman":
+    elif splitInput[1].lower() == "roman":
         if splitInput[2].lower() == "int":
             print(roman_to_int(splitInput[3]))
+    elif splitInput[1].lower() == "celsius":
+        if splitInput[2].lower() == "fahrenheint":
+            print(celsius_to_fahrenheit(float(splitInput[3])))
+        if splitInput[2].lower() == "kelvin":
+            print(celsius_to_kelvin(float(splitInput[3])))
+        if splitInput[2].lower() == "rankine":
+            print(celsius_to_rankine(float(splitInput[3])))
+    elif splitInput[1].lower() == "fahrenheint":
+        if splitInput[2].lower() == "celsius":
+            print(fahrenheit_to_celsius(float(splitInput[3])))
+        if splitInput[2].lower() == "kelvin":
+            print(fahrenheit_to_kelvin(float(splitInput[3])))
+        if splitInput[2].lower() == "rankine":
+            print(fahrenheit_to_rankine(float(splitInput[3])))
+    elif splitInput[1].lower() == "rankine":
+        if splitInput[2].lower() == "celsius":
+            print(rankine_to_celsius(float(splitInput[3])))
+        if splitInput[2].lower() == "kelvin":
+            print(rankine_to_kelvin(float(splitInput[3])))
+        if splitInput[2].lower() == "fahrenheit":
+            print(rankine_to_fahrenheit(float(splitInput[3])))
+    elif splitInput[1].lower() == "color":
+        if splitInput[2].lower() == "rgb":
+            print(webcolors.name_to_rgb(splitInput[3]))
+        if splitInput[2].lower() == "hex":
+            print(webcolors.name_to_hex(splitInput[3]))
+        if splitInput[2].lower() == "list":
+            for key, value in webcolors.css3_names_to_hex.items(): 
+                print("{:<30} {:<30}".format(key, value))
+    else:
+        print("Not Implement")
 
 if __name__ == "__main__":
     import Void
