@@ -5,6 +5,7 @@ from datetime import datetime
 import platform
 import psutil
 import socket
+import math
 import screen_brightness_control as screen
 import GPUtil
 from tabulate import tabulate
@@ -143,11 +144,6 @@ def rng(_min: int, _max: int) -> int:
     "Returns random number between min and max. Min included, max excluded"
     random.seed(time.time())
     return random.randrange(_min, _max)
-
-
-if __name__ == "__main__":
-    import Void
-    Void.main()
 
 def get_size(bytes, suffix="B"):
     """
@@ -367,7 +363,126 @@ def decimal_to_binary(num: int) -> str:
 
     return "0b" + "".join(str(e) for e in binary)
 
+def decimal_to_hexadecimal(decimal):
+    """
+        take integer decimal value, return hexadecimal representation as str beginning
+        with 0x
+        >>> decimal_to_hexadecimal(5)
+        '0x5'
+        >>> decimal_to_hexadecimal(15)
+        '0xf'
+        >>> decimal_to_hexadecimal(37)
+        '0x25'
+        >>> decimal_to_hexadecimal(255)
+        '0xff'
+        >>> decimal_to_hexadecimal(4096)
+        '0x1000'
+        >>> decimal_to_hexadecimal(999098)
+        '0xf3eba'
+        >>> # negatives work too
+        >>> decimal_to_hexadecimal(-256)
+        '-0x100'
+        >>> # floats are acceptable if equivalent to an int
+        >>> decimal_to_hexadecimal(17.0)
+        '0x11'
+        >>> # other floats will error
+        >>> decimal_to_hexadecimal(16.16) # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        AssertionError
+        >>> # strings will error as well
+        >>> decimal_to_hexadecimal('0xfffff') # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        AssertionError
+        >>> # results are the same when compared to Python's default hex function
+        >>> decimal_to_hexadecimal(-256) == hex(-256)
+        True
+    """
+    values = {
+        0: "0",
+        1: "1",
+        2: "2",
+        3: "3",
+        4: "4",
+        5: "5",
+        6: "6",
+        7: "7",
+        8: "8",
+        9: "9",
+        10: "a",
+        11: "b",
+        12: "c",
+        13: "d",
+        14: "e",
+        15: "f",
+    }
+
+    assert type(decimal) in (int, float) and decimal == int(decimal)
+    hexadecimal = ""
+    negative = False
+    if decimal < 0:
+        negative = True
+        decimal *= -1
+    while decimal > 0:
+        decimal, remainder = divmod(decimal, 16)
+        hexadecimal = values[remainder] + hexadecimal
+    hexadecimal = "0x" + hexadecimal
+    if negative:
+        hexadecimal = "-" + hexadecimal
+    return hexadecimal
+
+
+def decimal_to_octal(num: int) -> str:
+    """Convert a Decimal Number to an Octal Number.
+    >>> all(decimal_to_octal(i) == oct(i) for i
+    ...     in (0, 2, 8, 64, 65, 216, 255, 256, 512))
+    True
+    """
+    octal = 0
+    counter = 0
+    while num > 0:
+        remainder = num % 8
+        octal = octal + (remainder * math.pow(10, counter))
+        counter += 1
+        num = math.floor(num / 8)  # basically /= 8 without remainder if any
+        # This formatting removes trailing '.0' from `octal`.
+    return f"0o{int(octal)}"
+
+def roman_to_int(roman: str) -> int:
+    """
+    LeetCode No. 13 Roman to Integer
+    Given a roman numeral, convert it to an integer.
+    Input is guaranteed to be within the range from 1 to 3999.
+    https://en.wikipedia.org/wiki/Roman_numerals
+    >>> tests = {"III": 3, "CLIV": 154, "MIX": 1009, "MMD": 2500, "MMMCMXCIX": 3999}
+    >>> all(roman_to_int(key) == value for key, value in tests.items())
+    True
+    """
+    vals = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
+    total = 0
+    place = 0
+    while place < len(roman):
+        if (place + 1 < len(roman)) and (vals[roman[place]] < vals[roman[place + 1]]):
+            total += vals[roman[place + 1]] - vals[roman[place]]
+            place += 2
+        else:
+            total += vals[roman[place]]
+            place += 1
+    return total
+
 def convert(splitInput:str):
     if splitInput[1].lower() == "decimal":
         if splitInput[2].lower() == "binary":
             print(decimal_to_binary(int(splitInput[3])))
+        if splitInput[2].lower() == "hexadecimal":
+            print(decimal_to_hexadecimal(int(splitInput[3])))
+        if splitInput[2].lower() == "octal":
+            print(decimal_to_octal(int(splitInput[3])))
+    if splitInput[1].lower() == "roman":
+        if splitInput[2].lower() == "int":
+            print(roman_to_int(splitInput[3]))
+
+if __name__ == "__main__":
+    import Void
+    Void.main()
