@@ -1,6 +1,7 @@
 # Project V01D-Terminal
 
 from subprocess import call
+from webbrowser import open_new_tab
 import platform
 import os
 import sys
@@ -807,6 +808,9 @@ def switch(userInput,splitInput) -> None:
     elif userInput.lower() == "welcome": # Show welcome screen
         welcome()
         return
+
+    elif splitInput[0].lower() == "search":
+        open_new_tab(url = "https://www.google.com/search?q=" + " ".join(splitInput[1:]))
 
     elif splitInput[0].lower() == "sizeof": # Show welcome screen
         def get_size(start_path = '.'):
