@@ -31,7 +31,6 @@ def gcd(a, b) -> float:
 
     return float(a)
 
-
 def lcm(x, y) -> float:
     "Returs lowest common multiple"
     greater = 0
@@ -55,7 +54,10 @@ def version() -> str:
 
 def ytvid(url):
     startdir = os.getcwd()
-    downloads = os.environ["USERPROFILE"]+"\\Downloads"
+    if platform.system() == "Windows":
+        downloads = os.environ["USERPROFILE"]+"\\Downloads"
+    else:
+        downloads = "/tmp"
     os.chdir(downloads)
 
     yt = pytube.YouTube(url)
@@ -114,18 +116,18 @@ def PlainToString(text, mode) -> str:
         split = text.split()
     else:
         print("""
-Usage: plain2string [mode] [file|text]
+    Usage: plain2string [mode] [file|text]
 
-Print .txt, .py and other text filetypes from terminal
+    Print .txt, .py and other text filetypes from terminal
 
-positional arguments:   
-    mode    file        Split text in file by ' '
-            line        Split text by ' '
-            fileline    Split text in file by '\\n'
+    positional arguments:   
+        mode    file        Split text in file by ' '
+                line        Split text by ' '
+                fileline    Split text in file by '\\n'
 
-    file    Source file (only works with 'file','fileline')
-    text    String to split (only works with 'line')
-""")
+        file    Source file (only works with 'file','fileline')
+        text    String to split (only works with 'line')
+    """)
 
 
     out = ""
@@ -200,7 +202,6 @@ def gpu() -> None:
     print(tabulate(list_gpus, headers=("id", "name", "load", "free memory", "used memory", "total memory",
                                     "temperature", "uuid")))
 
-
 def cpu() -> None:
     "Print CPU information"
 
@@ -219,7 +220,6 @@ def cpu() -> None:
         print(f"Core {i}: {percentage}%")
     print(f"Total CPU Usage: {psutil.cpu_percent()}%")
 
-
 def sysinfo() -> None:
     "Print system information"
 
@@ -232,7 +232,6 @@ def sysinfo() -> None:
     print(f"Machine: {uname.machine}")
     print(f"Processor: {uname.processor}")
 
-
 def bootinfo() -> None:
     "Print Boot Time information"
 
@@ -240,7 +239,6 @@ def bootinfo() -> None:
     boot_time_timestamp = psutil.boot_time()
     bt = datetime.fromtimestamp(boot_time_timestamp)
     print(f"Boot Time: {bt.year}/{bt.month}/{bt.day} {bt.hour}:{bt.minute}:{bt.second}")
-
 
 def memory() -> None:
     "Print memory information"
@@ -288,7 +286,6 @@ def disk() -> None:
     print(f"Total read: {get_size(disk_io.read_bytes)}")
     print(f"Total write: {get_size(disk_io.write_bytes)}")
 
-
 def network() -> None:
     "Print network information"
 
@@ -311,6 +308,8 @@ def network() -> None:
     net_io = psutil.net_io_counters()
     print(f"Total Bytes Sent: {get_size(net_io.bytes_sent)}")
     print(f"Total Bytes Received: {get_size(net_io.bytes_recv)}")
+
+
 
 def decimal_to_binary(num: int) -> str:
 
