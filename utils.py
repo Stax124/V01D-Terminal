@@ -548,6 +548,22 @@ def convert(splitInput:str):
     else:
         print("Not Implement")
 
+def prime_factors(n: int) -> list:
+    """
+    Returns prime factors of n as a list.
+    """
+    i = 2
+    factors = []
+    while i * i <= n:
+        if n % i:
+            i += 1
+        else:
+            n //= i
+            factors.append(i)
+    if n > 1:
+        factors.append(n)
+    return factors
+
 if __name__ == "__main__":
     import Void
     Void.main()

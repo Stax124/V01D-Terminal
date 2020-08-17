@@ -17,6 +17,7 @@ def _import():
     from elevate import elevate
 
     # Prompt-toolkit - autocompletion library
+    from prompt_toolkit.enums import EditingMode
     from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
@@ -42,6 +43,7 @@ try:
     from elevate import elevate
 
     # Prompt-toolkit - autocompletion library
+    from prompt_toolkit.enums import EditingMode
     from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
@@ -1001,6 +1003,7 @@ session = PromptSession(completer=combinedcompleter,
                         enable_open_in_editor=True,
                         refresh_interval=0,
                         color_depth=ColorDepth.TRUE_COLOR,
+                        editing_mode=EditingMode.VI
                         )
 
 # ---------------------------------------------
@@ -1025,7 +1028,7 @@ def main() -> None:
         while True:
             try:
                 cd = os.getcwd() # Get current working directory
-                userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR,clipboard=PyperclipClipboard, vi_mode=True)  # Get user input (autocompetion allowed)
+                userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
                 
                 splitInput = userInput.split() # Split input to get key words
 
