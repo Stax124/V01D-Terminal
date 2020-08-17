@@ -2,6 +2,7 @@
 
 from subprocess import call
 from webbrowser import open_new_tab
+from math import *
 import platform
 import os
 import sys
