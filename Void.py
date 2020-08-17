@@ -1001,7 +1001,6 @@ session = PromptSession(completer=combinedcompleter,
                         enable_open_in_editor=True,
                         refresh_interval=0,
                         color_depth=ColorDepth.TRUE_COLOR,
-                        key_bindings=keys
                         )
 
 # ---------------------------------------------
@@ -1026,7 +1025,7 @@ def main() -> None:
         while True:
             try:
                 cd = os.getcwd() # Get current working directory
-                userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR, key_bindings=keys,clipboard=PyperclipClipboard, vi_mode=True)  # Get user input (autocompetion allowed)
+                userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR,clipboard=PyperclipClipboard, vi_mode=True)  # Get user input (autocompetion allowed)
                 
                 splitInput = userInput.split() # Split input to get key words
 
