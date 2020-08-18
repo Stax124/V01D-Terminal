@@ -49,6 +49,7 @@ if platform.system() == "Windows":
         "cryptocurrency":{"btc":None,"eth":None,"xrp":None,"usdt":None,"bch":None,"ltc":None,"ada":None,"bnb":None},
         "eval": None,
         "sizeof": None,
+        "godmode": None,
         "cheat": None,
         "currencyconverter":None,
         "checklastvid": None,

@@ -646,6 +646,11 @@ def switch(userInput,splitInput) -> None:
         power()
         return
 
+    elif userInput.lower() == "godmode" and platform.system().lower() == "windows":
+        os.system("mkdir GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
+        os.system("explorer GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
+        os.system("rmdir GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
+
     # Hashing ----------------------------------------------------------
 
     elif splitInput[0].lower() == "sha1":
