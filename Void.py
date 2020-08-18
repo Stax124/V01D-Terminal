@@ -1022,6 +1022,12 @@ def main() -> None:
     if sys.argv[1:] != []:
         userInput = argget(sys.argv[1:])
 
+        values = aliases.keys()
+        if not "delalias" in userInput:
+            for value in values:
+                if userInput.find(value) != -1:
+                    userInput = userInput.replace(value,aliases.get(value))
+
         splitInput = userInput.split()
 
         for i in splitInput:
@@ -1035,14 +1041,6 @@ def main() -> None:
         if userInput != rebuild:
             userInput = rebuild
 
-        values = aliases.keys()
-        if not "delalias" in userInput:
-            for value in values:
-                if userInput.find(value) != -1:
-                    userInput = userInput.replace(value,aliases.get(value))
-
-        splitInput = userInput.split()
-
         switch(userInput,splitInput)
     else:
         if config.get("welcome"):
@@ -1052,6 +1050,12 @@ def main() -> None:
                 cd = os.getcwd() # Get current working directory
                 userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
                 
+                values = aliases.keys()
+                if not "delalias" in userInput:
+                    for value in values:
+                        if userInput.find(value) != -1:
+                            userInput = userInput.replace(value,aliases.get(value))
+
                 splitInput = userInput.split() # Split input to get key words
 
                 for i in splitInput:
@@ -1064,14 +1068,6 @@ def main() -> None:
 
                 if userInput != rebuild:
                     userInput = rebuild
-
-                values = aliases.keys()
-                if not "delalias" in userInput:
-                    for value in values:
-                        if userInput.find(value) != -1:
-                            userInput = userInput.replace(value,aliases.get(value))
-
-                splitInput = userInput.split()
                 
                 try:
                     splitInput[0]
