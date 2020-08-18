@@ -3,6 +3,7 @@
 from subprocess import call
 from webbrowser import open_new_tab
 from math import *
+from utils import prime
 import platform
 import os
 import sys
@@ -978,7 +979,10 @@ positional arguments
     else:
         try: # Calculator
             output = eval(userInput.lower())
-            print(float(output))
+            if type(output) in [float, int, list, tuple, str, bool]:
+                print(output)
+            else:
+                raise
         except: # Try if input is alias
             if platform.system() == "Windows":
                 if MODE == "CMD":

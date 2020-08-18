@@ -559,7 +559,7 @@ def convert(splitInput:list):
     else:
         print("Not Implement")
 
-def prime_factors(n: int) -> list:
+def prime(n: int) -> list:
     """
     Returns prime factors of n as a list.
     """
