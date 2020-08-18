@@ -770,6 +770,7 @@ def switch(userInput,splitInput) -> None:
 
                 "\n OTHER FUNCTIONS \n\n"
                     "   downloadeta - calculate estimated time of arival: downloadeta [target(GB)] [speed(MB)]\n"
+                    "   convert - function for converting temperatures, colors to hex, audio|files and merging them\n"
                     "   ping - never ending ping loop\n"
                     "   pagefile - show pagefile location and size\n"
                     "   read - read specified .txt file: read [target]\n"

@@ -11,7 +11,8 @@ import GPUtil
 from tabulate import tabulate
 import requests
 import sys
-import pytube
+if platform.system() == "Windows":
+    import pytube
 import random
 import time
 import database
@@ -53,29 +54,30 @@ def version() -> str:
     return content.get('html_url').split('/')[-1]
 
 def ytvid(url):
-    startdir = os.getcwd()
     if platform.system() == "Windows":
-        downloads = os.environ["USERPROFILE"]+"\\Downloads"
-    else:
-        downloads = "/tmp"
-    os.chdir(downloads)
+        startdir = os.getcwd()
+        if platform.system() == "Windows":
+            downloads = os.environ["USERPROFILE"]+"\\Downloads"
+        else:
+            downloads = "/tmp"
+        os.chdir(downloads)
 
-    yt = pytube.YouTube(url)
-    vids = yt.streams.filter(file_extension = "mp4")
+        yt = pytube.YouTube(url)
+        vids = yt.streams.filter(file_extension = "mp4")
 
-    for i in range(len(vids)):
-        print(i,'. ',vids[i])
+        for i in range(len(vids)):
+            print(i,'. ',vids[i])
 
-    vnum = int(input("Enter video index: "))
+        vnum = int(input("Enter video index: "))
 
-    if platform.system() == 'Windows':
-        parent_dir = downloads
-    else:
-        parent_dir = "/tmp"
+        if platform.system() == 'Windows':
+            parent_dir = downloads
+        else:
+            parent_dir = "/tmp"
 
-    print(f"Downloading {yt.title} to {os.getcwd()}, Please wait...")
-    vids[vnum].download()
-    os.chdir(startdir)
+        print(f"Downloading {yt.title} to {os.getcwd()}, Please wait...")
+        vids[vnum].download()
+        os.chdir(startdir)
 
 def setbrightness(value:int):
     "Set screen brightness to value between 0 and 100"

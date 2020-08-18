@@ -2,6 +2,7 @@
 test.py
 check.py
 test
+aliases.pickle
 
 # Ignore utils
 utils
