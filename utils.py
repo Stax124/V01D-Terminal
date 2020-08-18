@@ -505,7 +505,7 @@ def rankine_to_fahrenheit(rankine: float) -> float:
 def rankine_to_kelvin(rankine: float) -> float:
     return round((float(rankine) * 5 / 9))
 
-def convert(splitInput:str):
+def convert(splitInput:list):
     if splitInput[1].lower() == "decimal":
         if splitInput[2].lower() == "binary":
             print(decimal_to_binary(int(splitInput[3])))
@@ -545,6 +545,17 @@ def convert(splitInput:str):
         if splitInput[2].lower() == "list":
             for key, value in webcolors.css3_names_to_hex.items(): 
                 print("{:<30} {:<30}".format(key, value))
+    elif splitInput[1].lower() in ["mp3","wav","m4a"]:
+        filename = " ".join(splitInput[2:])
+        call(args=f'ffmpeg -i {filename} {filename.replace(".mp4","."+splitInput[1].lower())}',cwd=os.getcwd())
+    elif splitInput[1].lower() == "combine":
+        args = str(" ".join(splitInput[2:]))
+        if not '"' in args:
+            args = tuple(args.split())
+        else:
+            args = tuple(list(args.split('"')))
+        print(args)
+        call(args=f'ffmpeg -i "{args[1]}" -i "{args[3]}" -c copy "{args[5]}"',cwd=os.getcwd())
     else:
         print("Not Implement")
 
