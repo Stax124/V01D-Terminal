@@ -1014,14 +1014,30 @@ def main() -> None:
     """
 
     if sys.argv[1:] != []:
-        a = argget(sys.argv[1:])
+        userInput = argget(sys.argv[1:])
 
-        if '"' in a:
-            a = a.split('"')
-        if "'" in a:
-            a = a.split("'")
+        splitInput = userInput.split()
 
-        switch(a,sys.argv[1:])
+        for i in splitInput:
+            if i.find("%") != -1:
+                spl = i.split("%")[1]
+                env = os.environ[spl]
+                splitInput[splitInput.index(i)] = splitInput[splitInput.index(i)].replace(f"%{spl}%",env)
+        
+        rebuild = " ".join(splitInput)
+
+        if userInput != rebuild:
+            userInput = rebuild
+
+        values = aliases.keys()
+        if not "delalias" in userInput:
+            for value in values:
+                if userInput.find(value) != -1:
+                    userInput = userInput.replace(value,aliases.get(value))
+
+        splitInput = userInput.split()
+
+        switch(userInput,splitInput)
     else:
         if config.get("welcome"):
             welcome()
