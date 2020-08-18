@@ -980,17 +980,13 @@ positional arguments
             output = eval(userInput.lower())
             print(float(output))
         except: # Try if input is alias
-            try:
-                value = aliases.get(userInput)
-                os.system(value)
-            except: # Pass input to cmd to decide
-                if platform.system() == "Windows":
-                    if MODE == "CMD":
-                        os.system(userInput)
-                    elif MODE == "POWERSHELL":
-                        os.system(f"powershell -Command {userInput}")
-                else:
-                    os.system(f'bash -c "{userInput}"')
+            if platform.system() == "Windows":
+                if MODE == "CMD":
+                    os.system(userInput)
+                elif MODE == "POWERSHELL":
+                    os.system(f"powershell -Command {userInput}")
+            else:
+                os.system(f'bash -c "{userInput}"')
 
 # --------------------------------------------
 
@@ -1042,6 +1038,14 @@ def main() -> None:
 
                 if userInput != rebuild:
                     userInput = rebuild
+
+                values = aliases.keys()
+                if not "delalias" in userInput:
+                    for value in values:
+                        if userInput.find(value) != -1:
+                            userInput = userInput.replace(value,aliases.get(value))
+
+                splitInput = userInput.split()
                 
                 try:
                     splitInput[0]
