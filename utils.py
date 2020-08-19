@@ -311,8 +311,6 @@ def network() -> None:
     print(f"Total Bytes Sent: {get_size(net_io.bytes_sent)}")
     print(f"Total Bytes Received: {get_size(net_io.bytes_recv)}")
 
-
-
 def decimal_to_binary(num: int) -> str:
 
     """
@@ -545,8 +543,9 @@ def convert(splitInput:list):
         if splitInput[2].lower() == "hex":
             print(webcolors.name_to_hex(splitInput[3]))
         if splitInput[2].lower() == "list":
-            for key, value in webcolors.css3_names_to_hex.items(): 
-                print("{:<30} {:<30}".format(key, value))
+            for key, value in webcolors.css3_names_to_hex.items():
+                r, g, b = webcolors.name_to_rgb(key)
+                print("{:<20} {:<20} rgb:({:<0},{:<0},{:<0}) ".format(key, value, r, g, b))
     elif splitInput[1].lower() in ["mp3","wav","m4a"]:
         filename = " ".join(splitInput[2:])
         call(args=f'ffmpeg -i {filename} {filename.replace(".mp4","."+splitInput[1].lower())}',cwd=os.getcwd())
