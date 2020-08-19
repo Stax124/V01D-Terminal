@@ -20,7 +20,7 @@ def WriteAliases(aliases) -> list:
     pickle.dump(aliases,f)
     f.close()
 
-def GetAliases():
+def GetAliases() -> dict:
     path = Path(os.path.join(__location__, "aliases.pickle"))
 
     if path.exists():
@@ -43,6 +43,8 @@ if platform.system() == "Windows":
     {
         "refreshenv":None,
         "ytdown":None,
+        "grantfiles": None,
+        "back": None,
         "downloadeta":None,
         "brightness":None,
         "plain2string": {"line":None,"file":None,"fileline":None},
@@ -225,7 +227,7 @@ if platform.system() == "Linux":
     f = open("commands.txt","r")
     l = f.read().splitlines()
     l = list(dict.fromkeys(l))
-    LinuxCompleter = WordCompleter(list(dict.fromkeys(l + ["currencyconverter","downloadeta","sizeof","md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download","cheat","checklastvid","checklasttweet","checktwitchonline","fileconverter","ping.gg","guid","dns","shorten","transfer","speedtest","weather","covid19","ip","geoip","qrcode","stonks","welcome"])))
+    LinuxCompleter = WordCompleter(list(dict.fromkeys(l + ["back","currencyconverter","downloadeta","sizeof","md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download","cheat","checklastvid","checklasttweet","checktwitchonline","fileconverter","ping.gg","guid","dns","shorten","transfer","speedtest","weather","covid19","ip","geoip","qrcode","stonks","welcome"])))
 else:
     LinuxCompleter = None
 

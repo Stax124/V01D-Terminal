@@ -172,7 +172,7 @@ MODE = config.get("mode","CMD")
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and platform.system() == "Windows":
-    combinedcompleter = FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter]))
+    combinedcompleter = FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter, database.WordCompleter(list(aliases.keys()))]))
 elif platform.system() == "Windows":
     combinedcompleter = merge_completers([database.WinCompleter, PathCompleter(), winWordCompleter])
 elif platform.system() == "Linux" and config["fuzzycomplete"]:
@@ -468,6 +468,10 @@ def switch(userInput,splitInput) -> None:
 
     elif splitInput[0].lower() == "ytdown":
         utils.ytvid(splitInput[1])
+        return
+
+    elif userInput.lower() == "grantfiles" and platform.system().lower() == "windows":
+        os.system('ICACLS "." /INHERITANCE:e /GRANT:r Admin:(F) /T /C ')
         return
 
     elif splitInput[0].lower() == "brightness":
