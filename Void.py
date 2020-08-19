@@ -932,9 +932,7 @@ def switch(userInput,splitInput) -> None:
             except:
                 print("No command specified")
                 return
-            complete = ""
-            for i in l:
-                complete += i + " "
+            complete = " ".join(l)
             aliases[splitInput[1]] = complete
             database.WriteAliases(aliases)
         return
