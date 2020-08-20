@@ -614,6 +614,15 @@ def switch(userInput,splitInput) -> None:
             os.system(f"wmic path win32_networkadapter where index={index} call disable")
         return
 
+    elif splitInput[0].lower() == "online":
+        urls = splitInput[1:]
+        for url in urls:
+            try:
+                response = requests.get(url)
+                print(f"{url} OK: {response.elapsed.total_seconds()}s" if response.ok == True else "SITE DOWN")
+            except:
+                print(url + " SITE DOWN")
+
     elif userInput.lower() == "motherboard":
         os.system("wmic baseboard get product,Manufacturer,version,serialnumber")
         return
