@@ -592,6 +592,28 @@ def switch(userInput,splitInput) -> None:
         os.system("wmic pagefile list")
         return
 
+    elif splitInput[0].lower() == "bluetooth":
+        if is_admin() == True:
+            if splitInput[1].lower() == "off":
+                os.system("net stop bthserv")
+            elif splitInput[1].lower() == "on":
+                os.system("net start bthserv")
+        else: print("Run shell as administrator or use: admin")
+        return
+
+    elif splitInput[0].lower() == "wifi":
+        if splitInput[1].lower() == "enable":
+            os.system("wmic nic get name, index")
+            index = input("Device index: ")
+            if index == "": return
+            os.system(f"wmic path win32_networkadapter where index={index} call enable")
+        elif splitInput[1].lower() == "disable":
+            os.system("wmic nic get name, index")
+            index = input("Device index: ")
+            if index == "": return
+            os.system(f"wmic path win32_networkadapter where index={index} call disable")
+        return
+
     elif userInput.lower() == "motherboard":
         os.system("wmic baseboard get product,Manufacturer,version,serialnumber")
         return
