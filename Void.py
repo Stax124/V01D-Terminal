@@ -8,6 +8,9 @@ import platform
 import os
 import sys
 
+def iswindows() -> bool:
+    return True if platform.system() == "Windows" else False
+
 def _import():
     from sys import exit as _exit
     import yaml
@@ -65,7 +68,7 @@ except Exception as e:
     if sys.executable.find("Python") != -1:
         print(e)
         # Install main lib
-        if platform.system().lower() == "windows":
+        if iswindows():
             os.system("pip install prompt-toolkit")
         else:
             os.system("sudo pip3 install prompt-toolkit")
@@ -74,7 +77,7 @@ except Exception as e:
 
         # Ask to install all dependencies, if denied, import error will be raised
         if confirm("Install dependencies: "):
-            if platform.system().lower() == "windows":
+            if iswindows():
                 os.system("pip install clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
             else:
                 os.system(
@@ -86,7 +89,7 @@ except Exception as e:
         _import()
     else:
         print(e)
-        if platform.system() == "Windows":
+        if iswindows():
             os.system("pause")
         else:
             os.system("bash -c pause")
@@ -95,7 +98,7 @@ except Exception as e:
 
 # Get Username
 try:
-    if platform.system() == "Windows":
+    if iswindows():
         USER = os.environ["USERNAME"]
     else:
         USER = os.environ["USER"]
@@ -111,7 +114,7 @@ LASTDIR = ""
 __location__ = defPath + "\\V01D-Terminal.exe"
 
 # Find config file
-if platform.system() == "Windows":
+if iswindows():
     CONFIG = defPath + r"\config.yml"
 else:
     CONFIG = defPath + r"/config.yml"
@@ -121,7 +124,7 @@ VERSION = "v0.6.3"
 
 # -------------------------------------------
 
-if platform.system().lower() == "windows":
+if iswindows():
     os.system("title Void-Terminal")
 
 aliases = database.GetAliases() # Get user alias from database
@@ -171,9 +174,9 @@ DOWNLOAD = list(config.get("downloadDict")) # Get all download dictionaries
 MODE = config.get("mode","CMD")
 
 # Pick completer based on config and platform
-if config["fuzzycomplete"] and platform.system() == "Windows":
+if config["fuzzycomplete"] and iswindows():
     combinedcompleter = FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter, database.WordCompleter(list(aliases.keys()))]))
-elif platform.system() == "Windows":
+elif iswindows():
     combinedcompleter = merge_completers([database.WinCompleter, PathCompleter(), winWordCompleter])
 elif platform.system() == "Linux" and config["fuzzycomplete"]:
     combinedcompleter = FuzzyCompleter(merge_completers([database.LinuxCompleter, PathCompleter()]))
@@ -298,7 +301,7 @@ def void(_splitinput) -> None: # Open new terminal or configure it
         elif (_splitinput[1] == "license"):
             try:
                 if _splitinput[2] == "full":
-                    if platform.system() == "Windows":
+                    if iswindows():
                         f = open(defPath +"\LICENSE")
                         print(f.read())
                     else:
@@ -320,9 +323,9 @@ def void(_splitinput) -> None: # Open new terminal or configure it
 
         elif (_splitinput[1] == "install"):
             if _splitinput[2] == "chocolatey":
-                if is_admin() == True and platform.system().lower() == "windows":
+                if is_admin() == True and iswindows():
                     os.system("powershell -Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))")
-                elif platform.system() == "Windows":
+                elif iswindows():
                     print("Rerun with administrative privileges: use 'admin' or 'elevate'")
                 else:
                     print("Only available on Windows")
@@ -330,7 +333,7 @@ def void(_splitinput) -> None: # Open new terminal or configure it
         elif _splitinput[1] == "updatePythonPackages":
             import pkg_resources
             packages = [dist.project_name for dist in pkg_resources.working_set]
-            if platform.system().lower() == "windows":
+            if iswindows():
                 call("pip install --upgrade --use-feature=2020-resolver" + ' '.join(packages), shell=True)
             else:
                 call("sudo pip3 install --upgrade --use-feature=2020-resolver" + ' '.join(packages), shell=True)
@@ -470,7 +473,7 @@ def switch(userInput,splitInput) -> None:
         utils.ytvid(splitInput[1])
         return
 
-    elif userInput.lower() == "grantfiles" and platform.system().lower() == "windows":
+    elif userInput.lower() == "grantfiles" and iswindows():
         os.system('ICACLS "." /INHERITANCE:e /GRANT:r Admin:(F) /T /C ')
         return
 
@@ -623,6 +626,14 @@ def switch(userInput,splitInput) -> None:
             except:
                 print(url + " SITE DOWN")
 
+    elif splitInput[0].lower() == "poweroff":
+        os.system("shutdown /s /f /t 0")
+        return
+
+    elif splitInput[0].lower() == "reboot":
+        os.system("shutdown /r /f /t 0")
+        return
+
     elif userInput.lower() == "motherboard":
         os.system("wmic baseboard get product,Manufacturer,version,serialnumber")
         return
@@ -681,7 +692,7 @@ def switch(userInput,splitInput) -> None:
         power()
         return
 
-    elif userInput.lower() == "godmode" and platform.system().lower() == "windows":
+    elif userInput.lower() == "godmode" and iswindows():
         os.system("mkdir GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
         os.system("explorer GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
         os.system("rmdir GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
@@ -763,7 +774,7 @@ def switch(userInput,splitInput) -> None:
         return 
 
     elif userInput.lower() == "help" or userInput.find("-h") == 0 or userInput.find("--help") == 0: # Print cmd help and defined help at the same time
-        if platform.system().lower() == "windows":
+        if iswindows():
             os.system("help")
             print("\n" +
 
@@ -915,7 +926,7 @@ def switch(userInput,splitInput) -> None:
         print(utils.rng(num[0], num[1]))
         return
 
-    elif splitInput[0].lower() == "open" and platform.system().lower() == "windows": # Open file explorer in cwd
+    elif splitInput[0].lower() == "open" and iswindows(): # Open file explorer in cwd
         target = argget(splitInput[1:])
         if target != "":
             os.system(f"explorer {target}")
@@ -923,11 +934,11 @@ def switch(userInput,splitInput) -> None:
             os.system("explorer .\\")
         return
 
-    elif userInput.lower() == "settings" and platform.system().lower() == "windows":  # Open file explorer in cwd
+    elif userInput.lower() == "settings" and iswindows():  # Open file explorer in cwd
         os.system("start ms-settings:")
         return
 
-    elif userInput.lower() == "startup" and platform.system().lower() == "windows":
+    elif userInput.lower() == "startup" and iswindows():
         os.system("explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")
 
     elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
@@ -1023,7 +1034,7 @@ positional arguments
             else:
                 raise
         except: # Try if input is alias
-            if platform.system() == "Windows":
+            if iswindows():
                 if MODE == "CMD":
                     os.system(userInput)
                 elif MODE == "POWERSHELL":
