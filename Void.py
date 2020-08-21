@@ -447,8 +447,20 @@ def switch(userInput,splitInput) -> None:
         return
 
     if splitInput[0] == "downloadeta":
-        target = float(splitInput[1]) * 1000000000
-        speed = float(splitInput[2]) * 1000000
+        out = []
+        mdict = {
+            "kb":"000",
+            "mb":"000000",
+            "gb":"000000000",
+            "tb":"000000000000",
+            "pb":"000000000000000",
+        }
+        for item in [splitInput[1],splitInput[2]]:
+            for multiplier in ["kb", "mb", "gb", "tb", "pb"]:
+                if str(item).lower().find(multiplier) != -1:
+                    out.append(str(item).lower().replace(multiplier,mdict.get(multiplier)))
+        target = float(out[0])
+        speed = float(out[1])
 
         print(f"ETA: {((target / speed) / 60 / 60).__round__(3)} h")
         return
