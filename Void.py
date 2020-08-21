@@ -22,7 +22,6 @@ def _import():
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
-    from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
@@ -48,7 +47,6 @@ try:
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
-    from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
@@ -323,7 +321,7 @@ def void(_splitinput) -> None: # Open new terminal or configure it
 
         elif (_splitinput[1] == "install"):
             if _splitinput[2] == "chocolatey":
-                if is_admin() == True and iswindows():
+                if isadmin() == True and iswindows():
                     os.system("powershell -Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))")
                 elif iswindows():
                     print("Rerun with administrative privileges: use 'admin' or 'elevate'")
@@ -365,7 +363,7 @@ optional arguments:
     saveToYml(config,CONFIG)
 
 
-def is_admin() -> bool:
+def isadmin() -> bool:
     "Ask if run with elevated privileges"
     try:
         _is_admin = os.getuid() == 0
@@ -596,7 +594,7 @@ def switch(userInput,splitInput) -> None:
         return
 
     elif splitInput[0].lower() == "bluetooth":
-        if is_admin() == True:
+        if isadmin() == True:
             if splitInput[1].lower() == "off":
                 os.system("net stop bthserv")
             elif splitInput[1].lower() == "on":
@@ -1092,7 +1090,8 @@ def main() -> None:
         while True:
             try:
                 cd = os.getcwd() # Get current working directory
-                userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path>""<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                privileges = "#" if isadmin() == True else "$"
+                userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path> {privileges}<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
                 
                 values = aliases.keys()
                 if not "delalias" in userInput:
