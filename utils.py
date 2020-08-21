@@ -554,7 +554,8 @@ def convert(splitInput:list):
                 print("{:<20} {:<20} rgb:({:<0},{:<0},{:<0}) ".format(key, value, r, g, b))
     elif splitInput[1].lower() in ["mp3","wav","m4a"]:
         filename = " ".join(splitInput[2:])
-        call(args=f'ffmpeg -i {filename} {filename.replace(".mp4","."+splitInput[1].lower())}',cwd=os.getcwd())
+        formating = filename.split(".")
+        call(args=f'ffmpeg -i {filename} {filename.replace("."+formating[-1],"."+splitInput[1].lower())}',cwd=os.getcwd())
     elif splitInput[1].lower() == "combine":
         args = str(" ".join(splitInput[2:]))
         if not '"' in args:
