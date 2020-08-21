@@ -128,6 +128,8 @@ if iswindows():
 aliases = database.GetAliases() # Get user alias from database
 
 def saveToYml(data,path) -> None:
+    if not os.path.exists(path):
+        if not confirm("config.yml not found, create new one ? "): print("config not saved !"); return
     try:
         with open(path, "w") as f:
             f.flush()

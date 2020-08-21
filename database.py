@@ -48,6 +48,8 @@ if platform.system() == "Windows":
         "grantfiles": None,
         "back": None,
         "downloadeta":None,
+        "poweroff":None,
+        "reboot":None,
         "brightness":None,
         "plain2string": {"line":None,"file":None,"fileline":None},
         "cryptocurrency":{"btc":None,"eth":None,"xrp":None,"usdt":None,"bch":None,"ltc":None,"ada":None,"bnb":None},
@@ -225,7 +227,7 @@ winWordCompleter = WordCompleter([
 
 if platform.system() == "Linux":
     if os.path.exists("commands.txt") == False:
-        os.system(f'bash -c "compgen -c >{defPath}/commands.txt"')
+        os.system(f'bash -c "compgen -c >{Void.defPath}/commands.txt"')
     f = open("commands.txt","r")
     l = f.read().splitlines()
     l = list(dict.fromkeys(l))
