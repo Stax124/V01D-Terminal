@@ -76,10 +76,10 @@ except Exception as e:
         # Ask to install all dependencies, if denied, import error will be raised
         if confirm("Install dependencies: "):
             if iswindows():
-                os.system("pip install clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
+                os.system("pip install pygame clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
             else:
                 os.system(
-                    "sudo pip3 install clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
+                    "sudo pip3 install pygame clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
         else:
             exit(0)
 
@@ -107,6 +107,9 @@ defPath = os.getcwd()
 
 # For use in "back"
 LASTDIR = ""
+
+playing = False
+volume = 1
 
 # Path to executable
 __location__ = defPath + "\\V01D-Terminal.exe"
@@ -485,6 +488,53 @@ def switch(userInput,splitInput) -> None:
     elif splitInput[0].lower() == "ytdown":
         utils.ytvid(splitInput[1])
         return
+        
+    elif splitInput[0].lower() == "play":
+        from pygame import mixer
+        from pynput.keyboard import Listener, KeyCode, Key
+
+        def on_press(key):
+            global volume
+            global playing
+            if key == Key.enter:
+                mixer.music.play()
+                playing = True
+            if key == KeyCode.from_char("p"):
+                if playing:
+                    mixer.music.pause()
+                    playing = not playing
+                else:
+                    mixer.music.unpause()
+                    playing = not playing
+            if key == Key.esc:
+                playing = False
+                mixer.music.stop()
+                listener.stop()
+            if key == Key.down:
+                if not volume <= 0:
+                    volume -= 0.1
+                    volume = volume.__round__(1)
+                    mixer.music.set_volume(volume)
+            if key == Key.up:
+                if not volume >= 1:
+                    volume += 0.1
+                    volume = volume.__round__(1)
+                    mixer.music.set_volume(volume)
+            sys.stdout.write(f"\rVolume: {volume}   State: {'Playing' if playing else 'Paused ' }")
+            sys.stdout.flush()
+
+        mixer.init()
+        f = argget(splitInput[1:])
+        if '"' in f: f = f.replace('"','')
+        f = r"{}".format(f)
+        mixer.music.load(f)
+
+        print("ENTER: Play, P: Pause, ESC: Quit, UP|DOWN: volume up|down")
+
+        with Listener(on_press=on_press, suppress=True) as listener:
+            listener.join()
+            print()
+            return
 
     elif userInput.lower() == "grantfiles" and iswindows():
         os.system('ICACLS "." /INHERITANCE:e /GRANT:r %USERNAME%:(F) /T /C ')
