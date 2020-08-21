@@ -467,6 +467,7 @@ def switch(userInput,splitInput) -> None:
 
     if userInput.lower() == "back":
         __placeholder = os.getcwd()
+        if LASTDIR == "": return
         os.chdir(LASTDIR)
         if __placeholder != LASTDIR:
             LASTDIR = __placeholder
@@ -484,7 +485,7 @@ def switch(userInput,splitInput) -> None:
         return
 
     elif userInput.lower() == "grantfiles" and iswindows():
-        os.system('ICACLS "." /INHERITANCE:e /GRANT:r Admin:(F) /T /C ')
+        os.system('ICACLS "." /INHERITANCE:e /GRANT:r %USERNAME%:(F) /T /C ')
         return
 
     elif splitInput[0].lower() == "brightness":
