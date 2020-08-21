@@ -8,10 +8,13 @@ import platform
 import os
 import sys
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
 def iswindows() -> bool:
     return True if platform.system() == "Windows" else False
 
 def _import():
+    from pygame import mixer
     from sys import exit as _exit
     import yaml
     import requests
@@ -37,6 +40,7 @@ def _import():
     import utils
 
 try:
+    from pygame import mixer
     from sys import exit as _exit
     import yaml
     import datetime
@@ -109,7 +113,7 @@ defPath = os.getcwd()
 LASTDIR = ""
 
 playing = False
-volume = 1
+playerInitialized = False
 
 # Path to executable
 __location__ = defPath + "\\V01D-Terminal.exe"
@@ -443,6 +447,8 @@ def hashfilesum(splitInput,hashalg) -> None:
 
 def switch(userInput,splitInput) -> None:
     global LASTDIR
+    global playing
+    global playerInitialized
     try:
         arg = argget(splitInput[1:])
     except:
@@ -489,52 +495,47 @@ def switch(userInput,splitInput) -> None:
         utils.ytvid(splitInput[1])
         return
         
-    elif splitInput[0].lower() == "play":
-        from pygame import mixer
-        from pynput.keyboard import Listener, KeyCode, Key
-
-        def on_press(key):
-            global volume
-            global playing
-            if key == Key.enter:
-                mixer.music.play()
-                playing = True
-            if key == KeyCode.from_char("p"):
-                if playing:
-                    mixer.music.pause()
-                    playing = not playing
-                else:
-                    mixer.music.unpause()
-                    playing = not playing
-            if key == Key.esc:
-                playing = False
-                mixer.music.stop()
-                listener.stop()
-            if key == Key.down:
-                if not volume <= 0:
-                    volume -= 0.1
-                    volume = volume.__round__(1)
-                    mixer.music.set_volume(volume)
-            if key == Key.up:
-                if not volume >= 1:
-                    volume += 0.1
-                    volume = volume.__round__(1)
-                    mixer.music.set_volume(volume)
-            sys.stdout.write(f"\rVolume: {volume}   State: {'Playing' if playing else 'Paused ' }")
-            sys.stdout.flush()
-
-        mixer.init()
+    elif splitInput[0].lower() == "music-play":
+        if not playerInitialized:
+            mixer.init()
+            playerInitialized = True
         f = argget(splitInput[1:])
         if '"' in f: f = f.replace('"','')
         f = r"{}".format(f)
         mixer.music.load(f)
+        mixer.music.play()
+        playing = True
+        return        
 
-        print("ENTER: Play, P: Pause, ESC: Quit, UP|DOWN: volume up|down")
+    elif splitInput[0].lower() == "music-pause":
+        if not playerInitialized: print("Player not initialized"); return
+        if playing == True:
+            mixer.music.pause()
+            playing = False
+        return
 
-        with Listener(on_press=on_press, suppress=True) as listener:
-            listener.join()
-            print()
-            return
+    elif splitInput[0].lower() == "music-resume":
+        if not playerInitialized: print("Player not initialized"); return
+        if playing == False:
+            mixer.music.unpause()
+            playing = True
+        return
+
+    elif splitInput[0].lower() == "music-stop":
+        if not playerInitialized: print("Player not initialized"); return
+        if playing == True:
+            mixer.music.stop()
+            mixer.quit()
+            playerInitialized = False
+        return
+
+    elif splitInput[0].lower() == "music-volume":
+        if not playerInitialized:
+            mixer.init()
+            playerInitialized = True
+        volume = float(splitInput[1]) / 100
+        mixer.music.set_volume(volume)
+        return
 
     elif userInput.lower() == "grantfiles" and iswindows():
         os.system('ICACLS "." /INHERITANCE:e /GRANT:r %USERNAME%:(F) /T /C ')
