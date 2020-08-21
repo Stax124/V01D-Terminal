@@ -21,7 +21,7 @@ import os
 from prompt_toolkit.shortcuts import confirm
 
 
-def gcd(a, b) -> float:
+def gcd(a: float, b: float) -> float:
     "Returs greatest common dividor"
     if b > a:
         a, b = b, a
@@ -32,7 +32,7 @@ def gcd(a, b) -> float:
 
     return float(a)
 
-def lcm(x, y) -> float:
+def lcm(x: float, y: float) -> float:
     "Returs lowest common multiple"
     greater = 0
     if x > y:
@@ -47,13 +47,15 @@ def lcm(x, y) -> float:
     return float(lcm)
 
 def version() -> str:
+    "Returns latest version of this shell"
     url = "https://api.github.com/repos/Stax124/V01D-Terminal/releases/latest"
     response = requests.get(url)
     content = response.json()
 
     return content.get('html_url').split('/')[-1]
 
-def ytvid(url):
+def ytvid(url: str) -> None:
+    "Downloads youtube stream from share link"
     if platform.system() == "Windows":
         startdir = os.getcwd()
         if platform.system() == "Windows":
@@ -70,6 +72,8 @@ def ytvid(url):
 
         vnum = int(input("Enter video index: "))
 
+        if vnum == "": return
+
         if platform.system() == 'Windows':
             parent_dir = downloads
         else:
@@ -83,7 +87,7 @@ def setbrightness(value:int):
     "Set screen brightness to value between 0 and 100"
     screen.set_brightness(value)
 
-def getbrightness():
+def getbrightness() -> None:
     "Get brightness of monitor"
     print(f"Brightness: {screen.get_brightness()}")
 
@@ -95,7 +99,7 @@ def currencyconverter(base:str,othercurrency:str) -> float:
     rate = rates.get(othercurrency)
     return rate
 
-def PlainToString(text, mode) -> str:
+def PlainToString(text: str, mode: str) -> str:
     "Returns list of strings from plain text file (hello world -> 'hello','world')"
 
     split = ""
@@ -139,7 +143,8 @@ def PlainToString(text, mode) -> str:
 
     return(out)
 
-def download(target) -> None:
+def download(target: str) -> None:
+    "Downloads file from the web"
     from Void import DOWNLOAD
     d = Download(promptinstall=True, dictionarypath=DOWNLOAD, startifexeption=True, returnexeption=True)
     d.download(target=target)
@@ -506,6 +511,7 @@ def rankine_to_kelvin(rankine: float) -> float:
     return round((float(rankine) * 5 / 9))
 
 def convert(splitInput:list):
+    "Calls adjacent converting method"
     if splitInput[1].lower() == "decimal":
         if splitInput[2].lower() == "binary":
             print(decimal_to_binary(int(splitInput[3])))

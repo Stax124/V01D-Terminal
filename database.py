@@ -7,7 +7,8 @@ import yaml
 import platform
 from pathlib import Path
 
-def writedata(data, filename, location, mode) -> None:
+def writedata(data, filename: str, location: str, mode: str) -> None:
+    "Writes data to target file"
     target = os.path.join(location, filename)
     f = open(target,mode)
     f.write(data)
@@ -15,7 +16,8 @@ def writedata(data, filename, location, mode) -> None:
 
 # -----------------------------------------------------------------
 
-def WriteAliases(aliases) -> list:
+def WriteAliases(aliases: dict) -> list:
+    "Writes aliases to aliase.picke file"
     f = open(os.path.join(__location__, "aliases.pickle"), "wb")
     pickle.dump(aliases,f)
     f.close()
