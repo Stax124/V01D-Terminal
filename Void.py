@@ -177,7 +177,7 @@ MODE = config.get("mode","CMD")
 if config["fuzzycomplete"] and iswindows():
     combinedcompleter = FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter, database.WordCompleter(list(aliases.keys()))]))
 elif iswindows():
-    combinedcompleter = merge_completers([database.WinCompleter, PathCompleter(), winWordCompleter])
+    combinedcompleter = merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter])
 elif platform.system() == "Linux" and config["fuzzycomplete"]:
     combinedcompleter = FuzzyCompleter(merge_completers([database.LinuxCompleter, PathCompleter()]))
 else:
