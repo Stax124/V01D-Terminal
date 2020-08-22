@@ -125,7 +125,7 @@ else:
     CONFIG = defPath + r"/config.yml"
 
 # Local version
-VERSION = "v0.6.3"
+VERSION = "v0.7.1"
 
 # -------------------------------------------
 
