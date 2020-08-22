@@ -47,12 +47,15 @@ def lcm(x: float, y: float) -> float:
     return float(lcm)
 
 def version() -> str:
-    "Returns latest version of this shell"
-    url = "https://api.github.com/repos/Stax124/V01D-Terminal/releases/latest"
-    response = requests.get(url)
-    content = response.json()
+    try:
+        "Returns latest version of this shell"
+        url = "https://api.github.com/repos/Stax124/V01D-Terminal/releases/latest"
+        response = requests.get(url)
+        content = response.json()
 
-    return content.get('html_url').split('/')[-1]
+        return content.get('html_url').split('/')[-1]
+    except:
+        return None
 
 def ytvid(url: str) -> None:
     "Downloads youtube stream from share link"
