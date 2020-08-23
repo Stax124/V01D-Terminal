@@ -15,7 +15,7 @@ Easy to use **Windows** terminal made by **Stax124**
 
 V01D-Terminal is **Python** based terminal application build on prompt-toolkit library.
 
-Can be runned as individual or you can pass arguments
+Can be run as an individual or you can pass arguments
 
 # Functions
   - Execute wide range of commands from cmd and powershell
