@@ -1,5 +1,6 @@
 # Project V01D-Terminal
 
+import argparse
 from subprocess import call
 from webbrowser import open_new_tab
 from math import *
@@ -7,6 +8,14 @@ from utils import prime
 import platform
 import os
 import sys
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-c", "--command", help="Execute following command")
+parser.add_argument("-v", "--verbose",help="Output everything",action="store_true")
+parser.add_argument("--merged",help="ytdown will merge downloaded files (audio,video)",action="store_true")
+parser.add_argument("--welcome",help="Force welcome screen",action="store_true")
+parser.add_argument("-s","--skipconfig",help="Terminal will skip loading config",action="store_true")
+args = parser.parse_args()
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
@@ -146,8 +155,10 @@ def saveToYml(data,path) -> None:
 
 # Load config or defaults
 try:
-    config = yaml.safe_load(open(CONFIG))
-    type(config.keys())
+    if not args.skipconfig:
+        config = yaml.safe_load(open(CONFIG))
+        type(config.keys())
+    else: raise
 except Exception as e:
     config = {
         "mode":"CMD",
@@ -168,14 +179,16 @@ except Exception as e:
         "scrollbar.background": "bg:#88aaaa",
         "scrollbar.button": "bg:#222222"
     }
-    print(e)
-    try:
-        if os.path.exists(CONFIG):
-            saveToYml(config,CONFIG) # Create new config file
-        else:
-            if confirm("config.yml not found, ignoring settings and using defaults, would you like to save new config? "): saveToYml(config,CONFIG) # Create new config file
-    except:
-        print(f"Error writing config file, please check if you are not starting Terminal from PATH, otherwise you dont have permission to write in this folder {CONFIG}")
+
+    if not args.skipconfig:
+        print(e)
+        try:
+            if os.path.exists(CONFIG):
+                saveToYml(config,CONFIG) # Create new config file
+            else:
+                if confirm("config.yml not found, ignoring settings and using defaults, would you like to save new config? "): saveToYml(config,CONFIG) # Create new config file
+        except:
+            print(f"Error writing config file, please check if you are not starting Terminal from PATH, otherwise you dont have permission to write in this folder {CONFIG}")
 
 DOWNLOAD = list(config.get("downloadDict")) # Get all download dictionaries
 MODE = config.get("mode","CMD")
@@ -217,23 +230,23 @@ def argget(_splitInput: list) -> str:
 
 def welcome() -> None:
     print(f"""
-██╗   ██╗ ██████╗ ██╗██████╗     ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
-██║   ██║██╔═══██╗██║██╔══██╗    ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
-██║   ██║██║   ██║██║██║  ██║       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
-╚██╗ ██╔╝██║   ██║██║██║  ██║       ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
- ╚████╔╝ ╚██████╔╝██║██████╔╝       ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
-  ╚═══╝   ╚═════╝ ╚═╝╚═════╝        ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+    ██╗   ██╗ ██████╗ ██╗██████╗     ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
+    ██║   ██║██╔═══██╗██║██╔══██╗    ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
+    ██║   ██║██║   ██║██║██║  ██║       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
+    ╚██╗ ██╔╝██║   ██║██║██║  ██║       ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
+     ╚████╔╝ ╚██████╔╝██║██████╔╝       ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
+      ╚═══╝   ╚═════╝ ╚═╝╚═════╝        ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
 
-Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users
+    Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users
 
-This help will be shown only once
+    This help will be shown only once
 
-Time: {datetime.datetime.now()}
+    Time: {datetime.datetime.now()}
 
-Latest release: {utils.version()}
+    Latest release: {utils.version()}
 
-'help' - show available commands
-            """)
+    'help' - show available commands
+                """)
 
 def password() -> None: 
     "Get password of wifi network (Windows only)"
@@ -243,7 +256,6 @@ def password() -> None:
     networkName = input("Network name > ")
 
     os.system(f"netsh wlan show profiles {networkName} key=clear")
-
 
 def void(_splitinput) -> None: # Open new terminal or configure it
     try:
@@ -351,26 +363,10 @@ def void(_splitinput) -> None: # Open new terminal or configure it
         elif _splitinput[1] == "config":
             print(config)
     except:
-        print("""
-██╗   ██╗ ██████╗ ██╗██████╗     ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
-██║   ██║██╔═══██╗██║██╔══██╗    ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
-██║   ██║██║   ██║██║██║  ██║       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
-╚██╗ ██╔╝██║   ██║██║██║  ██║       ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
- ╚████╔╝ ╚██████╔╝██║██████╔╝       ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
-  ╚═══╝   ╚═════╝ ╚═╝╚═════╝        ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
-                                                                                                  
-
-Usage: V01D-Terminal.exe [command | -h | --help]
-
-V01D-Terminal, easy to use Windows terminal with autocompletion
-
-optional arguments:
-    -h          Show help
-    command     Command that shell will execute
-""")
-            
-    saveToYml(config,CONFIG)
-
+        print("Not found")
+    
+    if not args.skipconfig:
+        saveToYml(config,CONFIG)
 
 def isadmin() -> bool:
     "Ask if run with elevated privileges"
@@ -382,18 +378,17 @@ def isadmin() -> bool:
 
     return _is_admin
 
-
 def read(splitInput) -> None:
     "Prints text of file"
     if splitInput == []:
         print("""
-Usage: read [target]
+    Usage: read [target]
 
-Print .txt, .py and other text filetypes from terminal
+    Print .txt, .py and other text filetypes from terminal
 
-positional arguments:       
-    target     File to read
-""")
+    positional arguments:       
+        target     File to read
+    """)
     else:
         try:
             path = splitInput[1]
@@ -437,7 +432,6 @@ def power() -> None:
     else:
         os.system("powercfg /setactive " + _input)
 
-
 def hashfilesum(splitInput,hashalg) -> None:
     with open(splitInput[1], "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
@@ -445,7 +439,8 @@ def hashfilesum(splitInput,hashalg) -> None:
 
 # --------------------------------------------
 
-def switch(userInput,splitInput) -> None:
+def switch(userInput) -> None:
+    splitInput = userInput.split()
     global LASTDIR
     global playing
     global playerInitialized
@@ -453,6 +448,9 @@ def switch(userInput,splitInput) -> None:
         arg = argget(splitInput[1:])
     except:
         pass
+    if splitInput == []:
+        return
+
     if splitInput[0].lower() == "password":
         password()
         return
@@ -505,6 +503,8 @@ def switch(userInput,splitInput) -> None:
         mixer.music.load(f)
         mixer.music.play()
         playing = True
+        if args.verbose:
+            print(f"Playing {f}")
         return        
 
     elif splitInput[0].lower() == "music-pause":
@@ -512,6 +512,8 @@ def switch(userInput,splitInput) -> None:
         if playing == True:
             mixer.music.pause()
             playing = False
+            if args.verbose:
+                print("Paused")
         return
 
     elif splitInput[0].lower() == "music-resume":
@@ -519,6 +521,8 @@ def switch(userInput,splitInput) -> None:
         if playing == False:
             mixer.music.unpause()
             playing = True
+            if args.verbose:
+                print("Resumed")
         return
 
     elif splitInput[0].lower() == "music-stop":
@@ -527,6 +531,8 @@ def switch(userInput,splitInput) -> None:
             mixer.music.stop()
             mixer.quit()
             playerInitialized = False
+            if args.verbose:
+                print("Stopped")
         return
 
     elif splitInput[0].lower() == "music-volume":
@@ -535,6 +541,8 @@ def switch(userInput,splitInput) -> None:
             playerInitialized = True
         volume = float(splitInput[1]) / 100
         mixer.music.set_volume(volume)
+        if args.verbose:
+            print(f"Volume set to {volume}")
         return
 
     elif userInput.lower() == "grantfiles" and iswindows():
@@ -543,7 +551,10 @@ def switch(userInput,splitInput) -> None:
 
     elif splitInput[0].lower() == "brightness":
         try:
-            utils.setbrightness(splitInput[1])
+            target = splitInput[1]
+            utils.setbrightness(target)
+            if args.verbose:
+                print(f"Brightness set to {target}")
         except:
             utils.getbrightness()
         return
@@ -837,7 +848,7 @@ def switch(userInput,splitInput) -> None:
         print(utils.PlainToString(argget(splitInput[2:]), mode=splitInput[1]))
         return 
 
-    elif userInput.lower() == "help" or userInput.find("-h") == 0 or userInput.find("--help") == 0: # Print cmd help and defined help at the same time
+    elif userInput.lower() == "help": # Print cmd help and defined help at the same time
         if iswindows():
             os.system("help")
             print("\n" +
@@ -1080,15 +1091,15 @@ def switch(userInput,splitInput) -> None:
             except Exception as e:
                 print(e)
                 print("""
-Usage: download [-list] [target]
+    Usage: download [-list] [target]
 
-Downloads files based on URL or dictionary
+    Downloads files based on URL or dictionary
 
-optional arguments:       
-    -list       Show dictionary of URLs
-positional arguments
-    target      URL or key from 'download -list'
-""")
+    optional arguments:       
+        -list       Show dictionary of URLs
+    positional arguments
+        target      URL or key from 'download -list'
+    """)
 
     else:
         try: # Calculator
@@ -1126,73 +1137,53 @@ def main() -> None:
     """
     Terminal main loop
     """
+    if config.get("welcome") or args.welcome:
+        welcome()
+    while True:
+        try:
+            cd = os.getcwd() # Get current working directory
+            privileges = "#" if isadmin() == True else "$"
+            userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path> {privileges}<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+            
+            userInput = envirotize(userInput)
 
-    if sys.argv[1:] != []:
-        userInput = argget(sys.argv[1:])
+            switch(userInput=userInput)
 
-        values = aliases.keys()
-        if not "delalias" in userInput:
-            for value in values:
-                if userInput.find(value) != -1:
-                    userInput = userInput.replace(value,aliases.get(value))
+        except KeyboardInterrupt:
+            pass
+        except Exception as error:
+            print(error)
+            os.system("pause")
 
-        splitInput = userInput.split()
+def envirotize(string) -> str:
+    "Applies Environment variables and aliases"
+    values = aliases.keys()
+    if not "delalias" in string:
+        for value in values:
+            if string.find(value) != -1:
+                string = string.replace(value,aliases.get(value))
 
-        for i in splitInput:
-            if i.find("%") != -1:
-                spl = i.split("%")[1]
-                env = os.environ[spl]
-                splitInput[splitInput.index(i)] = splitInput[splitInput.index(i)].replace(f"%{spl}%",env)
-        
-        rebuild = " ".join(splitInput)
+    splitInput = string.split()
 
-        if userInput != rebuild:
-            userInput = rebuild
+    for i in splitInput:
+        if i.find("%") != -1:
+            spl = i.split("%")[1]
+            env = os.environ[spl]
+            splitInput[splitInput.index(i)] = splitInput[splitInput.index(i)].replace(f"%{spl}%",env)
+    
+    rebuild = " ".join(splitInput)
 
-        switch(userInput,splitInput)
-    else:
-        if config.get("welcome"):
-            welcome()
-        while True:
-            try:
-                cd = os.getcwd() # Get current working directory
-                privileges = "#" if isadmin() == True else "$"
-                userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path> {privileges}<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
-                
-                values = aliases.keys()
-                if not "delalias" in userInput:
-                    for value in values:
-                        if userInput.find(value) != -1:
-                            userInput = userInput.replace(value,aliases.get(value))
-
-                splitInput = userInput.split() # Split input to get key words
-
-                for i in splitInput:
-                    if i.find("%") != -1:
-                        spl = i.split("%")[1]
-                        env = os.environ[spl]
-                        splitInput[splitInput.index(i)] = splitInput[splitInput.index(i)].replace(f"%{spl}%",env)
-                
-                rebuild = " ".join(splitInput)
-
-                if userInput != rebuild:
-                    userInput = rebuild
-                
-                try:
-                    splitInput[0]
-                except:
-                    continue
-
-                switch(userInput=userInput, splitInput=splitInput)
-
-            except KeyboardInterrupt:
-                pass
-            except Exception as error:
-                print(error)
-                os.system("pause")
-
+    if string != rebuild:
+        string = rebuild
+    
+    return string
 
 if __name__ == "__main__":
+    if args.command:
+        userInput = envirotize(args.command)
+
+        switch(userInput)
+    
     main()
     
 

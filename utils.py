@@ -13,6 +13,7 @@ import requests
 import sys
 if platform.system() == "Windows":
     import pytube
+from youtube_dl import YoutubeDL
 import random
 import time
 import database
@@ -59,32 +60,38 @@ def version() -> str:
 
 def ytvid(url: str) -> None:
     "Downloads youtube stream from share link"
-    if platform.system() == "Windows":
-        startdir = os.getcwd()
+    from Void import args
+    
+    if args.merged:
+        yt = YoutubeDL()
+        yt.download([url])
+    else:
         if platform.system() == "Windows":
-            downloads = os.environ["USERPROFILE"]+"\\Downloads"
-        else:
-            downloads = "/tmp"
-        os.chdir(downloads)
+            startdir = os.getcwd()
+            if platform.system() == "Windows":
+                downloads = os.environ["USERPROFILE"]+"\\Downloads"
+            else:
+                downloads = "/tmp"
+            os.chdir(downloads)
 
-        yt = pytube.YouTube(url)
-        vids = yt.streams.filter(file_extension = "mp4")
+            yt = pytube.YouTube(url)
+            vids = yt.streams.filter(file_extension = "mp4")
 
-        for i in range(len(vids)):
-            print(i,'. ',vids[i])
+            for i in range(len(vids)):
+                print(i,'. ',vids[i])
 
-        vnum = int(input("Enter video index: "))
+            vnum = int(input("Enter video index: "))
 
-        if vnum == "": return
+            if vnum == "": return
 
-        if platform.system() == 'Windows':
-            parent_dir = downloads
-        else:
-            parent_dir = "/tmp"
+            if platform.system() == 'Windows':
+                parent_dir = downloads
+            else:
+                parent_dir = "/tmp"
 
-        print(f"Downloading {yt.title} to {os.getcwd()}, Please wait...")
-        vids[vnum].download()
-        os.chdir(startdir)
+            print(f"Downloading {yt.title} to {os.getcwd()}, Please wait...")
+            vids[vnum].download()
+            os.chdir(startdir)
 
 def setbrightness(value:int):
     "Set screen brightness to value between 0 and 100"
