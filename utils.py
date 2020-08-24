@@ -3,6 +3,7 @@ from subprocess import call
 from sys import argv
 from datetime import datetime
 import platform
+import argparse
 import psutil
 import webcolors
 import math
@@ -58,21 +59,49 @@ def version() -> str:
     except:
         return None
 
-def ytvid(url: str) -> None:
+def ytvid(userinput: str) -> None:
     "Downloads youtube stream from share link"
     from Void import args
+    best = False
+    downloads = False
     
-    if args.merged:
+    def _help():
+        print(""" ytdown help page
+    -h      Show help
+    -b      Force download of best result
+    -d      Download files to download folder (doesnt work with -b)
+        """)
+
+    if "-b" in userinput:
+        userinput = userinput.replace("-b","")
+        best = True
+
+    if "-d" in userinput:
+        userinput = userinput.replace("-d","")
+        downloads = True
+
+    if "-h" in userinput:
+        _help()
+        return
+
+    try:
+        url = userinput.split()[1]
+    except:
+        _help()
+        return
+
+    if best:
         yt = YoutubeDL()
         yt.download([url])
     else:
         if platform.system() == "Windows":
             startdir = os.getcwd()
-            if platform.system() == "Windows":
-                downloads = os.environ["USERPROFILE"]+"\\Downloads"
-            else:
-                downloads = "/tmp"
-            os.chdir(downloads)
+            if downloads:
+                if platform.system() == "Windows":
+                    downloads = os.environ["USERPROFILE"]+"\\Downloads"
+                else:
+                    downloads = "/tmp"
+                os.chdir(downloads)
 
             yt = pytube.YouTube(url)
             vids = yt.streams.filter(file_extension = "mp4")
@@ -92,6 +121,7 @@ def ytvid(url: str) -> None:
             print(f"Downloading {yt.title} to {os.getcwd()}, Please wait...")
             vids[vnum].download()
             os.chdir(startdir)
+            return
 
 def setbrightness(value:int):
     "Set screen brightness to value between 0 and 100"

@@ -12,7 +12,6 @@ import sys
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--command", help="Execute following command")
 parser.add_argument("-v", "--verbose",help="Output everything",action="store_true")
-parser.add_argument("--merged",help="ytdown will merge downloaded files (audio,video)",action="store_true")
 parser.add_argument("--welcome",help="Force welcome screen",action="store_true")
 parser.add_argument("-s","--skipconfig",help="Terminal will skip loading config",action="store_true")
 args = parser.parse_args()
@@ -490,7 +489,7 @@ def switch(userInput) -> None:
         utils.convert(splitInput)
 
     elif splitInput[0].lower() == "ytdown":
-        utils.ytvid(splitInput[1])
+        utils.ytvid(userInput)
         return
         
     elif splitInput[0].lower() == "music-play":
