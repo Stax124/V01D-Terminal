@@ -7,6 +7,7 @@ from math import *
 from utils import prime
 import platform
 import os
+import re
 import sys
 
 parser = argparse.ArgumentParser()
@@ -309,6 +310,7 @@ def void(_splitinput) -> None: # Open new terminal or configure it
 
         elif (_splitinput[1] == "linux") and platform.system() == "Linux":
             if (_splitinput[2].lower() == "generate"):
+                print("This will take a while...")
                 target = "commands.txt"
                 os.system(f'bash -c "compgen -c >{defPath+"/"+target}"')
                 print(f"generated: {target}")
@@ -457,18 +459,20 @@ def switch(userInput) -> None:
     if splitInput[0] == "downloadeta":
         out = []
         mdict = {
-            "kb":"000",
-            "mb":"000000",
-            "gb":"000000000",
-            "tb":"000000000000",
-            "pb":"000000000000000",
+            "KB":"1000",
+            "MB":"1000000",
+            "GB":"1000000000",
+            "TB":"1000000000000",
+            "PB":"1000000000000000",
         }
         for item in [splitInput[1],splitInput[2]]:
-            for multiplier in ["kb", "mb", "gb", "tb", "pb"]:
-                if str(item).lower().find(multiplier) != -1:
-                    out.append(str(item).lower().replace(multiplier,mdict.get(multiplier)))
-        target = float(out[0])
-        speed = float(out[1])
+            for multiplier in ["KB", "MB", "GB", "TB", "PB"]:
+                if str(item).find(multiplier) != -1:
+                    item = item.replace(multiplier, "")
+                    m = mdict.get(multiplier)
+                    out.append(float(item) * float(m))
+        target = out[0]
+        speed = out[1]
 
         print(f"ETA: {((target / speed) / 60 / 60).__round__(3)} h")
         return
