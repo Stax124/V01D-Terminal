@@ -95,10 +95,10 @@ except Exception as e:
         # Ask to install all dependencies, if denied, import error will be raised
         if confirm("Install dependencies: "):
             if iswindows():
-                os.system("pip install pygame clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
+                os.system("pip install colr pygame clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
             else:
                 os.system(
-                    "sudo pip3 install pygame clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
+                    "sudo pip3 install colr pygame clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
         else:
             exit(0)
 
