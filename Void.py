@@ -118,6 +118,8 @@ try:
 except:
     USER = "ERROR"
 
+USERDOMAIN = os.environ["USERDOMAIN"]
+
 defPath = os.getcwd()
 
 # For use in "back"
@@ -1158,7 +1160,10 @@ def main() -> None:
         try:
             cd = os.getcwd() # Get current working directory
             privileges = "#" if isadmin() == True else "$"
-            userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path> {privileges}<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+            promptMessage = HTML(f"""
+┌──(<user>{USER}</user> ⌨  <user>{USERDOMAIN}</user>)<pointer>-</pointer>[<path>{cd}</path>]\n└─{privileges} """)
+
+            userInput = session.prompt(message=promptMessage,style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
             
             userInput = envirotize(userInput)
 
