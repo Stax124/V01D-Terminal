@@ -1161,7 +1161,7 @@ def main() -> None:
             cd = os.getcwd() # Get current working directory
             privileges = "#" if isadmin() == True else "$"
             promptMessage = HTML(f"""
-┌──(<user>{USER}</user> ⌬ <user>{USERDOMAIN}</user>)<pointer>-</pointer>[<path>{cd}</path>]\n└─{privileges} """)
+┌──(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)<pointer>-</pointer>[<path>{cd}</path>]\n└─{privileges} """)
 
             userInput = session.prompt(message=promptMessage,style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
             
