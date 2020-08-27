@@ -12,6 +12,7 @@ import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--command", help="Execute following command")
+parser.add_argument("-d", "--directory", help="Start in specified directory")
 parser.add_argument("-v", "--verbose",help="Output everything",action="store_true")
 parser.add_argument("--welcome",help="Force welcome screen",action="store_true")
 parser.add_argument("-s","--skipconfig",help="Terminal will skip loading config",action="store_true")
@@ -1112,13 +1113,16 @@ def switch(userInput) -> None:
             else:
                 raise
         except: # Try if input is alias
-            if iswindows():
-                if MODE == "CMD":
-                    os.system(userInput)
-                elif MODE == "POWERSHELL":
-                    os.system(f"powershell -Command {userInput}")
-            else:
-                os.system(f'bash -c "{userInput}"')
+            try:
+                os.chdir(userInput)
+            except:
+                if iswindows():
+                    if MODE == "CMD":
+                        os.system(userInput)
+                    elif MODE == "POWERSHELL":
+                        os.system(f"powershell -Command {userInput}")
+                else:
+                    os.system(f'bash -c "{userInput}"')
 
 # --------------------------------------------
 
@@ -1140,6 +1144,13 @@ def main() -> None:
     """
     Terminal main loop
     """
+    if args.directory:
+        try:
+            os.chdir(args.directory)
+        except:
+            print("Directory not found or accessible")
+            return
+
     if config.get("welcome") or args.welcome:
         welcome()
     while True:
@@ -1153,9 +1164,9 @@ def main() -> None:
             switch(userInput=userInput)
 
         except KeyboardInterrupt:
-            pass
+            print()
         except Exception as error:
-            print(error)
+            print(error.with_traceback(error.__traceback__))
             os.system("pause")
 
 def envirotize(string) -> str:
