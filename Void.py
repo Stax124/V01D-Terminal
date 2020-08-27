@@ -122,7 +122,14 @@ try:
 except:
     USER = "ERROR"
 
-USERDOMAIN = os.environ["USERDOMAIN"]
+
+try:
+    if iswindows():
+        USERDOMAIN = os.environ["USERDOMAIN"]
+    else:
+        USERDOMAIN = os.environ["NAME"]
+except:
+    USERDOMAIN = "ERROR"
 
 defPath = os.getcwd()
 
@@ -293,7 +300,7 @@ def void(_splitinput) -> None: # Open new terminal or configure it
                 config["completeWhileTyping"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["completeWhileTyping"] = False
-            print(f"completeWhileTyping: {config['fuzzycomplete']}")
+            print(f"completeWhileTyping: {config['completeWhileTyping']}")
 
         elif (_splitinput[1] == "wrapLines"):
             if (_splitinput[2].lower() == "true"):
@@ -941,7 +948,7 @@ def switch(userInput) -> None:
                 "\n IN DEVELOPMENT \n\n"
             )
         else:
-            call("help", shell=True)
+            call("bash -c help", shell=True)
             
         return
 
@@ -1180,7 +1187,8 @@ def main() -> None:
             print()
         except Exception as error:
             print(error.with_traceback(error.__traceback__))
-            os.system("pause")
+            if iswindows():
+                os.system("pause")
 
 def envirotize(string) -> str:
     "Applies Environment variables and aliases"
