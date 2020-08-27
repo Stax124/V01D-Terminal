@@ -598,7 +598,7 @@ def convert(splitInput:list):
             else:
                 for key, value in webcolors.CSS3_NAMES_TO_HEX.items():
                     r, g, b = webcolors.name_to_rgb(key)
-                    print("{:<20} {:<20} rgb:({:<0},{:<0},{:<0}) ".format(key, value, r, g, b))
+                    print("{0}{5:<20} {1}{6:<20} rgb:({2}{7:<0},{3}{8:<0},{4}{9:<0}) ".format(color(key,fore=str(value).replace('#','')), value, r, g, b,"","","","",""))
     elif splitInput[1].lower() in ["mp3","wav","m4a"]:
         filename = " ".join(splitInput[2:])
         formating = filename.split(".")
