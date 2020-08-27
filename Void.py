@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--command", help="Execute following command")
 parser.add_argument("-d", "--directory", help="Start in specified directory")
 parser.add_argument("-v", "--verbose",help="Output everything",action="store_true")
+parser.add_argument("-e", "--echo",help="Echoes all commands before executing",action="store_true")
 parser.add_argument("--welcome",help="Force welcome screen",action="store_true")
 parser.add_argument("-s","--skipconfig",help="Terminal will skip loading config",action="store_true")
 args = parser.parse_args()
@@ -1160,6 +1161,9 @@ def main() -> None:
             userInput = session.prompt(message=HTML(f"<user>{USER}</user> <path>{cd}</path> {privileges}<pointer> > </pointer>"),style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
             
             userInput = envirotize(userInput)
+
+            if args.echo:
+                print(userInput)
 
             switch(userInput=userInput)
 
