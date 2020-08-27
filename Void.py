@@ -24,6 +24,10 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 def iswindows() -> bool:
     return True if platform.system() == "Windows" else False
 
+if iswindows():
+    from subprocess import check_output
+    check_output("chcp 65001", shell=True)
+
 def _import():
     from pygame import mixer
     from sys import exit as _exit
