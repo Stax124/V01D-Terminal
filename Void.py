@@ -149,7 +149,7 @@ else:
     CONFIG = defPath + r"/config.yml"
 
 # Local version
-VERSION = "v0.7.1"
+VERSION = "v0.7.5pre1"
 
 # -------------------------------------------
 
@@ -523,6 +523,8 @@ def switch(userInput) -> None:
         playing = True
         if args.verbose:
             print(f"Playing {f}")
+        if iswindows():
+            os.system(f"title {f}")
         return        
 
     elif splitInput[0].lower() == "music-pause":

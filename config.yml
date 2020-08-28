@@ -1,14 +1,14 @@
 completeWhileTyping: false
 completion-menu.completion: 'bg:#000000 #ffffff'
 completion-menu.completion.current: 'bg:#00aaaa #000000'
-default: gold
+default: greenyellow
 downloadDict:
 - downloadDict.yml
 fuzzycomplete: true
 mode: CMD
 mouseSupport: true
 multithreading: true
-path: greenyellow
+path: aqua
 pointer: '#b20000'
 scrollbar.background: bg:#88aaaa
 scrollbar.button: bg:#222222
