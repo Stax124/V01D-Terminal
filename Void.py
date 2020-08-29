@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--command", help="Execute following command")
 parser.add_argument("-d", "--directory", help="Start in specified directory")
 parser.add_argument("-v", "--verbose",help="Output everything",action="store_true")
+parser.add_argument("-q", "--quiet",help="Do not output, works for internal commands only",action="store_true")
 parser.add_argument("-e", "--echo",help="Echoes all commands before executing",action="store_true")
 parser.add_argument("--welcome",help="Force welcome screen",action="store_true")
 parser.add_argument("-s","--skipconfig",help="Terminal will skip loading config",action="store_true")
@@ -83,7 +84,7 @@ try:
 
 except Exception as e:
     if sys.executable.find("Python") != -1:
-        print(e)
+        if not args.quiet: print(e)
         # Install main lib
         if iswindows():
             os.system("pip install prompt-toolkit")
@@ -105,7 +106,7 @@ except Exception as e:
         # Reimport all dependencies
         _import()
     else:
-        print(e)
+        if not args.quiet: print(e)
         if iswindows():
             os.system("pause")
         else:
@@ -160,13 +161,14 @@ aliases = database.GetAliases() # Get user alias from database
 
 def saveToYml(data,path) -> None:
     if not os.path.exists(path):
-        if not confirm("config.yml not found, create new one ? "): print("config not saved !"); return
+        if not confirm("config.yml not found, create new one ? "):
+            if not args.quiet: print("config not saved !"); return
     try:
         with open(path, "w") as f:
             f.flush()
             yaml.safe_dump(data, f)
     except:
-        print(f"Unable to save data to {path}")
+        if not args.quiet: print(f"Unable to save data to {path}")
 
 # Load config or defaults
 try:
@@ -196,14 +198,14 @@ except Exception as e:
     }
 
     if not args.skipconfig:
-        print(e)
+        if not args.quiet: print(e)
         try:
             if os.path.exists(CONFIG):
                 saveToYml(config,CONFIG) # Create new config file
             else:
                 if confirm("config.yml not found, ignoring settings and using defaults, would you like to save new config? "): saveToYml(config,CONFIG) # Create new config file
         except:
-            print(f"Error writing config file, please check if you are not starting Terminal from PATH, otherwise you dont have permission to write in this folder {CONFIG}")
+            if not args.quiet: print(f"Error writing config file, please check if you are not starting Terminal from PATH, otherwise you dont have permission to write in this folder {CONFIG}")
 
 DOWNLOAD = list(config.get("downloadDict")) # Get all download dictionaries
 MODE = config.get("mode","CMD")
@@ -244,7 +246,7 @@ def argget(_splitInput: list) -> str:
     return " ".join(_splitInput)
 
 def welcome() -> None:
-    print(f"""
+    if not args.quiet: print(f"""
     ██╗   ██╗ ██████╗ ██╗██████╗     ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
     ██║   ██║██╔═══██╗██║██╔══██╗    ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
     ██║   ██║██║   ██║██║██║  ██║       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
@@ -279,56 +281,56 @@ def void(_splitinput) -> None: # Open new terminal or configure it
                 config["multithreading"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["multithreading"] = False
-            print(f"multithreading: {config['multithreading']}")
+            if not args.quiet: print(f"multithreading: {config['multithreading']}")
 
         elif (_splitinput[1] == "fuzzycomplete"):
             if (_splitinput[2].lower() == "true"):
                 config["fuzzycomplete"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["fuzzycomplete"] = False
-            print(f"fuzzycomplete: {config['fuzzycomplete']}")
+            if not args.quiet: print(f"fuzzycomplete: {config['fuzzycomplete']}")
 
         elif (_splitinput[1] == "mouseSupport"):
             if (_splitinput[2].lower() == "true"):
                 config["mouseSupport"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["mouseSupport"] = False
-            print(f"mouseSupport: {config['fuzzycomplete']}")
+            if not args.quiet: print(f"mouseSupport: {config['fuzzycomplete']}")
 
         elif (_splitinput[1] == "completeWhileTyping"):
             if (_splitinput[2].lower() == "true"):
                 config["completeWhileTyping"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["completeWhileTyping"] = False
-            print(f"completeWhileTyping: {config['completeWhileTyping']}")
+            if not args.quiet: print(f"completeWhileTyping: {config['completeWhileTyping']}")
 
         elif (_splitinput[1] == "wrapLines"):
             if (_splitinput[2].lower() == "true"):
                 config["wrapLines"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["wrapLines"] = False
-            print(f"wrapLines: {config['fuzzycomplete']}")
+            if not args.quiet: print(f"wrapLines: {config['fuzzycomplete']}")
 
         elif (_splitinput[1] == "welcome"):
             if (_splitinput[2].lower() == "true"):
                 config["welcome"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["welcome"] = False
-            print(f"welcome: {config['fuzzycomplete']}")
+            if not args.quiet: print(f"welcome: {config['fuzzycomplete']}")
 
         elif (_splitinput[1] == "mode"):
             if (_splitinput[2].lower() == "powershell"):
                 config["mode"] = "POWERSHELL"
             elif (_splitinput[2].lower() == "cmd"):
                 config["mode"] = "CMD"
-            print(f"mode: {config['mode']}")
+            if not args.quiet: print(f"mode: {config['mode']}")
 
         elif (_splitinput[1] == "linux") and platform.system() == "Linux":
             if (_splitinput[2].lower() == "generate"):
-                print("This will take a while...")
+                if not args.quiet: print("This will take a while...")
                 target = "commands.txt"
                 os.system(f'bash -c "compgen -c >{defPath+"/"+target}"')
-                print(f"generated: {target}")
+                if not args.quiet: print(f"generated: {target}")
 
         elif (_splitinput[1] == "start"):
             os.system(f"start {__location__}")
@@ -338,12 +340,12 @@ def void(_splitinput) -> None: # Open new terminal or configure it
                 if _splitinput[2] == "full":
                     if iswindows():
                         f = open(defPath +"\LICENSE")
-                        print(f.read())
+                        if not args.quiet: print(f.read())
                     else:
                         f = open(defPath +"/LICENSE")
-                        print(f.read())
+                        if not args.quiet: print(f.read())
             except Exception as e:
-                print("""
+                if not args.quiet: print("""
     Void-Terminal  Copyright (C) 2020  Tomáš Novák
     This program comes with ABSOLUTELY NO WARRANTY;
     This is free software, and you are welcome to redistribute it
@@ -352,18 +354,18 @@ def void(_splitinput) -> None: # Open new terminal or configure it
 
         elif (_splitinput[1] == "version"):
             if _splitinput[2] == "latest":
-                print(utils.version())
+                if not args.quiet: print(utils.version())
             elif _splitinput[2] == "local":
-                print(VERSION)
+                if not args.quiet: print(VERSION)
 
         elif (_splitinput[1] == "install"):
             if _splitinput[2] == "chocolatey":
                 if isadmin() == True and iswindows():
                     os.system("powershell -Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))")
                 elif iswindows():
-                    print("Rerun with administrative privileges: use 'admin' or 'elevate'")
+                    if not args.quiet: print("Rerun with administrative privileges: use 'admin' or 'elevate'")
                 else:
-                    print("Only available on Windows")
+                    if not args.quiet: print("Only available on Windows")
 
         elif _splitinput[1] == "updatePythonPackages":
             import pkg_resources
@@ -377,9 +379,9 @@ def void(_splitinput) -> None: # Open new terminal or configure it
             os.system(f"title {_splitinput[-1]}")
 
         elif _splitinput[1] == "config":
-            print(config)
+            if not args.quiet: print(config)
     except:
-        print("Not found")
+        if not args.quiet: print("Not found")
     
     if not args.skipconfig:
         saveToYml(config,CONFIG)
@@ -395,12 +397,12 @@ def isadmin() -> bool:
     return _is_admin
 
 def read(splitInput) -> None:
-    "Prints text of file"
+    "if not args.quiet: prints text of file"
     if splitInput == []:
-        print("""
+        if not args.quiet: print("""
     Usage: read [target]
 
-    Print .txt, .py and other text filetypes from terminal
+    if not args.quiet: print .txt, .py and other text filetypes from terminal
 
     positional arguments:       
         target     File to read
@@ -413,29 +415,29 @@ def read(splitInput) -> None:
             elif "'" in path:
                 path = path.split("'")[1]
         except:
-            print("Incorrrect path. Use path [pathToFile]")
+            if not args.quiet: print("Incorrrect path. Use path [pathToFile]")
             return
         
-        print("\n")
+        if not args.quiet: print("\n")
         
         try:
             file = open(path)
         except:
-            print("File not found")
+            if not args.quiet: print("File not found")
             return
         
         try:
             content = file.read()
         except:
-            print("File unreadable")
+            if not args.quiet: print("File unreadable")
             return
         
-        print(content)
+        if not args.quiet: print(content)
         file.close()
 
 def power() -> None:
     "Change Windows power scheme"
-    print("If you want best powerscheme paste this, then paste ID of the new scheme: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
+    if not args.quiet: print("If you want best powerscheme paste this, then paste ID of the new scheme: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
     os.system("powercfg -list")
     _input = input("Select scheme: ")
 
@@ -497,7 +499,7 @@ def switch(userInput) -> None:
         target = out[0]
         speed = out[1]
 
-        print(f"ETA: {((target / speed) / 60 / 60).__round__(3)} h")
+        if not args.quiet: print(f"ETA: {((target / speed) / 60 / 60).__round__(3)} h")
         return
 
     if userInput.lower() == "back":
@@ -530,37 +532,40 @@ def switch(userInput) -> None:
         mixer.music.play()
         playing = True
         if args.verbose:
-            print(f"Playing {f}")
+            if not args.quiet: print(f"Playing {f}")
         if iswindows():
             os.system(f"title {f}")
         return        
 
     elif splitInput[0].lower() == "music-pause":
-        if not playerInitialized: print("Player not initialized"); return
+        if not playerInitialized:
+            if not args.quiet: print("Player not initialized"); return
         if playing == True:
             mixer.music.pause()
             playing = False
             if args.verbose:
-                print("Paused")
+                if not args.quiet: print("Paused")
         return
 
     elif splitInput[0].lower() == "music-resume":
-        if not playerInitialized: print("Player not initialized"); return
+        if not playerInitialized:
+            if not args.quiet: print("Player not initialized"); return
         if playing == False:
             mixer.music.unpause()
             playing = True
             if args.verbose:
-                print("Resumed")
+                if not args.quiet: print("Resumed")
         return
 
     elif splitInput[0].lower() == "music-stop":
-        if not playerInitialized: print("Player not initialized"); return
+        if not playerInitialized:
+            if not args.quiet: print("Player not initialized"); return
         if playing == True:
             mixer.music.stop()
             mixer.quit()
             playerInitialized = False
             if args.verbose:
-                print("Stopped")
+                if not args.quiet: print("Stopped")
         return
 
     elif splitInput[0].lower() == "music-volume":
@@ -570,7 +575,7 @@ def switch(userInput) -> None:
         volume = float(splitInput[1]) / 100
         mixer.music.set_volume(volume)
         if args.verbose:
-            print(f"Volume set to {volume}")
+            if not args.quiet: print(f"Volume set to {volume}")
         return
 
     elif userInput.lower() == "grantfiles" and iswindows():
@@ -582,7 +587,7 @@ def switch(userInput) -> None:
             target = splitInput[1]
             utils.setbrightness(target)
             if args.verbose:
-                print(f"Brightness set to {target}")
+                if not args.quiet: print(f"Brightness set to {target}")
         except:
             utils.getbrightness()
         return
@@ -600,17 +605,17 @@ def switch(userInput) -> None:
 
     elif splitInput[0].lower() == "checklastvid":
         os.system(f'curl -s "https://decapi.me/youtube/latest_video?user={argget(splitInput[1:])}"')
-        print()
+        if not args.quiet: print()
         return
 
     elif splitInput[0].lower() == "checklasttweet":
         os.system(f'curl -s "https://decapi.me/twitter/latest?name={argget(splitInput[1:])}"')
-        print()
+        if not args.quiet: print()
         return
 
     elif splitInput[0].lower() == "checktwitchonline":
         os.system(f'curl -s "https://decapi.me/twitch/uptime?channel={argget(splitInput[1:])}"')
-        print()
+        if not args.quiet: print()
         return
 
     elif splitInput[0].lower() == "fileconvert":
@@ -626,7 +631,7 @@ def switch(userInput) -> None:
 
     elif splitInput[0].lower() == "guid":
         os.system("curl givemeguid.com")
-        print()
+        if not args.quiet: print()
         return
 
     elif splitInput[0].lower() == "shorten":
@@ -639,7 +644,7 @@ def switch(userInput) -> None:
 
     elif splitInput[0].lower() == "dns":
         os.system("curl -L https://edns.ip-api.com/json")
-        print()
+        if not args.quiet: print()
         return
 
     elif splitInput[0].lower() == "speedtest":
@@ -669,7 +674,7 @@ def switch(userInput) -> None:
 
     elif userInput.lower() == "ip":
         os.system("curl api.ipify.org")
-        print()
+        if not args.quiet: print()
         return
 
     elif splitInput[0].lower() == "geoip":
@@ -677,21 +682,21 @@ def switch(userInput) -> None:
             os.system("curl ipinfo.io/"+splitInput[1])
         except:
             os.system("curl ipinfo.io")
-        print()
+        if not args.quiet: print()
         return
 
     elif splitInput[0].lower() == "qrcode":
         try:
             os.system("curl qrenco.de/"+splitInput[1])
         except:
-            print("Invalid argument")
+            if not args.quiet: print("Invalid argument")
         return
 
     elif splitInput[0].lower() == "stonks":
         try:
             os.system("curl stonks.icu/"+splitInput[1])
         except:
-            print("Invalid argument: eg. stonks amd/intl/tsla")
+            if not args.quiet: print("Invalid argument: eg. stonks amd/intl/tsla")
         return
 
     elif userInput.lower() == "pagefile":
@@ -704,7 +709,8 @@ def switch(userInput) -> None:
                 os.system("net stop bthserv")
             elif splitInput[1].lower() == "on":
                 os.system("net start bthserv")
-        else: print("Run shell as administrator or use: admin")
+        else:
+            if not args.quiet: print("Run shell as administrator or use: admin")
         return
 
     elif splitInput[0].lower() == "wifi":
@@ -725,9 +731,9 @@ def switch(userInput) -> None:
         for url in urls:
             try:
                 response = requests.get(url)
-                print(f"{url} OK: {response.elapsed.total_seconds()}s" if response.ok == True else "SITE DOWN")
+                if not args.quiet: print(f"{url} OK: {response.elapsed.total_seconds()}s" if response.ok == True else "SITE DOWN")
             except:
-                print(url + " SITE DOWN")
+                if not args.quiet: print(url + " SITE DOWN")
 
     elif splitInput[0].lower() == "poweroff":
         os.system("shutdown /s /f /t 0")
@@ -804,32 +810,32 @@ def switch(userInput) -> None:
 
     elif splitInput[0].lower() == "sha1":
         text = argget(splitInput[1:])
-        print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(),text)
+        if not args.quiet: print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(),text)
         return
 
     elif splitInput[0].lower() == "sha224":
         text = argget(splitInput[1:])
-        print(hashlib.sha224(bytes(text, "utf-8")).hexdigest(),text)
+        if not args.quiet: print(hashlib.sha224(bytes(text, "utf-8")).hexdigest(),text)
         return
 
     elif splitInput[0].lower() == "sha256":
         text = argget(splitInput[1:])
-        print(hashlib.sha256(bytes(text, "utf-8")).hexdigest(),text)
+        if not args.quiet: print(hashlib.sha256(bytes(text, "utf-8")).hexdigest(),text)
         return
 
     elif splitInput[0].lower() == "sha384":
         text = argget(splitInput[1:])
-        print(hashlib.sha384(bytes(text, "utf-8")).hexdigest(),text)
+        if not args.quiet: print(hashlib.sha384(bytes(text, "utf-8")).hexdigest(),text)
         return
 
     elif splitInput[0].lower() == "sha512":
         text = argget(splitInput[1:])
-        print(hashlib.sha512(bytes(text, "utf-8")).hexdigest(),text)
+        if not args.quiet: print(hashlib.sha512(bytes(text, "utf-8")).hexdigest(),text)
         return
 
     elif splitInput[0].lower() == "md5":
         text = argget(splitInput[1:])
-        print(hashlib.md5(bytes(text, "utf-8")).hexdigest(),text)
+        if not args.quiet: print(hashlib.md5(bytes(text, "utf-8")).hexdigest(),text)
         return
 
     # Hash sum -----------------------------------------------
@@ -837,49 +843,49 @@ def switch(userInput) -> None:
     elif splitInput[0].lower() == "sha1sum":
         hashsum = hashlib.sha1()
         hashfilesum(splitInput,hashsum)
-        print(hashsum.hexdigest())
+        if not args.quiet: print(hashsum.hexdigest())
         return
 
     elif splitInput[0].lower() == "sha224sum":
         hashsum = hashlib.sha224()
         hashfilesum(splitInput, hashsum)
-        print(hashsum.hexdigest())
+        if not args.quiet: print(hashsum.hexdigest())
         return
 
     elif splitInput[0].lower() == "sha256sum":
         hashsum = hashlib.sha256()
         hashfilesum(splitInput, hashsum)
-        print(hashsum.hexdigest())
+        if not args.quiet: print(hashsum.hexdigest())
         return
 
     elif splitInput[0].lower() == "sha384sum":
         hashsum = hashlib.sha384()
         hashfilesum(splitInput, hashsum)
-        print(hashsum.hexdigest())
+        if not args.quiet: print(hashsum.hexdigest())
         return
 
     elif splitInput[0].lower() == "sha512sum":
         hashsum = hashlib.sha512()
         hashfilesum(splitInput, hashsum)
-        print(hashsum.hexdigest())
+        if not args.quiet: print(hashsum.hexdigest())
         return
 
     elif splitInput[0].lower() == "md5sum":
         hashsum = hashlib.md5()
         hashfilesum(splitInput, hashsum)
-        print(hashsum.hexdigest())
+        if not args.quiet: print(hashsum.hexdigest())
         return
 
     # --------------------------------------------------------------
 
     elif splitInput[0].lower() == "plain2string":
-        print(utils.PlainToString(argget(splitInput[2:]), mode=splitInput[1]))
+        if not args.quiet: print(utils.PlainToString(argget(splitInput[2:]), mode=splitInput[1]))
         return 
 
-    elif userInput.lower() == "help": # Print cmd help and defined help at the same time
+    elif userInput.lower() == "help": # if not args.quiet: print cmd help and defined help at the same time
         if iswindows():
             os.system("help")
-            print("\n" +
+            if not args.quiet: print("\n" +
 
                 "\n MATH: \n\n"
                     "       +   -    Addition\n"
@@ -985,15 +991,15 @@ def switch(userInput) -> None:
                         total_size += os.path.getsize(fp)
 
             return total_size
-        print(get_size(splitInput[1]) / 1000000,"MB")
+        if not args.quiet: print(get_size(splitInput[1]) / 1000000,"MB")
 
     elif splitInput[0].lower() == "currencyconverter": # Show welcome screen
         rate = utils.currencyconverter(splitInput[1].upper(), splitInput[2].upper())
-        print(f"{(rate * float(splitInput[3])).__round__(2)} {splitInput[2]}")
+        if not args.quiet: print(f"{(rate * float(splitInput[3])).__round__(2)} {splitInput[2]}")
         return
 
     elif userInput.lower() == "os": # Show os
-        print(osBased.Os())
+        if not args.quiet: print(osBased.Os())
         return
 
     elif userInput.lower() == "clear" or userInput.lower() == "cls": # Clear terminal
@@ -1015,19 +1021,19 @@ def switch(userInput) -> None:
     elif splitInput[0].lower() == "lcm":
         nums = str(splitInput[1]).split(",")
         num = [float(nums[0]),float(nums[1])]
-        print(utils.lcm(num[0],num[1]))
+        if not args.quiet: print(utils.lcm(num[0],num[1]))
         return
 
     elif splitInput[0].lower() == "gcd":
         nums = str(splitInput[1]).split(",")
         num = [float(nums[0]), float(nums[1])]
-        print(utils.gcd(num[0], num[1]))
+        if not args.quiet: print(utils.gcd(num[0], num[1]))
         return
 
     elif splitInput[0].lower() == "rng":
         nums = str(splitInput[1]).split(",")
         num = [float(nums[0]), float(nums[1])]
-        print(utils.rng(num[0], num[1]))
+        if not args.quiet: print(utils.rng(num[0], num[1]))
         return
 
     elif splitInput[0].lower() == "open" and iswindows(): # Open file explorer in cwd
@@ -1048,9 +1054,9 @@ def switch(userInput) -> None:
     elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
         try:
             import pwned
-            print(pwned.lookup_pwned_api(splitInput[1]))
+            if not args.quiet: print(pwned.lookup_pwned_api(splitInput[1]))
         except:
-            print("Error")
+            if not args.quiet: print("Error")
         
         return
 
@@ -1070,13 +1076,13 @@ def switch(userInput) -> None:
 
     elif splitInput[0].lower() == "alias": # Define own function and save it
         if splitInput[1] == "-list":
-            print(aliases)
+            if not args.quiet: print(aliases)
         else:
             l = splitInput[2:]
             try:
                 splitInput[2]
             except:
-                print("No command specified")
+                if not args.quiet: print("No command specified")
                 return
             complete = " ".join(l)
             aliases[splitInput[1]] = complete
@@ -1090,7 +1096,7 @@ def switch(userInput) -> None:
             aliases.pop(splitInput[1])
             database.WriteAliases(aliases)
         except:
-            print("Name is not in list ! \nUsage: delalias [name]")
+            if not args.quiet: print("Name is not in list ! \nUsage: delalias [name]")
 
     elif userInput.lower() == "eval": # Show alias dictionary
         while True:
@@ -1101,7 +1107,7 @@ def switch(userInput) -> None:
                 else:
                     eval(compile(_eval,"<string>","exec"))
             except Exception as e:
-                print(e)
+                if not args.quiet: print(e)
         return
 
     elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror) or download straight to active folder
@@ -1109,7 +1115,7 @@ def switch(userInput) -> None:
             if splitInput[1].lower() == "-list":
                 for i in DOWNLOAD:
                     try:
-                        print(dict(yaml.safe_load(open(i))).keys())
+                        if not args.quiet: print(dict(yaml.safe_load(open(i))).keys())
                     except: pass
             else:
                 raise
@@ -1118,8 +1124,8 @@ def switch(userInput) -> None:
                 for item in splitInput[1:]:
                     utils.download(item)
             except Exception as e:
-                print(e)
-                print("""
+                if not args.quiet: print(e)
+                if not args.quiet: print("""
     Usage: download [-list] [target]
 
     Downloads files based on URL or dictionary
@@ -1134,7 +1140,7 @@ def switch(userInput) -> None:
         try: # Calculator
             output = eval(userInput.lower())
             if type(output) in [float, int, list, tuple, str, bool]:
-                print(output)
+                if not args.quiet: print(output)
             else:
                 raise
         except: # Try if input is alias
@@ -1173,7 +1179,7 @@ def main() -> None:
         try:
             os.chdir(args.directory)
         except:
-            print("Directory not found or accessible")
+            if not args.quiet: print("Directory not found or accessible")
             return
 
     if config.get("welcome") or args.welcome:
@@ -1190,14 +1196,14 @@ def main() -> None:
             userInput = envirotize(userInput)
 
             if args.echo:
-                print(userInput)
+                if not args.quiet: print(userInput)
 
             switch(userInput=userInput)
 
         except KeyboardInterrupt:
-            print()
+            if not args.quiet: print()
         except Exception as error:
-            print(error.with_traceback(error.__traceback__))
+            if not args.quiet: print(error.with_traceback(error.__traceback__))
             if iswindows():
                 os.system("pause")
 
