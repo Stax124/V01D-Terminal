@@ -13,6 +13,7 @@ import sys
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--command", help="Execute following command")
 parser.add_argument("-d", "--directory", help="Start in specified directory")
+parser.add_argument("--character-page", help="Manualy select code page, defaults to 65001 (unicode)")
 parser.add_argument("-v", "--verbose",help="Output everything",action="store_true")
 parser.add_argument("-q", "--quiet",help="Do not output, works for internal commands only",action="store_true")
 parser.add_argument("-e", "--echo",help="Echoes all commands before executing",action="store_true")
@@ -27,7 +28,10 @@ def iswindows() -> bool:
 
 if iswindows():
     from subprocess import check_output
-    check_output("chcp 65001", shell=True)
+    if not args.character_page:
+        check_output("chcp 65001", shell=True)
+    else:
+        print(check_output(f"chcp {args.character_page}", shell=True))
 
 def _import():
     from pygame import mixer
