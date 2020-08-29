@@ -177,7 +177,7 @@ try:
 except Exception as e:
     config = {
         "mode":"CMD",
-        "welcome":True,
+        "welcome":False,
         "downloadDict":("downloadDict.yml"),
         "multithreading":True,
         "fuzzycomplete":True,
@@ -185,10 +185,10 @@ except Exception as e:
         "wrapLines":True,
         "mouseSupport":True,
         "searchIgnoreCase":True,
-        "default": "#ff0066",
-        "pointer": "#b20000",
-        "path": "#22ff00",
-        "user": "#ff0066",
+        "default": "greenyellow",
+        "pointer": "#ff4500",
+        "path": "aqua",
+        "user": "#ff4500",
         "completion-menu.completion": "bg:#000000 #ffffff",
         "completion-menu.completion.current": "bg:#00aaaa #000000",
         "scrollbar.background": "bg:#88aaaa",
@@ -1174,7 +1174,7 @@ def main() -> None:
             cd = os.getcwd() # Get current working directory
             privileges = "#" if isadmin() == True else "$"
             promptMessage = HTML(f"""
-┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)<pointer>━</pointer>[<path>{cd}</path>]\n┗━{privileges} """)
+┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]\n┗━<pointer>{privileges}</pointer> """)
 
             userInput = session.prompt(message=promptMessage,style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
             
@@ -1220,6 +1220,5 @@ if __name__ == "__main__":
         userInput = envirotize(args.command)
 
         switch(userInput)
-    
-    main()
+    else: main()
     
