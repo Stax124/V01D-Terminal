@@ -398,42 +398,21 @@ def isadmin() -> bool:
 
 def read(splitInput) -> None:
     "if not args.quiet: prints text of file"
-    if splitInput == []:
-        if not args.quiet: print("""
-    Usage: read [target]
-
-    if not args.quiet: print .txt, .py and other text filetypes from terminal
-
-    positional arguments:       
-        target     File to read
-    """)
-    else:
-        try:
-            path = splitInput[1]
-            if '"' in path:
-                path = path.split('"')[1]
-            elif "'" in path:
-                path = path.split("'")[1]
-        except:
-            if not args.quiet: print("Incorrrect path. Use path [pathToFile]")
-            return
+    try:
+        path = argget(splitInput[1:])
+        if '"' in path:
+            path = path.replace('"',"")
+    except:
+        if not args.quiet: print("Incorrrect path. Use path [pathToFile]")
+        return
         
         if not args.quiet: print("\n")
         
-        try:
-            file = open(path)
-        except:
-            if not args.quiet: print("File not found")
-            return
+    file = open(path,encoding="utf-8")
+    content = file.read()
         
-        try:
-            content = file.read()
-        except:
-            if not args.quiet: print("File unreadable")
-            return
-        
-        if not args.quiet: print(content)
-        file.close()
+    if not args.quiet: print(content)
+    file.close()
 
 def power() -> None:
     "Change Windows power scheme"
@@ -471,6 +450,14 @@ def switch(userInput) -> None:
 
     if splitInput[0].lower() == "password":
         password()
+        return
+
+    if splitInput[0].lower() == "ls" and iswindows():
+        os.system("dir")
+        return
+
+    if splitInput[0].lower() == "pwd" and iswindows():
+        print(os.getcwd())
         return
 
     if splitInput[0].lower() == "instaloader":
