@@ -471,6 +471,14 @@ def switch(userInput) -> None:
         password()
         return
 
+    if splitInput[0].lower() == "instaloader":
+        import instaloader
+        import getpass
+        loader = instaloader.Instaloader(save_metadata=False)
+        loader.interactive_login(splitInput[1])
+        loader.download_profile(splitInput[2], download_stories=True)
+        return
+
     if splitInput[0] == "downloadeta":
         out = []
         mdict = {
@@ -915,6 +923,7 @@ def switch(userInput) -> None:
                     "   delalias - remove alias: delalias [name]\n"
 
                 "\n OTHER FUNCTIONS \n\n"
+                    "   instaloader - download instagram profile: instaloader [your username] [target username]\n"
                     "   downloadeta - calculate estimated time of arival: downloadeta [target(GB)] [speed(MB)]\n"
                     "   convert - function for converting temperatures, colors to hex, audio|files and merging them\n"
                     "   ping - never ending ping loop\n"
