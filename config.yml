@@ -1,11 +1,11 @@
-completeWhileTyping: false
+completeWhileTyping: true
 completion-menu.completion: 'bg:#000000 #ffffff'
 completion-menu.completion.current: 'bg:#00aaaa #000000'
 default: greenyellow
 downloadDict:
 - downloadDict.yml
 fuzzycomplete: true
-mode: CMD
+mode: POWERSHELL
 mouseSupport: true
 multithreading: true
 path: aqua

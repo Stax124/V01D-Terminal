@@ -87,7 +87,7 @@ try:
 
 
 except Exception as e:
-    if sys.executable.find("Python") != -1:
+    if sys.executable.find("Python") != -1 or sys.executable.find("python") != -1:
         if not args.quiet: print(e)
         # Install main lib
         if iswindows():
@@ -493,7 +493,7 @@ def switch(userInput) -> None:
         if not args.quiet: print(f"ETA: {((target / speed) / 60 / 60).__round__(3)} h")
         return
 
-    if userInput.lower() == "back":
+    if splitInput[0].lower() == "back":
         __placeholder = os.getcwd()
         if LASTDIR == "": return
         os.chdir(LASTDIR)
@@ -501,7 +501,7 @@ def switch(userInput) -> None:
             LASTDIR = __placeholder
         return
 
-    elif userInput.lower() == "elevate" or userInput.lower() == "admin":
+    elif splitInput[0].lower() == "elevate" or splitInput[0].lower() == "admin":
         elevate()
         return
 
@@ -569,7 +569,7 @@ def switch(userInput) -> None:
             if not args.quiet: print(f"Volume set to {volume}")
         return
 
-    elif userInput.lower() == "grantfiles" and iswindows():
+    elif splitInput[0].lower() == "grantfiles" and iswindows():
         os.system('ICACLS "." /INHERITANCE:e /GRANT:r %USERNAME%:(F) /T /C ')
         return
 
@@ -663,7 +663,7 @@ def switch(userInput) -> None:
             os.system("curl https://corona-stats.online/")
         return
 
-    elif userInput.lower() == "ip":
+    elif splitInput[0].lower() == "ip":
         os.system("curl api.ipify.org")
         if not args.quiet: print()
         return
@@ -690,7 +690,7 @@ def switch(userInput) -> None:
             if not args.quiet: print("Invalid argument: eg. stonks amd/intl/tsla")
         return
 
-    elif userInput.lower() == "pagefile":
+    elif splitInput[0].lower() == "pagefile":
         os.system("wmic pagefile list")
         return
 
@@ -734,35 +734,35 @@ def switch(userInput) -> None:
         os.system("shutdown /r /f /t 0")
         return
 
-    elif userInput.lower() == "motherboard":
+    elif splitInput[0].lower() == "motherboard":
         os.system("wmic baseboard get product,Manufacturer,version,serialnumber")
         return
 
-    elif userInput.lower() == "ram":
+    elif splitInput[0].lower() == "ram":
         utils.memory()
         return
 
-    elif userInput.lower() == "cpu":
+    elif splitInput[0].lower() == "cpu":
         utils.cpu()
         return
 
-    elif userInput.lower() == "gpu":
+    elif splitInput[0].lower() == "gpu":
         utils.gpu()
         return
 
-    elif userInput.lower() == "network":
+    elif splitInput[0].lower() == "network":
         utils.network()
         return
 
-    elif userInput.lower() == "disk":
+    elif splitInput[0].lower() == "disk":
         utils.disk()
         return
 
-    elif userInput.lower() == "bootinfo":
+    elif splitInput[0].lower() == "bootinfo":
         utils.bootinfo()
         return
 
-    elif userInput.lower() == "component":
+    elif splitInput[0].lower() == "component":
         utils.sysinfo()
         utils.cpu()
         utils.gpu()
@@ -772,27 +772,27 @@ def switch(userInput) -> None:
         utils.network()
         return
 
-    elif userInput.lower() == "firewall":
+    elif splitInput[0].lower() == "firewall":
         os.system("WF.msc")
         return
 
-    elif userInput.lower() == "services":
+    elif splitInput[0].lower() == "services":
         os.system("services.msc")
         return
 
-    elif userInput.lower() == "manager":
+    elif splitInput[0].lower() == "manager":
         os.system("compmgmt.msc")
         return
 
-    elif userInput.lower() == "event":
+    elif splitInput[0].lower() == "event":
         os.system("eventvwr.msc")
         return
 
-    elif userInput.lower() == "power":
+    elif splitInput[0].lower() == "power":
         power()
         return
 
-    elif userInput.lower() == "godmode" and iswindows():
+    elif splitInput[0].lower() == "godmode" and iswindows():
         os.system("mkdir GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
         os.system("explorer GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
         os.system("rmdir GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
@@ -873,7 +873,7 @@ def switch(userInput) -> None:
         if not args.quiet: print(utils.PlainToString(argget(splitInput[2:]), mode=splitInput[1]))
         return 
 
-    elif userInput.lower() == "help": # if not args.quiet: print cmd help and defined help at the same time
+    elif splitInput[0].lower() == "help": # if not args.quiet: print cmd help and defined help at the same time
         if iswindows():
             os.system("help")
             if not args.quiet: print("\n" +
@@ -960,11 +960,11 @@ def switch(userInput) -> None:
             
         return
 
-    elif userInput.lower() == "ping": # Never ending ping loop
+    elif splitInput[0].lower() == "ping": # Never ending ping loop
         os.system("start ping google.com -t")
         return
 
-    elif userInput.lower() == "welcome": # Show welcome screen
+    elif splitInput[0].lower() == "welcome": # Show welcome screen
         welcome()
         return
 
@@ -989,11 +989,11 @@ def switch(userInput) -> None:
         if not args.quiet: print(f"{(rate * float(splitInput[3])).__round__(2)} {splitInput[2]}")
         return
 
-    elif userInput.lower() == "os": # Show os
+    elif splitInput[0].lower() == "os": # Show os
         if not args.quiet: print(osBased.Os())
         return
 
-    elif userInput.lower() == "clear" or userInput.lower() == "cls": # Clear terminal
+    elif splitInput[0].lower() == "clear" or splitInput[0].lower() == "cls": # Clear terminal
         osBased.Clear()
         return
     
@@ -1035,11 +1035,11 @@ def switch(userInput) -> None:
             os.system("explorer .\\")
         return
 
-    elif userInput.lower() == "settings" and iswindows():  # Open file explorer in cwd
+    elif splitInput[0].lower() == "settings" and iswindows():  # Open file explorer in cwd
         os.system("start ms-settings:")
         return
 
-    elif userInput.lower() == "startup" and iswindows():
+    elif splitInput[0].lower() == "startup" and iswindows():
         os.system("explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")
 
     elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
@@ -1062,7 +1062,7 @@ def switch(userInput) -> None:
         os.chdir(path)
         return
 
-    elif userInput.lower() == "exit" or userInput.lower() == "quit": # Terminate application
+    elif splitInput[0].lower() == "exit" or splitInput[0].lower() == "quit": # Terminate application
         _exit()
 
     elif splitInput[0].lower() == "alias": # Define own function and save it
@@ -1089,7 +1089,7 @@ def switch(userInput) -> None:
         except:
             if not args.quiet: print("Name is not in list ! \nUsage: delalias [name]")
 
-    elif userInput.lower() == "eval": # Show alias dictionary
+    elif splitInput[0].lower() == "eval": # Show alias dictionary
         while True:
             try:
                 _eval = session.prompt(message=HTML(f"<user>{USER}</user> <path>eval</path>""<pointer> > </pointer>"), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR, completer=None)
@@ -1189,14 +1189,19 @@ def main() -> None:
             if args.echo:
                 if not args.quiet: print(userInput)
 
-            switch(userInput=userInput)
+            if "&" in userInput:
+                for i in userInput.split("&"):
+                    switch(userInput=i)
+            else:
+                switch(userInput=userInput)
 
         except KeyboardInterrupt:
             if not args.quiet: print()
         except Exception as error:
-            if not args.quiet: print(error.with_traceback(error.__traceback__))
-            if iswindows():
-                os.system("pause")
+            if not args.quiet:
+                print(error.with_traceback(error.__traceback__))
+                if iswindows():
+                    os.system("pause")
 
 def envirotize(string) -> str:
     "Applies Environment variables and aliases"
