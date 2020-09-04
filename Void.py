@@ -1,6 +1,7 @@
 # Project V01D-Terminal
 
 import argparse
+import shlex
 from subprocess import call
 from webbrowser import open_new_tab
 from math import *
@@ -402,17 +403,12 @@ def isadmin() -> bool:
 
 def read(splitInput) -> None:
     "if not args.quiet: prints text of file"
-    try:
-        path = argget(splitInput[1:])
-        if '"' in path:
-            path = path.replace('"',"")
-    except:
-        if not args.quiet: print("Incorrrect path. Use path [pathToFile]")
-        return
+    fparser = argparse.ArgumentParser(prog="read")
+    fparser.add_argument("file", help="Target filename")
+    try: fargs = fparser.parse_args(splitInput[1:])
+    except SystemExit: return
         
-        if not args.quiet: print("\n")
-        
-    file = open(path,encoding="utf-8")
+    file = open(fparser.file,encoding="utf-8")
     content = file.read()
         
     if not args.quiet: print(content)
@@ -441,7 +437,7 @@ def hashfilesum(splitInput,hashalg) -> None:
 # --------------------------------------------
 
 def switch(userInput) -> None:
-    splitInput = userInput.split()
+    splitInput = shlex.split(userInput)
     global LASTDIR
     global playing
     global playerInitialized
@@ -465,14 +461,26 @@ def switch(userInput) -> None:
         return
 
     if splitInput[0].lower() == "instaloader":
+        fparser = argparse.ArgumentParser(prog="instaloader")
+        fparser.add_argument("login", help="Your instagram username")
+        fparser.add_argument("target", help="Targeted instagram profile")
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
         import instaloader
         import getpass
         loader = instaloader.Instaloader(save_metadata=False)
-        loader.interactive_login(splitInput[1])
-        loader.download_profile(splitInput[2], download_stories=True)
+        loader.interactive_login(fargs.login)
+        loader.download_profile(fargs.target, download_stories=True)
         return
 
     if splitInput[0] == "downloadeta":
+        fparser = argparse.ArgumentParser(prog="downloadeta")
+        fparser.add_argument("target", help="Targeted download size")
+        fparser.add_argument("speed", help="Speed of your connection")
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
         out = []
         mdict = {
             "KB":"1000",
@@ -481,7 +489,7 @@ def switch(userInput) -> None:
             "TB":"1000000000000",
             "PB":"1000000000000000",
         }
-        for item in [splitInput[1],splitInput[2]]:
+        for item in [fargs.target,fargs.speed]:
             for multiplier in ["KB", "MB", "GB", "TB", "PB"]:
                 if str(item).find(multiplier) != -1:
                     item = item.replace(multiplier, "")
@@ -513,15 +521,24 @@ def switch(userInput) -> None:
         return
         
     elif splitInput[0].lower() == "music-play":
+        fparser = argparse.ArgumentParser(prog="music-play")
+        fparser.add_argument("file", help="Target filename")
+        fparser.add_argument("--volume", help="Set volume", type=int)
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+        
         if not playerInitialized:
             mixer.init()
             playerInitialized = True
-        f = argget(splitInput[1:])
-        if '"' in f: f = f.replace('"','')
-        f = r"{}".format(f)
+
+        f = fargs.file
         mixer.music.load(f)
         mixer.music.play()
         playing = True
+
+        if fargs.volume:
+            mixer.music.set_volume(fargs.volume/100)
+
         if args.verbose:
             if not args.quiet: print(f"Playing {f}")
         if iswindows():
@@ -534,8 +551,7 @@ def switch(userInput) -> None:
         if playing == True:
             mixer.music.pause()
             playing = False
-            if args.verbose:
-                if not args.quiet: print("Paused")
+            if not args.quiet: print("Paused")
         return
 
     elif splitInput[0].lower() == "music-resume":
@@ -544,8 +560,7 @@ def switch(userInput) -> None:
         if playing == False:
             mixer.music.unpause()
             playing = True
-            if args.verbose:
-                if not args.quiet: print("Resumed")
+            if not args.quiet: print("Resumed")
         return
 
     elif splitInput[0].lower() == "music-stop":
@@ -555,8 +570,7 @@ def switch(userInput) -> None:
             mixer.music.stop()
             mixer.quit()
             playerInitialized = False
-            if args.verbose:
-                if not args.quiet: print("Stopped")
+            if not args.quiet: print("Stopped")
         return
 
     elif splitInput[0].lower() == "music-volume":
@@ -564,13 +578,18 @@ def switch(userInput) -> None:
             mixer.init()
             playerInitialized = True
         volume = float(splitInput[1]) / 100
-        mixer.music.set_volume(volume)
-        if args.verbose:
-            if not args.quiet: print(f"Volume set to {volume}")
+        mixer.music.set_volume(splitInput[1])
+        if not args.quiet: print(f"Volume set to {volume}")
         return
 
     elif splitInput[0].lower() == "grantfiles" and iswindows():
-        os.system('ICACLS "." /INHERITANCE:e /GRANT:r %USERNAME%:(F) /T /C ')
+        fparser = argparse.ArgumentParser(prog="grantfiles")
+        fparser.add_argument("--target","-t", help="Target folder", type=str)
+        fparser.add_argument("--user","-u", help="Target folder", type=str)
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
+        os.system(f'ICACLS "{fargs.target if fargs.target else "."}" /INHERITANCE:e /GRANT:r {fargs.user if fargs.user else "%USERNAME%"}:(F) /T /C ')
         return
 
     elif splitInput[0].lower() == "brightness":
@@ -610,7 +629,15 @@ def switch(userInput) -> None:
         return
 
     elif splitInput[0].lower() == "fileconvert":
-        os.system(f'curl "http://c.docverter.com/convert" -F from={splitInput[1]} -F to={splitInput[2]} -F "input_files[]=@{splitInput[3]}" -o "{splitInput[4]}"')
+        fparser = argparse.ArgumentParser(prog="fileconvert")
+        fparser.add_argument("fromformat", help="From format", type=str)
+        fparser.add_argument("to", help="To format", type=str)
+        fparser.add_argument("file", help="File to convert", type=str)
+        fparser.add_argument("output", help="Output file", type=str)
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
+        os.system(f'curl "http://c.docverter.com/convert" -F from={fargs.fromformat} -F to={fargs.to} -F "input_files[]=@{fargs.file}" -o "{splitInput[4]}"')
         return
 
     elif splitInput[0].lower() == "ping.gg":
@@ -630,7 +657,7 @@ def switch(userInput) -> None:
         return
 
     elif splitInput[0].lower() == "transfer":
-        os.system(f'curl -F file=@"{argget(splitInput[1:])}" https://ttm.sh')
+        os.system(f'curl -F file=@"{argget(splitInput[1])}" https://ttm.sh')
         return
 
     elif splitInput[0].lower() == "dns":
@@ -727,11 +754,21 @@ def switch(userInput) -> None:
                 if not args.quiet: print(url + " SITE DOWN")
 
     elif splitInput[0].lower() == "poweroff":
-        os.system("shutdown /s /f /t 0")
+        fparser = argparse.ArgumentParser(prog="poweroff")
+        fparser.add_argument("--time","-t", help="Target folder", type=int)
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
+        os.system(f"shutdown /s /f /t {fargs.time if fargs.time else '0'}")
         return
 
     elif splitInput[0].lower() == "reboot":
-        os.system("shutdown /r /f /t 0")
+        fparser = argparse.ArgumentParser(prog="reboot")
+        fparser.add_argument("--time","-t", help="Target folder", type=int)
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
+        os.system(f"shutdown /r /f /t {fargs.time if fargs.time else '0'}")
         return
 
     elif splitInput[0].lower() == "motherboard":
@@ -985,11 +1022,18 @@ def switch(userInput) -> None:
         if not args.quiet: print(get_size(splitInput[1]) / 1000000,"MB")
 
     elif splitInput[0].lower() == "currencyconverter": # Show welcome screen
-        rate = utils.currencyconverter(splitInput[1].upper(), splitInput[2].upper())
-        if not args.quiet: print(f"{(rate * float(splitInput[3])).__round__(2)} {splitInput[2]}")
+        fparser = argparse.ArgumentParser(prog="currencyconverter")
+        fparser.add_argument("base", help="Base currency", type=str)
+        fparser.add_argument("other", help="Target currency", type=str)
+        fparser.add_argument("amount", help="Amount to convert", type=float)
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
+        rate = utils.currencyconverter(fargs.base.upper(), fargs.other.upper())
+        if not args.quiet: print(f"{(rate * float(fargs.amount)).__round__(2)} {fargs.other}")
         return
 
-    elif splitInput[0].lower() == "os": # Show os
+    elif splitInput[0] == "os": # Show os
         if not args.quiet: print(osBased.Os())
         return
 
@@ -1010,25 +1054,37 @@ def switch(userInput) -> None:
         return
 
     elif splitInput[0].lower() == "lcm":
-        nums = str(splitInput[1]).split(",")
-        num = [float(nums[0]),float(nums[1])]
-        if not args.quiet: print(utils.lcm(num[0],num[1]))
+        fparser = argparse.ArgumentParser(prog="lcm")
+        fparser.add_argument("first", help="First number", type=float)
+        fparser.add_argument("second", help="Second number", type=float)
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
+        if not args.quiet: print(utils.lcm(fargs.first,fargs.second))
         return
 
     elif splitInput[0].lower() == "gcd":
-        nums = str(splitInput[1]).split(",")
-        num = [float(nums[0]), float(nums[1])]
-        if not args.quiet: print(utils.gcd(num[0], num[1]))
+        fparser = argparse.ArgumentParser(prog="gcd")
+        fparser.add_argument("first", help="First number", type=float)
+        fparser.add_argument("second", help="Second number", type=float)
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
+        if not args.quiet: print(utils.gcd(fargs.first, fargs.second))
         return
 
     elif splitInput[0].lower() == "rng":
-        nums = str(splitInput[1]).split(",")
-        num = [float(nums[0]), float(nums[1])]
-        if not args.quiet: print(utils.rng(num[0], num[1]))
+        fparser = argparse.ArgumentParser(prog="rng")
+        fparser.add_argument("first", help="First number", type=float)
+        fparser.add_argument("second", help="Second number", type=float)
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
+        if not args.quiet: print(utils.rng(fargs.first, fargs.second))
         return
 
     elif splitInput[0].lower() == "open" and iswindows(): # Open file explorer in cwd
-        target = argget(splitInput[1:])
+        target = splitInput[1]
         if target != "":
             os.system(f"explorer {target}")
         else:
@@ -1055,11 +1111,7 @@ def switch(userInput) -> None:
     elif splitInput[0].lower() == "cd" and arg:
         if os.getcwd() != LASTDIR:
             LASTDIR = os.getcwd()
-        if '"' in arg:
-            path = argget(splitInput[1:]).split('"')[-2]
-        else:
-            path = argget(splitInput[1:])
-        os.chdir(path)
+        os.chdir(splitInput[1])
         return
 
     elif splitInput[0].lower() == "exit" or splitInput[0].lower() == "quit": # Terminate application
