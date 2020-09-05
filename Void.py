@@ -436,7 +436,8 @@ def hashfilesum(splitInput,hashalg) -> None:
 
 # --------------------------------------------
 
-def switch(userInput) -> None:
+def switch(userInput:str) -> None:
+    userInput.replace("/","//")
     splitInput = shlex.split(userInput)
     global LASTDIR
     global playing
@@ -1188,6 +1189,8 @@ def switch(userInput) -> None:
                 raise
         except: # Try if input is alias
             try:
+                if os.getcwd() != LASTDIR:
+                    LASTDIR = os.getcwd()
                 os.chdir(userInput)
             except:
                 if iswindows():
