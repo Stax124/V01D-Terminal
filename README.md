@@ -93,11 +93,7 @@ Can be run as an individual or you can pass arguments
   - Remove alias: **delalias [name]**
 
 # Music player
-  - Initialize player and play file: **music-play [file]**
-  - Pause current track: **music-pause**
-  - Resume current track: **music-resume**
-  - Stop current track: **music-stop**
-  - Set volume: **music-volume [taget(0-100)]**
+  - Initialize mpv player and play file: **play [file]**
 
 # Curl commands
   - Get DNS information: **dns**
