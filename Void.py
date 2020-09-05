@@ -22,8 +22,6 @@ parser.add_argument("--welcome",help="Force welcome screen",action="store_true")
 parser.add_argument("-s","--skipconfig",help="Terminal will skip loading config",action="store_true")
 args = parser.parse_args()
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-
 def iswindows() -> bool:
     return True if platform.system() == "Windows" else False
 
@@ -35,7 +33,6 @@ if iswindows():
         print(check_output(f"chcp {args.character_page}", shell=True))
 
 def _import():
-    from pygame import mixer
     from sys import exit as _exit
     import yaml
     import requests
@@ -61,7 +58,6 @@ def _import():
     import utils
 
 try:
-    from pygame import mixer
     from sys import exit as _exit
     import yaml
     import datetime
@@ -101,10 +97,10 @@ except Exception as e:
         # Ask to install all dependencies, if denied, import error will be raised
         if confirm("Install dependencies: "):
             if iswindows():
-                os.system("pip install colr pygame clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
+                os.system("pip install colr python-mpv clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
             else:
                 os.system(
-                    "sudo pip3 install colr pygame clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
+                    "sudo pip3 install colr python-mpv clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
         else:
             exit(0)
 
@@ -521,67 +517,20 @@ def switch(userInput:str) -> None:
         utils.ytdown(splitInput)
         return
         
-    elif splitInput[0].lower() == "music-play":
-        fparser = argparse.ArgumentParser(prog="music-play")
-        fparser.add_argument("file", help="Target filename")
-        fparser.add_argument("--volume", help="Set volume", type=int)
+    elif splitInput[0].lower() == "play":
+        fparser = argparse.ArgumentParser(prog="play")
+        fparser.add_argument("TARGET", help="Filename or URL")
         try: fargs = fparser.parse_args(splitInput[1:])
         except SystemExit: return
-        
-        if not playerInitialized:
-            mixer.init()
-            playerInitialized = True
 
-        f = fargs.file
-        mixer.music.load(f)
-        mixer.music.play()
-        playing = True
-
-        if fargs.volume:
-            mixer.music.set_volume(fargs.volume/100)
-
-        if args.verbose:
-            if not args.quiet: print(f"Playing {f}")
-        if iswindows():
-            os.system(f"title {f}")
-        return        
-
-    elif splitInput[0].lower() == "music-pause":
-        if not playerInitialized:
-            if not args.quiet: print("Player not initialized"); return
-        if playing == True:
-            mixer.music.pause()
-            playing = False
-            if not args.quiet: print("Paused")
-        return
-
-    elif splitInput[0].lower() == "music-resume":
-        if not playerInitialized:
-            if not args.quiet: print("Player not initialized"); return
-        if playing == False:
-            mixer.music.unpause()
-            playing = True
-            if not args.quiet: print("Resumed")
-        return
-
-    elif splitInput[0].lower() == "music-stop":
-        if not playerInitialized:
-            if not args.quiet: print("Player not initialized"); return
-        if playing == True:
-            mixer.music.stop()
-            mixer.quit()
-            playerInitialized = False
-            if not args.quiet: print("Stopped")
-        return
-
-    elif splitInput[0].lower() == "music-volume":
-        if not playerInitialized:
-            mixer.init()
-            playerInitialized = True
-        volume = float(splitInput[1]) / 100
-        mixer.music.set_volume(splitInput[1])
-        if not args.quiet: print(f"Volume set to {volume}")
-        return
+        import mpv
+        # player = mpv.MPV(input_default_bindings=True, input_vo_keyboard=True, osc=True)
+        player = mpv.MPV(player_operation_mode='pseudo-gui',
+                 script_opts='osc-layout=box,osc-seekbarstyle=bar,osc-deadzonesize=0,osc-minmousemove=3',
+                 input_default_bindings=True,
+                 input_vo_keyboard=True,
+                 osc=True)
+        player.play(fargs.TARGET)
 
     elif splitInput[0].lower() == "grantfiles" and iswindows():
         fparser = argparse.ArgumentParser(prog="grantfiles")
@@ -1240,8 +1189,8 @@ def main() -> None:
             if args.echo:
                 if not args.quiet: print(userInput)
 
-            if "&" in userInput:
-                for i in userInput.split("&"):
+            if " & " in userInput:
+                for i in userInput.split(" & "):
                     switch(userInput=i)
             else:
                 switch(userInput=userInput)
