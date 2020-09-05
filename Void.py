@@ -518,7 +518,7 @@ def switch(userInput:str) -> None:
         utils.convert(splitInput)
 
     elif splitInput[0].lower() == "ytdown":
-        utils.ytvid(userInput)
+        utils.ytdown(splitInput)
         return
         
     elif splitInput[0].lower() == "music-play":
@@ -756,7 +756,7 @@ def switch(userInput:str) -> None:
 
     elif splitInput[0].lower() == "poweroff":
         fparser = argparse.ArgumentParser(prog="poweroff")
-        fparser.add_argument("--time","-t", help="Target folder", type=int)
+        fparser.add_argument("--time","-t", help="Time to shutdown", type=int)
         try: fargs = fparser.parse_args(splitInput[1:])
         except SystemExit: return
 
@@ -765,7 +765,7 @@ def switch(userInput:str) -> None:
 
     elif splitInput[0].lower() == "reboot":
         fparser = argparse.ArgumentParser(prog="reboot")
-        fparser.add_argument("--time","-t", help="Target folder", type=int)
+        fparser.add_argument("--time","-t", help="Time to reboot", type=int)
         try: fargs = fparser.parse_args(splitInput[1:])
         except SystemExit: return
 
@@ -908,7 +908,7 @@ def switch(userInput:str) -> None:
     # --------------------------------------------------------------
 
     elif splitInput[0].lower() == "plain2string":
-        if not args.quiet: print(utils.PlainToString(argget(splitInput[2:]), mode=splitInput[1]))
+        if not args.quiet: print(utils.PlainToString(splitInput))
         return 
 
     elif splitInput[0].lower() == "help": # if not args.quiet: print cmd help and defined help at the same time

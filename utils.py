@@ -59,44 +59,25 @@ def version() -> str:
     except:
         return None
 
-def ytvid(userinput: str) -> None:
+def ytdown(splitInput: str) -> None:
     "Downloads youtube stream from share link"
+    fparser = argparse.ArgumentParser(prog="ytdown")
+    fparser.add_argument("-b","--best", help="Force download of best result", action="store_true")
+    fparser.add_argument("-d","--downloads", help="Download files to download folder (doesnt work with -b)", action="store_true")
+    fparser.add_argument("URL", help="URL to download")
+    try: fargs = fparser.parse_args(splitInput[1:])
+    except SystemExit: return
     from Void import args
-    best = False
-    downloads = False
-    
-    def _help():
-        print(""" ytdown help page
-    -h      Show help
-    -b      Force download of best result
-    -d      Download files to download folder (doesnt work with -b)
-        """)
 
-    if "-b" in userinput:
-        userinput = userinput.replace("-b","")
-        best = True
+    url = fargs.URL
 
-    if "-d" in userinput:
-        userinput = userinput.replace("-d","")
-        downloads = True
-
-    if "-h" in userinput:
-        _help()
-        return
-
-    try:
-        url = userinput.split()[1]
-    except:
-        _help()
-        return
-
-    if best:
+    if fargs.best:
         yt = YoutubeDL()
         yt.download([url])
     else:
         if platform.system() == "Windows":
             startdir = os.getcwd()
-            if downloads:
+            if fargs.downloads:
                 if platform.system() == "Windows":
                     downloads = os.environ["USERPROFILE"]+"\\Downloads"
                 else:
@@ -139,47 +120,26 @@ def currencyconverter(base:str,othercurrency:str) -> float:
     rate = rates.get(othercurrency)
     return rate
 
-def PlainToString(text: str, mode: str) -> str:
+def PlainToString(splitInput) -> str:
     "Returns list of strings from plain text file (hello world -> 'hello','world')"
-
-    split = ""
+    fparser = argparse.ArgumentParser(prog="plain2string")
+    fparser.add_argument("-l","--line", help="Split content by lines(\\n)", action="store_true")
+    fparser.add_argument("FILE", help="File to split")
+    try: fargs = fparser.parse_args(splitInput[1:])
+    except SystemExit: return
     
-    if mode == "file":
-        try:
-            f = open(text, "r")
-            text = f.read()
-            split = text.split()
-        except:
-            print("File not found or not accessible")
-    elif mode == "fileline":
-        try:
-            f = open(text, "r")
-            text = f.read()
-            split = text.split("\n")
-        except:
-            print("File not found")
-    elif mode == "line":
-        split = text.split()
-    else:
-        print("""
-    Usage: plain2string [mode] [file|text]
-
-    Print .txt, .py and other text filetypes from terminal
-
-    positional arguments:   
-        mode    file        Split text in file by ' '
-                line        Split text by ' '
-                fileline    Split text in file by '\\n'
-
-        file    Source file (only works with 'file','fileline')
-        text    String to split (only works with 'line')
-    """)
-
+    from Void import args
 
     out = ""
+    with open(fargs.FILE, "r", encoding="utf-8") as f:
+        content = f.read()
 
-    for item in split:
-        out += "'" + item + "'" + ","
+        if fargs.line: lines = content.splitlines()
+        else: lines = content.split()
+
+        for i in range(len(lines)):
+            lines[i] = '"'+lines[i]+'"'
+            out = ",\n".join(lines)
 
     return(out)
 
