@@ -520,17 +520,42 @@ def switch(userInput:str) -> None:
     elif splitInput[0].lower() == "play":
         fparser = argparse.ArgumentParser(prog="play")
         fparser.add_argument("TARGET", help="Filename or URL")
+        fparser.add_argument("--volume", help="Set default volume ( 0 - 130 )", type=int)
+        fparser.add_argument("--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int)
+        fparser.add_argument("--stream", help="Select stream ( best,worst,140 etc. )")
         try: fargs = fparser.parse_args(splitInput[1:])
         except SystemExit: return
 
         import mpv
         # player = mpv.MPV(input_default_bindings=True, input_vo_keyboard=True, osc=True)
-        player = mpv.MPV(player_operation_mode='pseudo-gui',
-                 script_opts='osc-layout=box,osc-seekbarstyle=bar,osc-deadzonesize=0,osc-minmousemove=3',
-                 input_default_bindings=True,
-                 input_vo_keyboard=True,
-                 osc=True)
-        player.play(fargs.TARGET)
+        if fargs.stream:
+            player = mpv.MPV(player_operation_mode='pseudo-gui',
+                    script_opts='osc-layout=box,osc-seekbarstyle=bar,osc-deadzonesize=0,osc-minmousemove=3',
+                    input_default_bindings=True,
+                    input_vo_keyboard=True,
+                    osc=True,
+                    ytdl_format=fargs.stream,
+                    volume=fargs.volume if fargs.volume else 100,
+                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
+        else:
+            player = mpv.MPV(player_operation_mode='pseudo-gui',
+                    script_opts='osc-layout=box,osc-seekbarstyle=bar,osc-deadzonesize=0,osc-minmousemove=3',
+                    input_default_bindings=True,
+                    input_vo_keyboard=True,
+                    osc=True,
+                    volume=fargs.volume if fargs.volume else 100,
+                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
+
+        from threading import Thread
+
+        def play():
+            player.play(fargs.TARGET)
+            player.wait_for_playback()
+            player.terminate()
+
+        thread = Thread(target=play)
+        thread.start()
+        
 
     elif splitInput[0].lower() == "grantfiles" and iswindows():
         fparser = argparse.ArgumentParser(prog="grantfiles")
