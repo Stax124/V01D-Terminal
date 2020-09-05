@@ -1155,8 +1155,14 @@ def switch(userInput:str) -> None:
         return
 
     elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror) or download straight to active folder
+        fparser = argparse.ArgumentParser(prog="download")
+        fparser.add_argument("-l","--list", help="List all dictionary keys", action="store_true")
+        fparser.add_argument("-k", "--key", help="URL or dictionary key")
+        try: fargs = fparser.parse_args(splitInput[1:])
+        except SystemExit: return
+
         try:
-            if splitInput[1].lower() == "-list":
+            if fargs.list:
                 for i in DOWNLOAD:
                     try:
                         if not args.quiet: print(dict(yaml.safe_load(open(i))).keys())
@@ -1169,16 +1175,6 @@ def switch(userInput:str) -> None:
                     utils.download(item)
             except Exception as e:
                 if not args.quiet: print(e)
-                if not args.quiet: print("""
-    Usage: download [-list] [target]
-
-    Downloads files based on URL or dictionary
-
-    optional arguments:       
-        -list       Show dictionary of URLs
-    positional arguments
-        target      URL or key from 'download -list'
-    """)
 
     else:
         try: # Calculator
