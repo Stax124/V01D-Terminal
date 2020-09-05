@@ -437,7 +437,7 @@ def hashfilesum(splitInput,hashalg) -> None:
 # --------------------------------------------
 
 def switch(userInput:str) -> None:
-    userInput.replace("/","//")
+    userInput = userInput.replace("\\","\\\\")
     splitInput = shlex.split(userInput)
     global LASTDIR
     global playing
