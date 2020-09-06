@@ -1,4 +1,5 @@
 import os
+import shlex
 from typing import Callable, Iterable, List, Optional
 from prompt_toolkit.completion import CompleteEvent, Completer, Completion
 from prompt_toolkit.document import Document
@@ -49,6 +50,13 @@ class PathCompleter(Completer):
         except:
             text = document.text_before_cursor
 
+        if text.find("%") != -1:
+            try:
+                spl = text.split("%")[1]
+                env = os.environ[spl]
+                text = text.replace(f"%{spl}%",env)
+            except: pass
+
         # Complete only when we have at least the minimal input length,
         # otherwise, we can too many results and autocompletion will become too
         # heavy.
@@ -93,7 +101,7 @@ class PathCompleter(Completer):
                     # For directories, add a slash to the filename.
                     # (We don't add them to the `completion`. Users can type it
                     # to trigger the autocompletion themselves.)
-                    filename += "\\"
+                    filename = filename+"\\"
                 elif self.only_directories:
                     continue
 

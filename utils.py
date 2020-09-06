@@ -63,6 +63,7 @@ def ytdown(splitInput: str) -> None:
     "Downloads youtube stream from share link"
     fparser = argparse.ArgumentParser(prog="ytdown")
     fparser.add_argument("-b","--best", help="Force download of best result", action="store_true")
+    fparser.add_argument("-F","--formats", help="Print available formats", action="store_true")
     fparser.add_argument("-d","--downloads", help="Download files to download folder (doesnt work with -b)", action="store_true")
     fparser.add_argument("URL", help="URL to download")
     try: fargs = fparser.parse_args(splitInput[1:])
@@ -74,9 +75,13 @@ def ytdown(splitInput: str) -> None:
     if fargs.best:
         yt = YoutubeDL()
         yt.download([url])
+    elif fargs.formats:
+        yt = YoutubeDL({"listformats": True})
+        yt.download([url])
     else:
         if platform.system() == "Windows":
             startdir = os.getcwd()
+            downloads = ""
             if fargs.downloads:
                 if platform.system() == "Windows":
                     downloads = os.environ["USERPROFILE"]+"\\Downloads"
