@@ -46,7 +46,7 @@ def _import():
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-    from prompt_toolkit.completion import merge_completers, FuzzyCompleter
+    from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter
     from PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
@@ -71,7 +71,7 @@ try:
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-    from prompt_toolkit.completion import merge_completers, FuzzyCompleter
+    from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter
     from PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
@@ -213,13 +213,13 @@ MODE = config.get("mode","CMD")
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and iswindows():
-    combinedcompleter = FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter, database.WordCompleter(list(aliases.keys()))]))
+    combinedcompleter = ThreadedCompleter(FuzzyCompleter(merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter, database.WordCompleter(list(aliases.keys()))])))
 elif iswindows():
-    combinedcompleter = merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter])
+    combinedcompleter = ThreadedCompleter(merge_completers([database.WinCompleter, PathCompleter(), database.winWordCompleter]))
 elif platform.system() == "Linux" and config["fuzzycomplete"]:
-    combinedcompleter = FuzzyCompleter(merge_completers([database.LinuxCompleter, PathCompleter()]))
+    combinedcompleter = ThreadedCompleter(FuzzyCompleter(merge_completers([database.LinuxCompleter, PathCompleter()])))
 else:
-    combinedcompleter = merge_completers([database.LinuxCompleter, PathCompleter()])
+    combinedcompleter = ThreadedCompleter(merge_completers([database.LinuxCompleter, PathCompleter()]))
 
 # Define console style
 _style = Style.from_dict(
