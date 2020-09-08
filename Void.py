@@ -6,6 +6,7 @@ from subprocess import call
 from webbrowser import open_new_tab
 from math import *
 from utils import prime
+from scripts.vectors import *
 import platform
 import os
 import re
@@ -1075,7 +1076,7 @@ def switch(userInput:str) -> None:
 
     elif splitInput[0].lower() == "pwned": # Check if your password is in someones dictionary
         try:
-            import pwned
+            import scripts.pwned as pwned
             if not args.quiet: print(pwned.lookup_pwned_api(splitInput[1]))
         except:
             if not args.quiet: print("Error")
