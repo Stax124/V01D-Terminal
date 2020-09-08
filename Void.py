@@ -1153,12 +1153,12 @@ def switch(userInput:str) -> None:
 
     else:
         try: # Calculator
-            output = eval(userInput.lower())
-            if type(output) in [float, int, list, tuple, str, bool]:
+            output = eval(userInput)
+            if type(output) in [float, int, list, tuple, str, bool, Vector2, Vector3]:
                 if not args.quiet: print(output)
             else:
                 raise
-        except: # Try if input is alias
+        except Exception as e: # Try if input is alias
             try:
                 if os.getcwd() != LASTDIR:
                     LASTDIR = os.getcwd()
