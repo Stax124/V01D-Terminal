@@ -401,11 +401,11 @@ def isadmin() -> bool:
 def read(splitInput) -> None:
     "if not args.quiet: prints text of file"
     fparser = argparse.ArgumentParser(prog="read")
-    fparser.add_argument("file", help="Target filename")
+    fparser.add_argument("filename", help="Target filename")
     try: fargs = fparser.parse_args(splitInput[1:])
     except SystemExit: return
         
-    file = open(fparser.file,encoding="utf-8")
+    file = open(fargs.filename,encoding="utf-8")
     content = file.read()
         
     if not args.quiet: print(content)
