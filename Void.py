@@ -523,13 +523,13 @@ def switch(userInput:str) -> None:
         fparser.add_argument("TARGET", help="Filename or URL")
         fparser.add_argument("--volume", help="Set default volume ( 0 - 130 )", type=int)
         fparser.add_argument("--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int)
-        fparser.add_argument("--stream", help="Select stream ( best,worst,140 etc. )")
+        fparser.add_argument("-f","--format", help="Select stream ( best,worst,140 etc. )")
         try: fargs = fparser.parse_args(splitInput[1:])
         except SystemExit: return
 
         import mpv
         # player = mpv.MPV(input_default_bindings=True, input_vo_keyboard=True, osc=True)
-        if fargs.stream:
+        if fargs.format:
             player = mpv.MPV(player_operation_mode='pseudo-gui',
                     script_opts='osc-layout=box,osc-seekbarstyle=bar,osc-deadzonesize=0,osc-minmousemove=3',
                     input_default_bindings=True,

@@ -62,52 +62,52 @@ def version() -> str:
 def ytdown(splitInput: str) -> None:
     "Downloads youtube stream from share link"
     fparser = argparse.ArgumentParser(prog="ytdown")
-    fparser.add_argument("-b","--best", help="Force download of best result", action="store_true")
+    fparser.add_argument("-v","--verbose", help="Output everything", action="store_true")
+    fparser.add_argument("-q","--quiet", help="Do not print messages to stdout", action="store_true")
+    fparser.add_argument("-k","--keep", help="Keep video file after post processing", action="store_true")
+    fparser.add_argument("--skip", help="Skip video downloading", action="store_true")
+    fparser.add_argument("--geo_bypass", help="Bypass geographic restriction via faking X-Forwarded-For HTTP header", action="store_true")
+    fparser.add_argument("--prefer_ffmpeg", help="If False, use avconv instead of ffmpeg if both are available, otherwise prefer ffmpeg.", action="store_true")
+    fparser.add_argument("--proxy", help="URL of the proxy server to use")
+    fparser.add_argument("--thumbnails", help="Print a table of all thumbnails and exit")
+    fparser.add_argument("--source", help="Client-side IP address to bind to")
+    fparser.add_argument("-a","--archive", help="File name of a file where all downloads are recorded. Videos already present in the file are not downloaded again")
+    fparser.add_argument("-u","--username", help="Username for authentication purposes")
+    fparser.add_argument("-p","--password", help="Password for authentication purposes")
+    fparser.add_argument("-f","--format", help="Video format code")
     fparser.add_argument("-F","--formats", help="Print available formats", action="store_true")
-    fparser.add_argument("-d","--downloads", help="Download files to download folder (doesnt work with -b)", action="store_true")
+    fparser.add_argument("-s","--subtitle", help="Subtitle format code")
+    fparser.add_argument("-S","--subtitles", help="Print available subtitles", action="store_true")
     fparser.add_argument("URL", help="URL to download")
     try: fargs = fparser.parse_args(splitInput[1:])
     except SystemExit: return
-    from Void import args
 
-    url = fargs.URL
-
-    if fargs.best:
-        yt = YoutubeDL()
-        yt.download([url])
-    elif fargs.formats:
-        yt = YoutubeDL({"listformats": True})
-        yt.download([url])
-    else:
-        if platform.system() == "Windows":
-            startdir = os.getcwd()
-            downloads = ""
-            if fargs.downloads:
-                if platform.system() == "Windows":
-                    downloads = os.environ["USERPROFILE"]+"\\Downloads"
-                else:
-                    downloads = "/tmp"
-                os.chdir(downloads)
-
-            yt = pytube.YouTube(url)
-            vids = yt.streams.filter(file_extension = "mp4")
-
-            for i in range(len(vids)):
-                print(i,'. ',vids[i])
-
-            vnum = int(input("Enter video index: "))
-
-            if vnum == "": return
-
-            if platform.system() == 'Windows':
-                parent_dir = downloads
-            else:
-                parent_dir = "/tmp"
-
-            print(f"Downloading {yt.title} to {os.getcwd()}, Please wait...")
-            vids[vnum].download()
-            os.chdir(startdir)
-            return
+    yt = YoutubeDL(dict({
+        "verbose":fargs.verbose,
+        "quiet":fargs.quiet,
+        "keepvideo":fargs.keep,
+        "skip_download":fargs.skip,
+        "geo_bypass":fargs.geo_bypass,
+        "prefer_ffmpeg":fargs.prefer_ffmpeg,
+        "list_thumbnails":fargs.thumbnails,
+        "source_address":fargs.source,
+        "download_archive":fargs.archive,
+        "username":fargs.username,
+        "password":fargs.password,
+        "format":fargs.format,
+        "listformats":fargs.formats,
+        "subtitlesformat":fargs.subtitle,
+        "listsubtitles":fargs.subtitles,
+        "format":fargs.format,
+        "format":fargs.format,
+        "format":fargs.format,
+        "format":fargs.format,
+        "format":fargs.format,
+        "format":fargs.format,
+        "format":fargs.format,
+    }))
+    yt.download([fargs.URL])
+    
 
 def setbrightness(value:int):
     "Set screen brightness to value between 0 and 100"
