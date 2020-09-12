@@ -522,13 +522,14 @@ def switch(userInput:str) -> None:
         fparser = argparse.ArgumentParser(prog="play")
         fparser.add_argument("TARGET", help="Filename or URL")
         fparser.add_argument("--volume", help="Set default volume ( 0 - 130 )", type=int)
+        fparser.add_argument("--no-thread", help="Run in main thread", action="store_true")
         fparser.add_argument("--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int)
         fparser.add_argument("-f","--format", help="Select stream ( best,worst,140 etc. )")
         try: fargs = fparser.parse_args(splitInput[1:])
         except SystemExit: return
 
         import mpv
-        # player = mpv.MPV(input_default_bindings=True, input_vo_keyboard=True, osc=True)
+
         if fargs.format:
             player = mpv.MPV(player_operation_mode='pseudo-gui',
                     input_default_bindings=True,
@@ -545,15 +546,17 @@ def switch(userInput:str) -> None:
                     volume=fargs.volume if fargs.volume else 100,
                     volume_max=fargs.maxvolume if fargs.maxvolume else 130)
 
-        from threading import Thread
-
         def play():
             player.play(fargs.TARGET)
             player.wait_for_playback()
             player.terminate()
 
-        thread = Thread(target=play)
-        thread.start()
+        if fargs.no_thread:
+            play()
+        else:
+            from threading import Thread
+            thread = Thread(target=play)
+            thread.start()
         
 
     elif splitInput[0].lower() == "grantfiles" and iswindows():
