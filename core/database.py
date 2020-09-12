@@ -51,6 +51,7 @@ if platform.system() == "Windows":
         "poweroff":None,
         "reboot":None,
         "instaloader":None,
+        "autoclicker":None,
         "brightness":None,
         "plain2string": None,
         "cryptocurrency":{"btc":None,"eth":None,"xrp":None,"usdt":None,"bch":None,"ltc":None,"ada":None,"bnb":None},
@@ -234,7 +235,7 @@ if platform.system() == "Linux":
     f = open("commands.txt","r")
     l = f.read().splitlines()
     l = list(dict.fromkeys(l))
-    LinuxCompleter = WordCompleter(list(dict.fromkeys(l + ["threads","instaloader","play","back","currencyconverter","downloadeta","sizeof","md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download","cheat","checklastvid","checklasttweet","checktwitchonline","fileconverter","ping.gg","guid","dns","shorten","transfer","speedtest","weather","covid19","ip","geoip","qrcode","stonks","welcome"])))
+    LinuxCompleter = WordCompleter(list(dict.fromkeys(l + ["autoclicker","threads","instaloader","play","back","currencyconverter","downloadeta","sizeof","md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download","cheat","checklastvid","checklasttweet","checktwitchonline","fileconverter","ping.gg","guid","dns","shorten","transfer","speedtest","weather","covid19","ip","geoip","qrcode","stonks","welcome"])))
 else:
     LinuxCompleter = None
 

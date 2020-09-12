@@ -1051,6 +1051,18 @@ class Void_Terminal(object):
             call('auto-py-to-exe', shell=True)
             return
 
+        elif splitInput[0].lower() == "autoclicker":
+            fparser = argparse.ArgumentParser(prog="autoclicker")
+            fparser.add_argument("--right", help="Use right mouse button instead of left", action="store_true")
+            fparser.add_argument("--delay", help="Delay in seconds", type=float)
+            try: fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit: return
+
+            from core.autoclicker import Autoclicker
+            clicker = Autoclicker(core.autoclicker.Button.left if not fargs.right else core.autoclicker.Button.right,fargs.delay if fargs.delay else 0.05)
+            clicker.start()
+            return
+
         elif splitInput[0].lower() == "lcm":
             fparser = argparse.ArgumentParser(prog="lcm")
             fparser.add_argument("first", help="First number", type=float)

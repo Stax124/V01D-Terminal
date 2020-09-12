@@ -4,23 +4,11 @@ import threading
 from pynput.mouse import Button, Controller
 from pynput.keyboard import Listener, KeyCode
 
-i = input("delay: ")
-if i == "":
-    delay = 0.005
-else:
-    try:
-        delay = float(i)
-    except:
-        sys.exit()
-button = Button.left
-start_stop_key = KeyCode(char='s')
-exit_key = KeyCode(char='e')
-
-
 class ClickMouse(threading.Thread):
-    def __init__(self, delay, button):
+    def __init__(self, delay, button, mouse):
         super(ClickMouse, self).__init__()
         self.delay = delay
+        self.mouse = mouse
         self.button = button
         self.running = False
         self.program_running = True
@@ -42,26 +30,35 @@ class ClickMouse(threading.Thread):
             while self.running:
                 sys.stdout.write("\r[S]top Clicking...")
                 sys.stdout.flush()
-                mouse.click(self.button)
+                self.mouse.click(self.button)
                 time.sleep(self.delay)
             time.sleep(0.1)
 
 
-mouse = Controller()
-click_thread = ClickMouse(delay, button)
-click_thread.start()
 
 
-def on_press(key):
-    if key == start_stop_key:
-        if click_thread.running:
-            click_thread.stop_clicking()
-        else:
-            click_thread.start_clicking()
-    elif key == exit_key:
-        click_thread.exit()
-        listener.stop()
+class Autoclicker(object):
+    def on_press(self,key):
+        if key == self.start_stop_key:
+            if self.click_thread.running:
+                self.click_thread.stop_clicking()
+            else:
+                self.click_thread.start_clicking()
+        elif key == self.exit_key:
+            self.click_thread.exit()
+            self.listener.stop()
 
+    def __init__(self,button,delay):
+        super().__init__()
+        self.mouse = Controller()
+        self.delay = delay
+        self.button = button
+        self.click_thread = ClickMouse(delay, button, self.mouse)
+        self.click_thread.start()
+        self.start_stop_key = KeyCode(char='s')
+        self.exit_key = KeyCode(char='e')
+        self.listener = Listener(on_press=self.on_press)
+        self.listener.start()
 
-with Listener(on_press=on_press) as listener:
-    listener.join()
+    def start(self):
+        self.listener.join()
