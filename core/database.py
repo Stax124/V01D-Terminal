@@ -2,7 +2,7 @@ from prompt_toolkit.completion import WordCompleter, NestedCompleter
 from typing import Callable, Iterable, List, Optional
 import os
 import pickle
-import utils
+import core.utils as utils
 import yaml
 import platform
 from pathlib import Path
@@ -58,6 +58,7 @@ if platform.system() == "Windows":
         "sizeof": None,
         "godmode": None,
         "cheat": None,
+        "threads": None,
         "currencyconverter":None,
         "checklastvid": None,
         "checklasttweet": None,
@@ -228,16 +229,12 @@ winWordCompleter = WordCompleter([
 
 if platform.system() == "Linux":
     if os.path.exists("commands.txt") == False:
-        os.system(f'bash -c "compgen -c >{Void.defPath}/commands.txt"')
+        from Void import defPath
+        os.system(f'bash -c "compgen -c >{defPath}/commands.txt"')
     f = open("commands.txt","r")
     l = f.read().splitlines()
     l = list(dict.fromkeys(l))
-    LinuxCompleter = WordCompleter(list(dict.fromkeys(l + ["instaloader","play","back","currencyconverter","downloadeta","sizeof","md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download","cheat","checklastvid","checklasttweet","checktwitchonline","fileconverter","ping.gg","guid","dns","shorten","transfer","speedtest","weather","covid19","ip","geoip","qrcode","stonks","welcome"])))
+    LinuxCompleter = WordCompleter(list(dict.fromkeys(l + ["threads","instaloader","play","back","currencyconverter","downloadeta","sizeof","md5","sha1","sha224","sha256","sha384","sha512","void","plain2string","eval","welcome","help","elevate","admin","compile","cls","clear","read","gcd","lcm","rng","os","pwned","exit","quit","alias","delalias","+","-","*","/","**","//","download","cheat","checklastvid","checklasttweet","checktwitchonline","fileconverter","ping.gg","guid","dns","shorten","transfer","speedtest","weather","covid19","ip","geoip","qrcode","stonks","welcome"])))
 else:
     LinuxCompleter = None
 
-# ----------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import Void
-    Void.main()

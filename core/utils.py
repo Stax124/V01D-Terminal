@@ -17,8 +17,8 @@ if platform.system() == "Windows":
 from youtube_dl import YoutubeDL
 import random
 import time
-import database
-from download import Download
+import core.database as database
+from core.download import Download
 import os
 from prompt_toolkit.shortcuts import confirm
 
