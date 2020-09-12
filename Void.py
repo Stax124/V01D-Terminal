@@ -3,6 +3,8 @@
 import argparse
 import shlex
 from subprocess import call
+import threading
+from threading import Thread
 from webbrowser import open_new_tab
 from math import *
 from utils import prime
@@ -554,7 +556,6 @@ def switch(userInput:str) -> None:
         if fargs.no_thread:
             play()
         else:
-            from threading import Thread
             thread = Thread(target=play)
             thread.start()
         
@@ -696,6 +697,12 @@ def switch(userInput:str) -> None:
 
     elif splitInput[0].lower() == "pagefile":
         os.system("wmic pagefile list")
+        return
+
+    elif splitInput[0].lower() == "threads":
+        print(f"Active threads: {threading.activeCount()}\n")
+        for t in threading.enumerate():
+            print("{:<30} {:<30}".format(t.name,t.is_alive()))
         return
 
     elif splitInput[0].lower() == "bluetooth":
