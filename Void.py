@@ -534,7 +534,7 @@ def switch(userInput:str) -> None:
                     input_default_bindings=True,
                     input_vo_keyboard=True,
                     osc=True,
-                    ytdl_format=fargs.stream,
+                    ytdl_format=fargs.format,
                     volume=fargs.volume if fargs.volume else 100,
                     volume_max=fargs.maxvolume if fargs.maxvolume else 130)
         else:
