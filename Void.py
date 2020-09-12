@@ -531,7 +531,6 @@ def switch(userInput:str) -> None:
         # player = mpv.MPV(input_default_bindings=True, input_vo_keyboard=True, osc=True)
         if fargs.format:
             player = mpv.MPV(player_operation_mode='pseudo-gui',
-                    script_opts='osc-layout=box,osc-seekbarstyle=bar,osc-deadzonesize=0,osc-minmousemove=3',
                     input_default_bindings=True,
                     input_vo_keyboard=True,
                     osc=True,
@@ -540,7 +539,6 @@ def switch(userInput:str) -> None:
                     volume_max=fargs.maxvolume if fargs.maxvolume else 130)
         else:
             player = mpv.MPV(player_operation_mode='pseudo-gui',
-                    script_opts='osc-layout=box,osc-seekbarstyle=bar,osc-deadzonesize=0,osc-minmousemove=3',
                     input_default_bindings=True,
                     input_vo_keyboard=True,
                     osc=True,

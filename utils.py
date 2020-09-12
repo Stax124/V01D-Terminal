@@ -69,7 +69,7 @@ def ytdown(splitInput: str) -> None:
     fparser.add_argument("--geo_bypass", help="Bypass geographic restriction via faking X-Forwarded-For HTTP header", action="store_true")
     fparser.add_argument("--prefer_ffmpeg", help="If False, use avconv instead of ffmpeg if both are available, otherwise prefer ffmpeg.", action="store_true")
     fparser.add_argument("--proxy", help="URL of the proxy server to use")
-    fparser.add_argument("--thumbnails", help="Print a table of all thumbnails and exit")
+    fparser.add_argument("--thumbnails", help="Print a table of all thumbnails and exit", action="store_true")
     fparser.add_argument("--source", help="Client-side IP address to bind to")
     fparser.add_argument("-a","--archive", help="File name of a file where all downloads are recorded. Videos already present in the file are not downloaded again")
     fparser.add_argument("-u","--username", help="Username for authentication purposes")
