@@ -63,9 +63,9 @@ Can be run as an individual or you can pass arguments
   - Basic math operations can be typed right into the terminal: **2+2-(6/9)**
   - More complicated operations can be called as functions: **sin(2)+ceil(max([1,2,3,4]))**
   - Some basic constants are available out of the box: **pi, tau, e**...
-  - Greatest common divisor: **gcd float,float**
-  - Lowest common multiplier: **lcm float,float**
-  - Random number generator: **rng min,max[not included]**
+  - Greatest common divisor: **gcd float float**
+  - Lowest common multiplier: **lcm float float**
+  - Random number generator: **rng min max[not included]**
 
 # Components
   - Get all information about your rig: **component**
@@ -76,7 +76,7 @@ Can be run as an individual or you can pass arguments
   - Run shell as administrator: **admin, elevate**
   - Exit application: **exit, quit**
   - Get os name: **os**
-  - Open current directory: **open**
+  - Open current directory: **open [directory]**
   - Read file contents: **read [file]**
   - Shutdown machine: **poweroff**
   - Reboot machine: **reboot**
