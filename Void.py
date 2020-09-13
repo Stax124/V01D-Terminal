@@ -250,12 +250,12 @@ def argget(_splitInput: list) -> str:
 
 def welcome() -> None:
     if not args.quiet: print(f"""
-    ██╗   ██╗ ██████╗ ██╗██████╗     ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
-    ██║   ██║██╔═══██╗██║██╔══██╗    ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
-    ██║   ██║██║   ██║██║██║  ██║       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
-    ╚██╗ ██╔╝██║   ██║██║██║  ██║       ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
-     ╚████╔╝ ╚██████╔╝██║██████╔╝       ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
-      ╚═══╝   ╚═════╝ ╚═╝╚═════╝        ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+ ██╗   ██╗  ██████╗  ██╗ ██████╗         ████████╗ ███████╗ ██████╗  ███╗   ███╗ ██╗ ███╗   ██╗  █████╗  ██╗
+ ██║   ██║ ██╔═══██╗ ██║ ██╔══██╗        ╚══██╔══╝ ██╔════╝ ██╔══██╗ ████╗ ████║ ██║ ████╗  ██║ ██╔══██╗ ██║
+ ██║   ██║ ██║   ██║ ██║ ██║  ██║ █████╗    ██║    █████╗   ██████╔╝ ██╔████╔██║ ██║ ██╔██╗ ██║ ███████║ ██║
+ ╚██╗ ██╔╝ ██║   ██║ ██║ ██║  ██║ ╚════╝    ██║    ██╔══╝   ██╔══██╗ ██║╚██╔╝██║ ██║ ██║╚██╗██║ ██╔══██║ ██║
+  ╚████╔╝  ╚██████╔╝ ██║ ██████╔╝           ██║    ███████╗ ██║  ██║ ██║ ╚═╝ ██║ ██║ ██║ ╚████║ ██║  ██║ ███████╗
+   ╚═══╝    ╚═════╝  ╚═╝ ╚═════╝            ╚═╝    ╚══════╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚══════╝
 
     Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users
 
@@ -919,9 +919,9 @@ class Void_Terminal(PromptSession):
                         "       %   -    Modulus\n"
                         "       **  -    Exponentiation\n"
                         "       //  -    floor division\n"
-                        "   gcd - greatest common divisor: gcd [value],[value]\n"
-                        "   lcm - least common multiple: lcm [value],[value]\n"
-                        "   rng - random number generator: rng [min(included)],[max(excluded)]\n"
+                        "   gcd - greatest common divisor: gcd [value] [value]\n"
+                        "   lcm - least common multiple: lcm [value] [value]\n"
+                        "   rng - random number generator: rng [min(included)] [max(excluded)]\n"
 
                     "\n COMPUTER: \n\n"
 
@@ -984,8 +984,8 @@ class Void_Terminal(PromptSession):
                         "   qrcode - make qrcode out of user input: qrcode [text]\n"
                         "   stonks - get stock information: stonks [target]\n"
                         "   cryptocurrency - get cryptocurrency information: cryptocurrency [currency | currency@time | :help]\n"
-                        "   ytdown - download youtube video (if you want both audio and video, download both and then combine them on youselves): ytdown [url]\n"
-
+                        "   ytdown - download video from URL: ytdown [url]\n"
+                        "   play - play audio or video file from URL or path: play [url | file]\n"
                     "\n IN DEVELOPMENT \n\n"
                 )
             else:
