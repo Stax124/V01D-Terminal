@@ -153,7 +153,7 @@ else:
     CONFIG = defPath + r"/config.yml"
 
 # Local version
-VERSION = "v0.7.5pre1"
+VERSION = "v0.8.0pre1"
 
 # -------------------------------------------
 
@@ -434,20 +434,18 @@ def hashfilesum(splitInput,hashalg) -> None:
 
 # --------------------------------------------
 
-class Void_Terminal(object):
-    def __init__(self):
-        super().__init__()
-        self.session = PromptSession(completer=combinedcompleter,
-                        complete_while_typing=config.get("completeWhileTyping"),
-                        mouse_support=config.get("mouseSupport"),
-                        wrap_lines=config.get("wrapLines"),
-                        auto_suggest=AutoSuggestFromHistory(),
-                        search_ignore_case=config.get("searchIgnoreCase"),
-                        enable_open_in_editor=True,
-                        refresh_interval=0,
-                        color_depth=ColorDepth.TRUE_COLOR,
-                        editing_mode=EditingMode.VI
-                        )
+class Void_Terminal(PromptSession):
+    def __init__(self,completer=combinedcompleter,complete_while_typing=config.get("completeWhileTyping"),mouse_support=config.get("mouseSupport"),wrap_lines=config.get("wrapLines"),auto_suggest=AutoSuggestFromHistory(),search_ignore_case=config.get("searchIgnoreCase"),enable_open_in_editor=True,refresh_interval=0,color_depth=ColorDepth.TRUE_COLOR,editing_mode=EditingMode.VI):
+        super().__init__(completer=completer,
+                        complete_while_typing=complete_while_typing,
+                        mouse_support=mouse_support,
+                        wrap_lines=wrap_lines,
+                        auto_suggest=auto_suggest,
+                        search_ignore_case=search_ignore_case,
+                        enable_open_in_editor=enable_open_in_editor,
+                        refresh_interval=refresh_interval,
+                        color_depth=color_depth,
+                        editing_mode=editing_mode)
 
     def switch(self,userInput:str) -> None:
         userInput = userInput.replace("\\","\\\\")
@@ -1154,7 +1152,7 @@ class Void_Terminal(object):
         elif splitInput[0].lower() == "eval": # Show alias dictionary
             while True:
                 try:
-                    _eval = self.session.prompt(message=HTML(f"<user>{USER}</user> <path>eval</path>""<pointer> > </pointer>"), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR, completer=None)
+                    _eval = self.prompt(message=HTML(f"<user>{USER}</user> <path>eval</path>""<pointer> > </pointer>"), style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR, completer=None)
                     if _eval.lower() == "quit" or _eval.lower() == "exit":
                         break
                     else:
@@ -1226,7 +1224,7 @@ class Void_Terminal(object):
                 promptMessage = HTML(f"""
 ┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]\n┗━<pointer>{privileges}</pointer> """)
 
-                userInput = self.session.prompt(message=promptMessage,style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                userInput = self.prompt(message=promptMessage,style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
                 
                 userInput = self.envirotize(userInput)
 
