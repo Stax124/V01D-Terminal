@@ -549,6 +549,7 @@ class Void_Terminal(PromptSession):
                         input_default_bindings=True,
                         input_vo_keyboard=True,
                         osc=True,
+                        load_unsafe_playlists=True,
                         ytdl_format=fargs.format,
                         volume=fargs.volume if fargs.volume else 100,
                         volume_max=fargs.maxvolume if fargs.maxvolume else 130)
@@ -557,6 +558,7 @@ class Void_Terminal(PromptSession):
                         input_default_bindings=True,
                         input_vo_keyboard=True,
                         osc=True,
+                        load_unsafe_playlists=True,
                         volume=fargs.volume if fargs.volume else 100,
                         volume_max=fargs.maxvolume if fargs.maxvolume else 130)
 
@@ -564,6 +566,7 @@ class Void_Terminal(PromptSession):
                 player.play(fargs.TARGET)
                 player.wait_for_playback()
                 player.terminate()
+                player.play
 
             if fargs.no_thread:
                 play()
@@ -716,6 +719,12 @@ class Void_Terminal(PromptSession):
             for t in threading.enumerate():
                 print("{:<30} {:<30}".format(t.name,t.is_alive()))
             return
+
+        elif splitInput[0].lower() == "webcam":
+            core.utils.webcam()
+
+        elif splitInput[0].lower() == "imgviewer":
+            core.utils.imgviewer()
 
         elif splitInput[0].lower() == "bluetooth":
             if isadmin() == True:
