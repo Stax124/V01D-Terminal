@@ -1255,7 +1255,21 @@ class Void_Terminal(PromptSession):
                         os.system("pause")
 
     def envirotize(self,string) -> str:
-        "Applies Environment variables and aliases"
+        "Applies Environment variables"
+        import re
+
+        def expandvars(string, default=None, skip_escaped=False):
+            """Expand environment variables of form $var and ${var}.
+            If parameter 'skip_escaped' is True, all escaped variable references
+            (i.e. preceded by backslashes) are skipped.
+            Unknown variables are set to 'default'. If 'default' is None,
+            they are left unchanged.
+            """
+            def replace_var(m):
+                return os.environ.get(m.group(2) or m.group(1), m.group(0) if default is None else default)
+            reVar = (r'(?<!\\)' if skip_escaped else '') + r'\$(\w+|\{([^}]*)\})'
+            return re.sub(reVar, replace_var, string)
+
         values = aliases.keys()
         if not "delalias" in string:
             for value in values:
@@ -1269,8 +1283,10 @@ class Void_Terminal(PromptSession):
                 spl = i.split("%")[1]
                 env = os.environ[spl]
                 splitInput[splitInput.index(i)] = splitInput[splitInput.index(i)].replace(f"%{spl}%",env)
+            
         
         rebuild = " ".join(splitInput)
+        rebuild = expandvars(rebuild)
 
         if string != rebuild:
             string = rebuild
