@@ -24,6 +24,16 @@ parser.add_argument("--welcome",help="Force welcome screen",action="store_true")
 parser.add_argument("-s","--skipconfig",help="Terminal will skip loading config",action="store_true")
 args = parser.parse_args()
 
+class c:
+        header = '\033[95m'
+        okblue = '\033[94m'
+        okgreen = '\033[92m'
+        warning = '\033[93m'
+        fail = '\033[91m'
+        end = '\033[0m'
+        bold = '\033[1m'
+        underline = '\033[4m'
+
 def iswindows() -> bool:
     return True if platform.system() == "Windows" else False
 
@@ -249,23 +259,23 @@ def argget(_splitInput: list) -> str:
     return " ".join(_splitInput)
 
 def welcome() -> None:
-    if not args.quiet: print(f"""
+    if not args.quiet: print(f"""{c.warning}
  ██╗   ██╗  ██████╗  ██╗ ██████╗         ████████╗ ███████╗ ██████╗  ███╗   ███╗ ██╗ ███╗   ██╗  █████╗  ██╗
  ██║   ██║ ██╔═══██╗ ██║ ██╔══██╗        ╚══██╔══╝ ██╔════╝ ██╔══██╗ ████╗ ████║ ██║ ████╗  ██║ ██╔══██╗ ██║
  ██║   ██║ ██║   ██║ ██║ ██║  ██║ █████╗    ██║    █████╗   ██████╔╝ ██╔████╔██║ ██║ ██╔██╗ ██║ ███████║ ██║
  ╚██╗ ██╔╝ ██║   ██║ ██║ ██║  ██║ ╚════╝    ██║    ██╔══╝   ██╔══██╗ ██║╚██╔╝██║ ██║ ██║╚██╗██║ ██╔══██║ ██║
   ╚████╔╝  ╚██████╔╝ ██║ ██████╔╝           ██║    ███████╗ ██║  ██║ ██║ ╚═╝ ██║ ██║ ██║ ╚████║ ██║  ██║ ███████╗
-   ╚═══╝    ╚═════╝  ╚═╝ ╚═════╝            ╚═╝    ╚══════╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚══════╝
+   ╚═══╝    ╚═════╝  ╚═╝ ╚═════╝            ╚═╝    ╚══════╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚══════╝{c.end}
 
-    Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users
+    {c.okgreen}Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users{c.end}
 
     This help will be shown only once
 
-    Time: {datetime.datetime.now()}
+    {c.okgreen}Time{c.end}: {datetime.datetime.now()}
 
-    Latest release: {core.utils.version()}
+    {c.okgreen}Latest release{c.end}: {core.utils.version()}
 
-    'help' - show available commands
+    {c.okgreen}'help'{c.end} - show available commands
                 """)
 
 def password() -> None: 
@@ -284,56 +294,56 @@ def void(_splitinput) -> None: # Open new terminal or configure it
                 config["multithreading"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["multithreading"] = False
-            if not args.quiet: print(f"multithreading: {config['multithreading']}")
+            if not args.quiet: print(f"multithreading: {c.okgreen}{config['multithreading']}{c.end}")
 
         elif (_splitinput[1] == "fuzzycomplete"):
             if (_splitinput[2].lower() == "true"):
                 config["fuzzycomplete"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["fuzzycomplete"] = False
-            if not args.quiet: print(f"fuzzycomplete: {config['fuzzycomplete']}")
+            if not args.quiet: print(f"fuzzycomplete: {c.okgreen}{config['fuzzycomplete']}{c.end}")
 
         elif (_splitinput[1] == "mouseSupport"):
             if (_splitinput[2].lower() == "true"):
                 config["mouseSupport"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["mouseSupport"] = False
-            if not args.quiet: print(f"mouseSupport: {config['fuzzycomplete']}")
+            if not args.quiet: print(f"mouseSupport: {c.okgreen}{config['fuzzycomplete']}{c.end}")
 
         elif (_splitinput[1] == "completeWhileTyping"):
             if (_splitinput[2].lower() == "true"):
                 config["completeWhileTyping"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["completeWhileTyping"] = False
-            if not args.quiet: print(f"completeWhileTyping: {config['completeWhileTyping']}")
+            if not args.quiet: print(f"completeWhileTyping: {c.okgreen}{config['completeWhileTyping']}{c.end}")
 
         elif (_splitinput[1] == "wrapLines"):
             if (_splitinput[2].lower() == "true"):
                 config["wrapLines"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["wrapLines"] = False
-            if not args.quiet: print(f"wrapLines: {config['fuzzycomplete']}")
+            if not args.quiet: print(f"wrapLines: {c.okgreen}{config['fuzzycomplete']}{c.end}")
 
         elif (_splitinput[1] == "welcome"):
             if (_splitinput[2].lower() == "true"):
                 config["welcome"] = True
             elif (_splitinput[2].lower() == "false"):
                 config["welcome"] = False
-            if not args.quiet: print(f"welcome: {config['fuzzycomplete']}")
+            if not args.quiet: print(f"welcome: {c.okgreen}{config['welcome']}{c.end}")
 
         elif (_splitinput[1] == "mode"):
             if (_splitinput[2].lower() == "powershell"):
                 config["mode"] = "POWERSHELL"
             elif (_splitinput[2].lower() == "cmd"):
                 config["mode"] = "CMD"
-            if not args.quiet: print(f"mode: {config['mode']}")
+            if not args.quiet: print(f"mode: {c.okgreen}{config['mode']}{c.end}")
 
         elif (_splitinput[1] == "linux") and platform.system() == "Linux":
             if (_splitinput[2].lower() == "generate"):
-                if not args.quiet: print("This will take a while...")
+                if not args.quiet: print(f"{c.okgreen}This will take a while...")
                 target = "commands.txt"
                 os.system(f'bash -c "compgen -c >{defPath+"/"+target}"')
-                if not args.quiet: print(f"generated: {target}")
+                if not args.quiet: print(f"generated: {c.okgreen}{target}{c.end}")
 
         elif (_splitinput[1] == "license"):
             try:
@@ -354,18 +364,18 @@ def void(_splitinput) -> None: # Open new terminal or configure it
 
         elif (_splitinput[1] == "version"):
             if _splitinput[2] == "latest":
-                if not args.quiet: print(core.utils.version())
+                if not args.quiet: print(c.okgreen+core.utils.version()+c.end)
             elif _splitinput[2] == "local":
-                if not args.quiet: print(VERSION)
+                if not args.quiet: print(c.okgreen+VERSION+c.end)
 
         elif (_splitinput[1] == "install"):
             if _splitinput[2] == "chocolatey":
                 if isadmin() == True and iswindows():
                     os.system("powershell -Command Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))")
                 elif iswindows():
-                    if not args.quiet: print("Rerun with administrative privileges: use 'admin' or 'elevate'")
+                    if not args.quiet: print(f"{c.warning}Rerun with administrative privileges: use 'admin' or 'elevate'{c.end}")
                 else:
-                    if not args.quiet: print("Only available on Windows")
+                    if not args.quiet: print(f"{c.fail}Only available on Windows{c.end}")
 
         elif _splitinput[1] == "updatePythonPackages":
             import pkg_resources
@@ -381,7 +391,7 @@ def void(_splitinput) -> None: # Open new terminal or configure it
         elif _splitinput[1] == "config":
             if not args.quiet: print(config)
     except:
-        if not args.quiet: print("Not found")
+        if not args.quiet: print(f"{c.fail}Not found{c.end}")
     
     if not args.skipconfig:
         saveToYml(config,CONFIG)
@@ -411,7 +421,7 @@ def read(splitInput) -> None:
 
 def power() -> None:
     "Change Windows power scheme"
-    if not args.quiet: print("If you want best powerscheme paste this, then paste ID of the new scheme: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61")
+    if not args.quiet: print(f"{c.warning}If you want best powerscheme paste this, then paste ID of the new scheme{c.end}: {c.okgreen}powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61{c.end}")
     os.system("powercfg -list")
     _input = input("Select scheme: ")
 
@@ -447,113 +457,113 @@ class Void_Terminal(PromptSession):
     def help(self):
         print("\n" +
         "\n MATH: \n\n"
-            "       +   -    Addition\n"
-            "       -   -    Subtraction\n"
-            "       *   -    Multiplication\n"
-            "       /   -    Division\n"
-            "       %   -    Modulus\n"
-            "       **  -    Exponentiation\n"
-            "       //  -    floor division\n\n"
+            f"       {c.fail}+{c.end}   -    Addition\n"
+            f"       {c.fail}-{c.end}   -    Subtraction\n"
+            f"       {c.fail}*{c.end}   -    Multiplication\n"
+            f"       {c.fail}/{c.end}   -    Division\n"
+            f"       {c.fail}%{c.end}   -    Modulus\n"
+            f"       {c.fail}**{c.end}  -    Exponentiation\n"
+            f"       {c.fail}//{c.end}  -    floor division\n\n"
 
-            "   Other fuctions and constants for chaining from math library, functions need to be called like this: f(arguments)\n"
-            "   acos, acosh, asin, asinh, atan, atan2, atanh, ceil, comb, copysign, cos, cosh, degrees, dist, e, erf, erfc, exp, expm1, fabs, factorial, floor, fmod, frexp, fsum, gamma, gcd, hypot, inf, isclose, isfinite, isinf, isnan, isqrt, ldexp, lgamma, log, log10, log1p, log2, modf, nan, perm, pi, pow, prime, prod, radians, remainder, sin, sinh, sqrt, tan, tanh, tau, trunc  \n\n"
+            f"   Other fuctions and constants for chaining from math library, functions need to be called like this: {c.okgreen}f(arguments){c.end}\n\n"
+            f"   {c.okgreen}acos, acosh, asin, asinh, atan, atan2, atanh, ceil, comb, copysign, cos, cosh, degrees, dist, e, erf, erfc, exp, expm1, fabs, factorial, floor, fmod, frexp, fsum, gamma, gcd, hypot, inf, isclose, isfinite, isinf, isnan, isqrt, ldexp, lgamma, log, log10, log1p, log2, modf, nan, perm, pi, pow, prime, prod, radians, remainder, sin, sinh, sqrt, tan, tanh, tau, trunc{c.end}\n\n"
 
-            "   gcd - greatest common divisor: gcd [value] [value]\n"
-            "   lcm - least common multiple: lcm [value] [value]\n"
-            "   rng - random number generator: rng [min(included)] [max(excluded)]\n"
+            f"   {c.okblue}gcd{c.end} - greatest common divisor: {c.okgreen}gcd [value] [value]{c.end}\n"
+            f"   {c.okblue}lcm{c.end} - least common multiple: {c.okgreen}lcm [value] [value]{c.end}\n"
+            f"   {c.okblue}rng{c.end} - random number generator: {c.okgreen}rng [min(included)] [max(excluded)]{c.end}\n"
 
         "\n COMPUTER: \n\n"
 
-            "   component - info about workstation\n"
-            "   motherboard, cpu, gpu, ram, disk, network, bootinfo - info about your workstation´s component\n"
-            "   pagefile - show pagefile location and size\n"
+            f"   {c.okblue}component{c.end} - info about workstation\n"
+            f"   {c.okblue}motherboard, cpu, gpu, ram, disk, network, bootinfo{c.end} - info about your workstation´s component\n"
+            f"   {c.okblue}pagefile{c.end} - show pagefile location and size\n"
 
         "\n WINDOWS DEFINED: \n\n"
 
-            "   control - control panel\n"
-            "   diskpart - open diskpart\n"
-            "   msconfig - configure your system\n"
-            "   msinfo32 - show windows configuration\n"
-            "   regedit - tool for editing registers\n"
-            "   sysdm.cpl - system properties\n"
-            "   firewall - configure firewall settings\n"
-            "   services - configure services\n"
-            "   manager - computer management\n"
-            "   event - event viewer\n"
-            "   dxdiag - DirectX diagnostics tool\n"
+            f"   {c.okblue}control{c.end} - control panel\n"
+            f"   {c.okblue}diskpart{c.end} - open diskpart\n"
+            f"   {c.okblue}msconfig{c.end} - configure your system\n"
+            f"   {c.okblue}msinfo32{c.end} - show windows configuration\n"
+            f"   {c.okblue}regedit{c.end} - tool for editing registers\n"
+            f"   {c.okblue}sysdm.cpl{c.end} - system properties\n"
+            f"   {c.okblue}firewall{c.end} - configure firewall settings\n"
+            f"   {c.okblue}services{c.end} - configure services\n"
+            f"   {c.okblue}manager{c.end} - computer management\n"
+            f"   {c.okblue}event{c.end} - event viewer\n"
+            f"   {c.okblue}dxdiag{c.end} - DirectX diagnostics tool\n"
 
         "\n CORE: \n\n"
 
-"""   void: - config: prints out current configuration
-            - mode [ POWERSHELL | CMD ]: change mode of executing system commands
-            - install [ chocolatey ]: install packages (will be replaced by winget)
-            - multithreading [ true | false ]: enable multithreading for some commands
-            - mouseSupport [ true | false ]: enable mouse support in terminal
-            - fuzzyComplete [ true | false ]: enable fuzzy completion
-            - completeWhileTyping [ true | false ]: show context menu for autocompletion automatically
-            - wrapLines [ true | false ]: enable wrapping lines in terminal
-            - license { full }: show license, show full license
-            - version [ local | latest ]: show current version, pull latest github version tag
-            - welcome: show welcome message
-            - updatePythonPackages: updates all installed packages
-            - title [ title ]: change title of terminal
+f"""   {c.okblue}void{c.end}: - config: prints out current configuration
+            - {c.okblue}mode{c.end} {c.okgreen}[ POWERSHELL | CMD ]{c.end}: change mode of executing system commands
+            - {c.okblue}install{c.end} {c.okgreen}[ chocolatey ]{c.end}: install packages (will be replaced by winget)
+            - {c.okblue}multithreading{c.end} {c.okgreen}[ true | false ]{c.end}: enable multithreading for some commands
+            - {c.okblue}mouseSupport{c.end} {c.okgreen}[ true | false ]{c.end}: enable mouse support in terminal
+            - {c.okblue}fuzzyComplete{c.end} {c.okgreen}[ true | false ]{c.end}: enable fuzzy completion
+            - {c.okblue}completeWhileTyping{c.end} {c.okgreen}[ true | false ]{c.end}: show context menu for autocompletion automatically
+            - {c.okblue}wrapLines{c.end} {c.okgreen}[ true | false ]{c.end}: enable wrapping lines in terminal
+            - {c.okblue}license{c.end} {c.okgreen}[ full ]{c.end}: show license, show full license
+            - {c.okblue}version{c.end} {c.okgreen}[ local | latest ]{c.end}: show current version, pull latest github version tag
+            - {c.okblue}welcome{c.end}: show welcome message
+            - {c.okblue}updatePythonPackages{c.end}: updates all installed packages
+            - {c.okblue}title{c.end} {c.okgreen}[ title ]{c.end}: change title of terminal
 \n"""
 
-            "   exit | quit - quit application\n"
-            "   os - show operating system\n"
-            "   pwd - print out current working directory\n"
-            "   threads - print out currently running threads\n"
-            "   open - open file explorer in current directory: open [target]\n"
-            "   elevate, admin - grant admin permission for shell\n"
-            "   read - read specified file: read [target]\n"
-            "   sizeof - get size of directory: sizeof [folder]\n"
-            "   godmode - opens Windows 10 god mode control panel\n"
+            f"   {c.okblue}exit, quit{c.end} - quit application\n"
+            f"   {c.okblue}os{c.end} - show operating system\n"
+            f"   {c.okblue}pwd{c.end} - print out current working directory\n"
+            f"   {c.okblue}threads{c.end} - print out currently running threads\n"
+            f"   {c.okblue}open{c.end} - open file explorer in current directory: {c.okgreen}open [target]{c.end}\n"
+            f"   {c.okblue}elevate, admin{c.end} - grant admin permission for shell\n"
+            f"   {c.okblue}read{c.end} - read specified file: {c.okgreen}read [target]{c.end}\n"
+            f"   {c.okblue}sizeof{c.end} - get size of directory: {c.okgreen}sizeof [folder]{c.end}\n"
+            f"   {c.okblue}godmode{c.end} - opens Windows 10 god mode control panel\n"
         
         "\n ALIAS: \n\n"
 
-            "   alias - define your own function: alias [name | -list] [command(if name)]\n"
-            "   delalias - remove alias: delalias [name]\n"
+            f"   {c.okblue}alias{c.end} - define your own function: {c.okgreen}alias [name | -list] [command(if name)]{c.end}\n"
+            f"   {c.okblue}delalias{c.end} - remove alias: {c.okgreen}delalias [name]{c.end}\n"
 
         "\n HASHING: \n\n"
 
-            "   md5, sha1 , sha224, sha256, sha384, sha512 - hash string\n"
-            "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file: (function) [target]\n"
+            f"   {c.okblue}md5, sha1 , sha224, sha256, sha384, sha512{c.end} - hash string\n"
+            f"   {c.okblue}md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum{c.end} - hash file: {c.okgreen}(function) [target]{c.end}\n"
 
         "\n MULTIMEDIA: \n\n"
 
-            "   instaloader - download instagram profile: instaloader [your username] [target username]\n"
-            "   play - play audio or video file from URL or path: play [url | file]\n"
-            "   ytdown - download video from URL: ytdown [url]\n"
+            f"   {c.okblue}instaloader{c.end} - download instagram profile: {c.okgreen}instaloader [your username] [target username]{c.end}\n"
+            f"   {c.okblue}play{c.end} - play audio or video file from URL or path: {c.okgreen}play [url | file]{c.end}\n"
+            f"   {c.okblue}ytdown{c.end} - download video from URL: {c.okgreen}ytdown [url]{c.end}\n"
 
         "\n CURL: \n\n"
 
-            "   cheat - programmer cheat sheet: cheat [querry]\n"
-            "   checklastvid - get last youtube video of specified channel: checklastvid [channel]\n"
-            "   checklasttweet - get last tweet of specified user: checklasttweet [channel]\n"
-            "   checktwitchonline - get information about specified twitch channel: checklastvid [channel]\n"
-            "   fileconverter - convert files to other types: fileconverter [input type] [output type] [target] [new file name]\n"
-            "   ping.gg - server monitoring utility\n"
-            "   guid - generate random GUID\n"
-            "   dns - get dns information\n"
-            "   shorten - make url shorter: shorten [target]\n"
-            "   transfer - temporarily upload a file to server: transfer [target]\n"
-            "   speedtest - check internet connection speed\n"
-            "   weather - check weather, if no location specified, check local weather: weather [location(optional) | moon(optional)]\n"
-            "   covid19 - display status of current covid19 situation in country: covid19 [location(optional)]\n"
-            "   ip - get your external IP address\n"
-            "   geoip - get your external IP address and location: geoip [target(optional)]\n"
-            "   qrcode - make qrcode out of user input: qrcode [text]\n"
-            "   stonks - get stock information: stonks [target]\n"
-            "   cryptocurrency - get cryptocurrency information: cryptocurrency [currency | currency@time | :help]\n"
+            f"   {c.okblue}cheat{c.end} - programmer cheat sheet: {c.okgreen}cheat [querry]{c.end}\n"
+            f"   {c.okblue}checklastvid{c.end} - get last youtube video of specified channel: {c.okgreen}checklastvid [channel]{c.end}\n"
+            f"   {c.okblue}checklasttweet{c.end} - get last tweet of specified user: {c.okgreen}checklasttweet [channel]{c.end}\n"
+            f"   {c.okblue}checktwitchonline{c.end} - get information about specified twitch channel: {c.okgreen}checklastvid [channel]{c.end}\n"
+            f"   {c.okblue}fileconverter{c.end} - convert files to other types: {c.okgreen}fileconverter [input type] [output type] [target] [new file name]{c.end}\n"
+            f"   {c.okblue}ping.gg{c.end} - server monitoring utility\n"
+            f"   {c.okblue}guid{c.end} - generate random GUID\n"
+            f"   {c.okblue}dns{c.end} - get dns information\n"
+            f"   {c.okblue}shorten{c.end} - make url shorter: {c.okgreen}shorten [target]{c.end}\n"
+            f"   {c.okblue}transfer{c.end} - temporarily upload a file to server: {c.okgreen}transfer [target]{c.end}\n"
+            f"   {c.okblue}speedtest{c.end} - check internet connection speed\n"
+            f"   {c.okblue}weather{c.end} - check weather, if no location specified, check local weather: {c.okgreen}weather [location(optional) | moon(optional)]{c.end}\n"
+            f"   {c.okblue}covid19{c.end} - display status of current covid19 situation in country: {c.okgreen}covid19 [location(optional)]{c.end}\n"
+            f"   {c.okblue}ip{c.end} - get your external IP address\n"
+            f"   {c.okblue}geoip{c.end} - get your external IP address and location: {c.okgreen}geoip [target(optional)]{c.end}\n"
+            f"   {c.okblue}qrcode{c.end} - make qrcode out of user input: {c.okgreen}qrcode [text]{c.end}\n"
+            f"   {c.okblue}stonks{c.end} - get stock information: {c.okgreen}stonks [target]{c.end}\n"
+            f"   {c.okblue}cryptocurrency{c.end} - get cryptocurrency information: {c.okgreen}cryptocurrency [currency | currency@time | :help]{c.end}\n"
 
         "\n OTHER FUNCTIONS \n\n"
 
-            "   downloadeta - calculate estimated time of arival: downloadeta [target(GB)] [speed(MB)]\n"
-            "   convert - function for converting temperatures, colors to hex, audio|files and merging them\n"
-            "   power - change your Windows powerplan\n"
-            "   download - dictionary for downloading files: download [-list | target | URL]\n"
-            "   plain2string - convert plain text to strings: plain2string mode[space,file, fileline] text/[filename]\n"
-            "   autoclicker - integrated autoclicker\n"
+            f"   {c.okblue}downloadeta{c.end} - calculate estimated time of arival: {c.okgreen}downloadeta [target(GB)] [speed(MB)]{c.end}\n"
+            f"   {c.okblue}convert{c.end} - function for converting temperatures, colors to hex, audio|files and merging them\n"
+            f"   {c.okblue}power{c.end} - change your Windows powerplan\n"
+            f"   {c.okblue}download{c.end} - dictionary for downloading files: {c.okgreen}download [-list | target | URL]{c.end}\n"
+            f"   {c.okblue}plain2string{c.end} - convert plain text to strings: {c.okgreen}plain2string mode[space,file, fileline] text/[filename]{c.end}\n"
+            f"   {c.okblue}autoclicker{c.end} - integrated autoclicker\n"
     )
 
     def switch(self,userInput:str) -> None:
@@ -588,7 +598,7 @@ class Void_Terminal(PromptSession):
             return
 
         if splitInput[0].lower() == "pwd" and iswindows():
-            print(os.getcwd())
+            print(c.okgreen+os.getcwd()+c.end)
             return
 
         if splitInput[0].lower() == "instaloader":
@@ -709,7 +719,7 @@ class Void_Terminal(PromptSession):
                 target = splitInput[1]
                 core.utils.setbrightness(target)
                 if args.verbose:
-                    if not args.quiet: print(f"Brightness set to {target}")
+                    if not args.quiet: print(f"Brightness set to {c.okgreen}{target}{c.end}")
             except:
                 core.utils.getbrightness()
             return
@@ -727,17 +737,17 @@ class Void_Terminal(PromptSession):
 
         elif splitInput[0].lower() == "checklastvid":
             os.system(f'curl -s "https://decapi.me/youtube/latest_video?user={argget(splitInput[1:])}"')
-            if not args.quiet: print()
+            print()
             return
 
         elif splitInput[0].lower() == "checklasttweet":
             os.system(f'curl -s "https://decapi.me/twitter/latest?name={argget(splitInput[1:])}"')
-            if not args.quiet: print()
+            print()
             return
 
         elif splitInput[0].lower() == "checktwitchonline":
             os.system(f'curl -s "https://decapi.me/twitch/uptime?channel={argget(splitInput[1:])}"')
-            if not args.quiet: print()
+            print()
             return
 
         elif splitInput[0].lower() == "fileconvert":
@@ -774,7 +784,7 @@ class Void_Terminal(PromptSession):
 
         elif splitInput[0].lower() == "dns":
             os.system("curl -L https://edns.ip-api.com/json")
-            if not args.quiet: print()
+            print()
             return
 
         elif splitInput[0].lower() == "speedtest":
@@ -804,7 +814,7 @@ class Void_Terminal(PromptSession):
 
         elif splitInput[0].lower() == "ip":
             os.system("curl api.ipify.org")
-            if not args.quiet: print()
+            print()
             return
 
         elif splitInput[0].lower() == "geoip":
@@ -812,14 +822,14 @@ class Void_Terminal(PromptSession):
                 os.system("curl ipinfo.io/"+splitInput[1])
             except:
                 os.system("curl ipinfo.io")
-            if not args.quiet: print()
+            print()
             return
 
         elif splitInput[0].lower() == "qrcode":
             try:
                 os.system("curl qrenco.de/"+splitInput[1])
             except:
-                if not args.quiet: print("Invalid argument")
+                if not args.quiet: print(f"{c.warning}Invalid argument{c.end}")
             return
 
         elif splitInput[0].lower() == "stonks":
@@ -834,7 +844,7 @@ class Void_Terminal(PromptSession):
             return
 
         elif splitInput[0].lower() == "threads":
-            print(f"Active threads: {threading.activeCount()}\n")
+            print(f"Active threads: {c.warning}{threading.activeCount()}{c.end}\n")
             for t in threading.enumerate():
                 print("{:<30} {:<30}".format(t.name,t.is_alive()))
             return
@@ -852,7 +862,7 @@ class Void_Terminal(PromptSession):
                 elif splitInput[1].lower() == "on":
                     os.system("net start bthserv")
             else:
-                if not args.quiet: print("Run shell as administrator or use: admin")
+                if not args.quiet: print(f"{c.warning}Run shell as administrator or use: admin{c.end}")
             return
 
         elif splitInput[0].lower() == "wifi":
@@ -873,9 +883,9 @@ class Void_Terminal(PromptSession):
             for url in urls:
                 try:
                     response = requests.get(url)
-                    if not args.quiet: print(f"{url} OK: {response.elapsed.total_seconds()}s" if response.ok == True else "SITE DOWN")
+                    if not args.quiet: print(f"{url} {c.okgreen}OK{c.end}: {response.elapsed.total_seconds()}s" if response.ok == True else f"{c.fail}SITE DOWN{c.end}")
                 except:
-                    if not args.quiet: print(url + " SITE DOWN")
+                    if not args.quiet: print(url + f" {c.fail}SITE DOWN{c.end}")
 
         elif splitInput[0].lower() == "poweroff":
             fparser = argparse.ArgumentParser(prog="poweroff")
@@ -962,32 +972,32 @@ class Void_Terminal(PromptSession):
 
         elif splitInput[0].lower() == "sha1":
             text = argget(splitInput[1:])
-            if not args.quiet: print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(),text)
+            if not args.quiet: print(hashlib.sha1(bytes(text, "utf-8")).hexdigest(),c.okgreen+text+c.end)
             return
 
         elif splitInput[0].lower() == "sha224":
             text = argget(splitInput[1:])
-            if not args.quiet: print(hashlib.sha224(bytes(text, "utf-8")).hexdigest(),text)
+            if not args.quiet: print(hashlib.sha224(bytes(text, "utf-8")).hexdigest(),c.okgreen+text+c.end)
             return
 
         elif splitInput[0].lower() == "sha256":
             text = argget(splitInput[1:])
-            if not args.quiet: print(hashlib.sha256(bytes(text, "utf-8")).hexdigest(),text)
+            if not args.quiet: print(hashlib.sha256(bytes(text, "utf-8")).hexdigest(),c.okgreen+text+c.end)
             return
 
         elif splitInput[0].lower() == "sha384":
             text = argget(splitInput[1:])
-            if not args.quiet: print(hashlib.sha384(bytes(text, "utf-8")).hexdigest(),text)
+            if not args.quiet: print(hashlib.sha384(bytes(text, "utf-8")).hexdigest(),c.okgreen+text+c.end)
             return
 
         elif splitInput[0].lower() == "sha512":
             text = argget(splitInput[1:])
-            if not args.quiet: print(hashlib.sha512(bytes(text, "utf-8")).hexdigest(),text)
+            if not args.quiet: print(hashlib.sha512(bytes(text, "utf-8")).hexdigest(),c.okgreen+text+c.end)
             return
 
         elif splitInput[0].lower() == "md5":
             text = argget(splitInput[1:])
-            if not args.quiet: print(hashlib.md5(bytes(text, "utf-8")).hexdigest(),text)
+            if not args.quiet: print(hashlib.md5(bytes(text, "utf-8")).hexdigest(),c.okgreen+text+c.end)
             return
 
         # Hash sum -----------------------------------------------
@@ -1061,7 +1071,7 @@ class Void_Terminal(PromptSession):
                             total_size += os.path.getsize(fp)
 
                 return total_size
-            if not args.quiet: print(get_size(splitInput[1]) / 1000000,"MB")
+            if not args.quiet: print(get_size(splitInput[1]) / 1000000,f"{c.okgreen}MB{c.end}")
 
         elif splitInput[0].lower() == "currencyconverter": # Show welcome screen
             fparser = argparse.ArgumentParser(prog="currencyconverter")
@@ -1072,7 +1082,7 @@ class Void_Terminal(PromptSession):
             except SystemExit: return
 
             rate = core.utils.currencyconverter(fargs.base.upper(), fargs.other.upper())
-            if not args.quiet: print(f"{(rate * float(fargs.amount)).__round__(2)} {fargs.other}")
+            if not args.quiet: print(f"{(rate * float(fargs.amount)).__round__(2)} {c.okgreen}{fargs.other}{c.end}")
             return
 
         elif splitInput[0] == "os": # Show os
@@ -1157,7 +1167,7 @@ class Void_Terminal(PromptSession):
                 import core.pwned as pwned
                 if not args.quiet: print(pwned.lookup_pwned_api(splitInput[1]))
             except:
-                if not args.quiet: print("Error")
+                if not args.quiet: print(f"{c.fail}Error{c.end}")
             
             return
 
@@ -1179,7 +1189,7 @@ class Void_Terminal(PromptSession):
                 try:
                     splitInput[2]
                 except:
-                    if not args.quiet: print("No command specified")
+                    if not args.quiet: print(f"{c.warning}No command specified{c.end}")
                     return
                 complete = " ".join(l)
                 aliases[splitInput[1]] = complete
@@ -1193,7 +1203,7 @@ class Void_Terminal(PromptSession):
                 aliases.pop(splitInput[1])
                 core.database.WriteAliases(aliases)
             except:
-                if not args.quiet: print("Name is not in list ! \nUsage: delalias [name]")
+                if not args.quiet: print(f"{c.fail}Name is not in list !{c.end} \nUsage: {c.okgreen}delalias [name]{c.end}")
 
         elif splitInput[0].lower() == "eval": # Show alias dictionary
             while True:
@@ -1204,7 +1214,7 @@ class Void_Terminal(PromptSession):
                     else:
                         eval(compile(_eval,"<string>","exec"))
                 except Exception as e:
-                    if not args.quiet: print(e)
+                    if not args.quiet: print(f"{c.fail}{e}{c.end}")
             return
 
         elif splitInput[0].lower() == "download": # Dictionary for downloading (direct link to website mirror) or download straight to active folder
@@ -1227,7 +1237,7 @@ class Void_Terminal(PromptSession):
                     for item in splitInput[1:]:
                         core.utils.download(item)
                 except Exception as e:
-                    if not args.quiet: print(e)
+                    if not args.quiet: print(f"{c.fail}{e}{c.end}")
 
         else:
             try: # Calculator
@@ -1236,7 +1246,7 @@ class Void_Terminal(PromptSession):
                     if not args.quiet: print(output)
                 else:
                     raise
-            except Exception as e: # Try if input is alias
+            except: # Try if input is alias
                 try:
                     if os.getcwd() != LASTDIR:
                         LASTDIR = os.getcwd()
@@ -1258,7 +1268,7 @@ class Void_Terminal(PromptSession):
             try:
                 os.chdir(args.directory)
             except:
-                if not args.quiet: print("Directory not found or accessible")
+                if not args.quiet: print(f"{c.fail}Directory not found or accessible{c.end}")
                 return
 
         if config.get("welcome") or args.welcome:
@@ -1275,7 +1285,7 @@ class Void_Terminal(PromptSession):
                 userInput = self.envirotize(userInput)
 
                 if args.echo:
-                    if not args.quiet: print(userInput)
+                    if not args.quiet: print(f"{c.okgreen}{userInput}{c.end}")
 
                 if " & " in userInput:
                     for i in userInput.split(" & "):
@@ -1287,7 +1297,7 @@ class Void_Terminal(PromptSession):
                 if not args.quiet: print()
             except Exception as error:
                 if not args.quiet:
-                    print(error.with_traceback(error.__traceback__))
+                    print(f"{c.fail}{error.with_traceback(error.__traceback__)}{c.end}")
                     if iswindows():
                         os.system("pause")
 
