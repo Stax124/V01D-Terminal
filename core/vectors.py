@@ -20,10 +20,7 @@ class Vector3():
             return True
         else: return False
     def normalize(self):
-        try:
-            return self.x / self.magnitude, self.y / self.magnitude, self.z / self.magnitude
-        except ZeroDivisionError:
-            return Vector3(0,0,0)
+        return self.x / self.magnitude, self.y / self.magnitude, self.z / self.magnitude
 
 class Vector2():
     def __init__(self,x:float,y:float):
@@ -46,7 +43,4 @@ class Vector2():
             return True
         else: return False
     def normalize(self):
-        try:
-            return Vector2(self.x / self.magnitude, self.y / self.magnitude)
-        except ZeroDivisionError:
-            return Vector2(0,0)
+        return Vector2(self.x / self.magnitude, self.y / self.magnitude)
