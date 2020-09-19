@@ -165,3 +165,6 @@ Can be run as an individual or you can pass arguments
   - Open auto-py-to-exe Python compiler (must be installed and on PATH): **compile**
   - Convert file or string into list of strings: **plain2string [line,file,fileline] {file}**
   - Get ETA of downloading: **downloadeta [target][suffix] [download speed][suffix]**
+  
+  # Disclaimer
+  **Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway)**
