@@ -1,4 +1,5 @@
 import os
+import re
 import shlex
 from typing import Callable, Iterable, List, Optional
 from prompt_toolkit.completion import CompleteEvent, Completer, Completion
@@ -50,12 +51,26 @@ class PathCompleter(Completer):
         except:
             text = document.text_before_cursor
 
+        def expandvars(string, default=None, skip_escaped=False):
+            """Expand environment variables of form $var and ${var}.
+            If parameter 'skip_escaped' is True, all escaped variable references
+            (i.e. preceded by backslashes) are skipped.
+            Unknown variables are set to 'default'. If 'default' is None,
+            they are left unchanged.
+            """
+            def replace_var(m):
+                return os.environ.get(m.group(2) or m.group(1), m.group(0) if default is None else default)
+            reVar = (r'(?<!\\)' if skip_escaped else '') + r'\$(\w+|\{([^}]*)\})'
+            return re.sub(reVar, replace_var, string)
+
         if text.find("%") != -1:
             try:
                 spl = text.split("%")[1]
                 env = os.environ[spl]
                 text = text.replace(f"%{spl}%",env)
             except: pass
+
+        text = expandvars(text)
 
         # Complete only when we have at least the minimal input length,
         # otherwise, we can too many results and autocompletion will become too
@@ -111,8 +126,3 @@ class PathCompleter(Completer):
                 yield Completion(completion, 0, display=filename)
         except OSError:
             pass
-
-
-if __name__ == "__main__":
-    import Void
-    Void.main()
