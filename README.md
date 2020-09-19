@@ -17,6 +17,27 @@ V01D-Terminal is **Python** based terminal application build on prompt-toolkit l
 
 Can be run as an individual or you can pass arguments
 
+# Installation
+
+**For windows users:**
+  - Via installer: Standard procedure if its your first time installing it, in case of updating, it should have it´s path already set up.
+  - Via archive: Download .rar or .zip archive and it should have Void-Terminal.exe executable ready to use, no installing needed.
+
+**For Linux users:**
+  - Sorry, I cant provide package for you now. You will need to download .tar.gz manually, unzip it and install python dependencies by yourself. In future I will try to provide better way. If you have any problems running it, just make an issue on GitHub and I will try to respond asap. I would apprisate, if you have experience with linux packaging, feel free to contact me and we could work that out.
+  For now, just use "python3 Void.py".
+
+# Windows Terminal integration
+**If you have Windows Terminal installed, open the dropdown menu and select settings**
+ - **Add this entry**: {
+                // Make changes here to the Void-Terminal profile.
+                "guid": "{45d2d006-c667-4e6b-bead-96233a11d754}",
+                "name": "Void-Terminal",
+                "commandline": "**PATH-TO-Void-Terminal.exe** -v -s -d **WHERE-TO-START-TERMINAL**",
+                "hidden": false
+            },
+
+
 # Functions
   - Execute wide range of commands from cmd and powershell
   - Calculator

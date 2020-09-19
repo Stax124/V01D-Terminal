@@ -246,6 +246,23 @@ def imgviewer():
     # --------------------------------- Close & Exit ---------------------------------
     window.close()
 
+def time_reformat(duration: int):
+        minutes, seconds = divmod(duration, 60)
+        hours, minutes = divmod(minutes, 60)
+        days, hours = divmod(hours, 24)
+
+        duration = []
+        if days > 0:
+            duration.append('{} days'.format(days))
+        if hours > 0:
+            duration.append('{} hours'.format(hours))
+        if minutes > 0:
+            duration.append('{} minutes'.format(minutes))
+        if seconds > 0:
+            duration.append('{} seconds'.format(seconds))
+
+        return ', '.join(duration)
+
 def gcd(a: float, b: float) -> float:
     "Returs greatest common dividor"
     if b > a:

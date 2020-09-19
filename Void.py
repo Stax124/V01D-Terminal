@@ -464,6 +464,16 @@ class Void_Terminal(PromptSession):
             password()
             return
 
+        if splitInput[0].lower() == "thread":
+            fparser = argparse.ArgumentParser(prog="thread")
+            fparser.add_argument("function", help="Fuction to run")
+            try: fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit: return
+
+            thread = Thread(target=self.switch,args=splitInput[1:])
+            thread.start()
+            return
+
         if splitInput[0].lower() == "ls" and iswindows():
             os.system("dir")
             return
@@ -510,7 +520,7 @@ class Void_Terminal(PromptSession):
             target = out[0]
             speed = out[1]
 
-            if not args.quiet: print(f"ETA: {((target / speed) / 60 / 60).__round__(3)} h")
+            if not args.quiet: print(core.utils.time_reformat(target / speed))
             return
 
         if splitInput[0].lower() == "back":
@@ -1300,5 +1310,6 @@ if __name__ == "__main__":
         userInput = app.envirotize(args.command)
 
         app.switch(userInput)
+        sys.exit(0)
     else: app.main()
     
