@@ -335,9 +335,6 @@ def void(_splitinput) -> None: # Open new terminal or configure it
                 os.system(f'bash -c "compgen -c >{defPath+"/"+target}"')
                 if not args.quiet: print(f"generated: {target}")
 
-        elif (_splitinput[1] == "start"):
-            os.system(f"start {__location__}")
-
         elif (_splitinput[1] == "license"):
             try:
                 if _splitinput[2] == "full":
@@ -446,6 +443,118 @@ class Void_Terminal(PromptSession):
                         refresh_interval=refresh_interval,
                         color_depth=color_depth,
                         editing_mode=editing_mode)
+
+    def help(self):
+        print("\n" +
+        "\n MATH: \n\n"
+            "       +   -    Addition\n"
+            "       -   -    Subtraction\n"
+            "       *   -    Multiplication\n"
+            "       /   -    Division\n"
+            "       %   -    Modulus\n"
+            "       **  -    Exponentiation\n"
+            "       //  -    floor division\n\n"
+
+            "   Other fuctions and constants for chaining from math library, functions need to be called like this: f(arguments)\n"
+            "   acos, acosh, asin, asinh, atan, atan2, atanh, ceil, comb, copysign, cos, cosh, degrees, dist, e, erf, erfc, exp, expm1, fabs, factorial, floor, fmod, frexp, fsum, gamma, gcd, hypot, inf, isclose, isfinite, isinf, isnan, isqrt, ldexp, lgamma, log, log10, log1p, log2, modf, nan, perm, pi, pow, prime, prod, radians, remainder, sin, sinh, sqrt, tan, tanh, tau, trunc  \n\n"
+
+            "   gcd - greatest common divisor: gcd [value] [value]\n"
+            "   lcm - least common multiple: lcm [value] [value]\n"
+            "   rng - random number generator: rng [min(included)] [max(excluded)]\n"
+
+        "\n COMPUTER: \n\n"
+
+            "   component - info about workstation\n"
+            "   motherboard, cpu, gpu, ram, disk, network, bootinfo - info about your workstation´s component\n"
+            "   pagefile - show pagefile location and size\n"
+
+        "\n WINDOWS DEFINED: \n\n"
+
+            "   control - control panel\n"
+            "   diskpart - open diskpart\n"
+            "   msconfig - configure your system\n"
+            "   msinfo32 - show windows configuration\n"
+            "   regedit - tool for editing registers\n"
+            "   sysdm.cpl - system properties\n"
+            "   firewall - configure firewall settings\n"
+            "   services - configure services\n"
+            "   manager - computer management\n"
+            "   event - event viewer\n"
+            "   dxdiag - DirectX diagnostics tool\n"
+
+        "\n CORE: \n\n"
+
+"""   void: - config: prints out current configuration
+            - mode [ POWERSHELL | CMD ]: change mode of executing system commands
+            - install [ chocolatey ]: install packages (will be replaced by winget)
+            - multithreading [ true | false ]: enable multithreading for some commands
+            - mouseSupport [ true | false ]: enable mouse support in terminal
+            - fuzzyComplete [ true | false ]: enable fuzzy completion
+            - completeWhileTyping [ true | false ]: show context menu for autocompletion automatically
+            - wrapLines [ true | false ]: enable wrapping lines in terminal
+            - license { full }: show license, show full license
+            - version [ local | latest ]: show current version, pull latest github version tag
+            - welcome: show welcome message
+            - updatePythonPackages: updates all installed packages
+            - title [ title ]: change title of terminal
+\n"""
+
+            "   exit | quit - quit application\n"
+            "   os - show operating system\n"
+            "   pwd - print out current working directory\n"
+            "   threads - print out currently running threads\n"
+            "   open - open file explorer in current directory: open [target]\n"
+            "   elevate, admin - grant admin permission for shell\n"
+            "   read - read specified file: read [target]\n"
+            "   sizeof - get size of directory: sizeof [folder]\n"
+            "   godmode - opens Windows 10 god mode control panel\n"
+        
+        "\n ALIAS: \n\n"
+
+            "   alias - define your own function: alias [name | -list] [command(if name)]\n"
+            "   delalias - remove alias: delalias [name]\n"
+
+        "\n HASHING: \n\n"
+
+            "   md5, sha1 , sha224, sha256, sha384, sha512 - hash string\n"
+            "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file: (function) [target]\n"
+
+        "\n MULTIMEDIA: \n\n"
+
+            "   instaloader - download instagram profile: instaloader [your username] [target username]\n"
+            "   play - play audio or video file from URL or path: play [url | file]\n"
+            "   ytdown - download video from URL: ytdown [url]\n"
+
+        "\n CURL: \n\n"
+
+            "   cheat - programmer cheat sheet: cheat [querry]\n"
+            "   checklastvid - get last youtube video of specified channel: checklastvid [channel]\n"
+            "   checklasttweet - get last tweet of specified user: checklasttweet [channel]\n"
+            "   checktwitchonline - get information about specified twitch channel: checklastvid [channel]\n"
+            "   fileconverter - convert files to other types: fileconverter [input type] [output type] [target] [new file name]\n"
+            "   ping.gg - server monitoring utility\n"
+            "   guid - generate random GUID\n"
+            "   dns - get dns information\n"
+            "   shorten - make url shorter: shorten [target]\n"
+            "   transfer - temporarily upload a file to server: transfer [target]\n"
+            "   speedtest - check internet connection speed\n"
+            "   weather - check weather, if no location specified, check local weather: weather [location(optional) | moon(optional)]\n"
+            "   covid19 - display status of current covid19 situation in country: covid19 [location(optional)]\n"
+            "   ip - get your external IP address\n"
+            "   geoip - get your external IP address and location: geoip [target(optional)]\n"
+            "   qrcode - make qrcode out of user input: qrcode [text]\n"
+            "   stonks - get stock information: stonks [target]\n"
+            "   cryptocurrency - get cryptocurrency information: cryptocurrency [currency | currency@time | :help]\n"
+
+        "\n OTHER FUNCTIONS \n\n"
+
+            "   downloadeta - calculate estimated time of arival: downloadeta [target(GB)] [speed(MB)]\n"
+            "   convert - function for converting temperatures, colors to hex, audio|files and merging them\n"
+            "   power - change your Windows powerplan\n"
+            "   download - dictionary for downloading files: download [-list | target | URL]\n"
+            "   plain2string - convert plain text to strings: plain2string mode[space,file, fileline] text/[filename]\n"
+            "   autoclicker - integrated autoclicker\n"
+    )
 
     def switch(self,userInput:str) -> None:
         userInput = userInput.replace("\\","\\\\")
@@ -928,92 +1037,10 @@ class Void_Terminal(PromptSession):
         elif splitInput[0].lower() == "help": # if not args.quiet: print cmd help and defined help at the same time
             if iswindows():
                 os.system("help")
-                if not args.quiet: print("\n" +
-
-                    "\n MATH: \n\n"
-                        "       +   -    Addition\n"
-                        "       -   -    Subtraction\n"
-                        "       *   -    Multiplication\n"
-                        "       /   -    Division\n"
-                        "       %   -    Modulus\n"
-                        "       **  -    Exponentiation\n"
-                        "       //  -    floor division\n"
-                        "   gcd - greatest common divisor: gcd [value] [value]\n"
-                        "   lcm - least common multiple: lcm [value] [value]\n"
-                        "   rng - random number generator: rng [min(included)] [max(excluded)]\n"
-
-                    "\n COMPUTER: \n\n"
-
-                        "   component - info about workstation\n"
-                        "   motherboard, cpu, gpu, ram, disk, network, bootinfo - info about your workstation´s component\n"
-
-                    "\n WINDOWS DEFINED: \n\n"
-
-                        "   control - control panel\n"
-                        "   diskpart - open diskpart\n"
-                        "   msconfig - configure your system\n"
-                        "   msinfo32 - show windows configuration\n"
-                        "   regedit - tool for editing registers\n"
-                        "   sysdm.cpl - system properties\n"
-                        "   firewall - configure firewall settings\n"
-                        "   services - configure services\n"
-                        "   manager - computer management\n"
-                        "   event - event viewer\n"
-                        "   dxdiag - DirectX diagnostics tool\n"
-
-                    "\n MANAGEMENT: \n\n"
-
-                        "   exit | quit - quit application\n"
-                        "   os - show operating system\n"
-                    
-                    "\n ALIAS: \n\n"
-
-                        "   alias - define your own function: alias [name | -list] [command(if name)]\n"
-                        "   delalias - remove alias: delalias [name]\n"
-
-                    "\n OTHER FUNCTIONS \n\n"
-                        "   instaloader - download instagram profile: instaloader [your username] [target username]\n"
-                        "   downloadeta - calculate estimated time of arival: downloadeta [target(GB)] [speed(MB)]\n"
-                        "   convert - function for converting temperatures, colors to hex, audio|files and merging them\n"
-                        "   ping - never ending ping loop\n"
-                        "   pagefile - show pagefile location and size\n"
-                        "   read - read specified .txt file: read [target]\n"
-                        "   power - change your Windows powerplan\n"
-                        "   download - dictionary for downloading files: download [-list | target | URL]\n"
-                        "   open - open file explorer in current directory\n"
-                        "   plain2string - convert plain text to strings: plain2string mode[space,file, fileline] text/[filename]\n"
-                        "   md5, sha1 , sha224, sha256, sha384, sha512 - hash string\n"
-                        "   md5sum, sha1sum, sha224sum, sha256sum, sha384sum, sha512sum - hash file: (function) [target]\n"
-                        "   elevate, admin - grant admin permission for shell\n"
-                        "   cheat - programmer cheat sheet: cheat [querry]\n"
-                        "   checklastvid - get last youtube video of specified channel: checklastvid [channel]\n"
-                        "   checklasttweet - get last tweet of specified user: checklasttweet [channel]\n"
-                        "   checktwitchonline - get information about specified twitch channel: checklastvid [channel]\n"
-                        "   fileconverter - convert files to other types: fileconverter [input type] [output type] [target] [new file name]\n"
-                        "   ping.gg - server monitoring utility\n"
-                        "   guid - generate random GUID\n"
-                        "   dns - get dns information\n"
-                        "   shorten - make url shorter: shorten [target]\n"
-                        "   transfer - temporarily upload a file to server: transfer [target]\n"
-                        "   speedtest - check internet connection speed\n"
-                        "   weather - check weather, if no location specified, check local weather: weather [location(optional) | moon(optional)]\n"
-                        "   covid19 - display status of current covid19 situation in country: covid19 [location(optional)]\n"
-                        "   ip - get your external IP address\n"
-                        "   geoip - get your external IP address and location: geoip [target(optional)]\n"
-                        "   qrcode - make qrcode out of user input: qrcode [text]\n"
-                        "   stonks - get stock information: stonks [target]\n"
-                        "   cryptocurrency - get cryptocurrency information: cryptocurrency [currency | currency@time | :help]\n"
-                        "   ytdown - download video from URL: ytdown [url]\n"
-                        "   play - play audio or video file from URL or path: play [url | file]\n"
-                    "\n IN DEVELOPMENT \n\n"
-                )
+                if not args.quiet: self.help()
             else:
                 call("bash -c help", shell=True)
                 
-            return
-
-        elif splitInput[0].lower() == "ping": # Never ending ping loop
-            os.system("start ping google.com -t")
             return
 
         elif splitInput[0].lower() == "welcome": # Show welcome screen

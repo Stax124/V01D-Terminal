@@ -51,6 +51,7 @@ if platform.system() == "Windows":
         "poweroff":None,
         "reboot":None,
         "instaloader":None,
+        "pwd":None,
         "autoclicker":None,
         "brightness":None,
         "plain2string": None,
