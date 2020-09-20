@@ -668,6 +668,8 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
             fparser = argparse.ArgumentParser(prog="play")
             fparser.add_argument("TARGET", help="Filename or URL")
             fparser.add_argument("--volume", help="Set default volume ( 0 - 130 )", type=int)
+            fparser.add_argument("-r","--resolution", help="Set resolution target", type=int)
+            fparser.add_argument("--fps", help="Set fps target", type=int)
             fparser.add_argument("--no-thread", help="Run in main thread", action="store_true")
             fparser.add_argument("--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int)
             fparser.add_argument("-f","--format", help="Select stream ( best,worst,140 etc. )")
@@ -688,6 +690,17 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
                     osc=True,
                     load_unsafe_playlists=True,
                     ytdl_format=fargs.format,
+                    volume=fargs.volume if fargs.volume else 100,
+                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
+            elif fargs.resolution or fargs.fps:
+                player = mpv.MPV(
+                    player_operation_mode='pseudo-gui',
+                    log_handler=my_log,
+                    input_default_bindings=True,
+                    input_vo_keyboard=True,
+                    osc=True,
+                    load_unsafe_playlists=True,
+                    ytdl_format=f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best",
                     volume=fargs.volume if fargs.volume else 100,
                     volume_max=fargs.maxvolume if fargs.maxvolume else 130)
             else:
