@@ -57,6 +57,7 @@ def _import():
     from prompt_toolkit.enums import EditingMode
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
+    from prompt_toolkit.patch_stdout import patch_stdout
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
     from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter
     from core.PathCompleter import PathCompleter
@@ -82,6 +83,7 @@ try:
     from prompt_toolkit.enums import EditingMode
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
+    from prompt_toolkit.patch_stdout import patch_stdout
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
     from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter
     from core.PathCompleter import PathCompleter
@@ -259,7 +261,7 @@ def argget(_splitInput: list) -> str:
     return " ".join(_splitInput)
 
 def welcome() -> None:
-    if not args.quiet: print(f"""{c.warning}
+    if not args.quiet: print(f"""{c.fail}
  ██╗   ██╗  ██████╗  ██╗ ██████╗         ████████╗ ███████╗ ██████╗  ███╗   ███╗ ██╗ ███╗   ██╗  █████╗  ██╗
  ██║   ██║ ██╔═══██╗ ██║ ██╔══██╗        ╚══██╔══╝ ██╔════╝ ██╔══██╗ ████╗ ████║ ██║ ████╗  ██║ ██╔══██╗ ██║
  ██║   ██║ ██║   ██║ ██║ ██║  ██║ █████╗    ██║    █████╗   ██████╔╝ ██╔████╔██║ ██║ ██╔██╗ ██║ ███████║ ██║
@@ -267,9 +269,10 @@ def welcome() -> None:
   ╚████╔╝  ╚██████╔╝ ██║ ██████╔╝           ██║    ███████╗ ██║  ██║ ██║ ╚═╝ ██║ ██║ ██║ ╚████║ ██║  ██║ ███████╗
    ╚═══╝    ╚═════╝  ╚═╝ ╚═════╝            ╚═╝    ╚══════╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚══════╝{c.end}
 
-    {c.okgreen}Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users{c.end}
+    {c.okblue}Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users{c.end}
 
-    This help will be shown only once
+    For full functionality, please use commands one after another: {c.okgreen}'void install chocolatey'{c.end}, {c.okgreen}'choco install mpv'{c.end}, {c.okgreen}'choco install ffmpeg'{c.end}
+    Linux users may use: {c.okgreen}'sudo apt install ffmpeg'{c.end}, {c.okgreen}'sudo apt install mpv'{c.end}
 
     {c.okgreen}Time{c.end}: {datetime.datetime.now()}
 
@@ -559,7 +562,7 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
         "\n OTHER FUNCTIONS \n\n"
 
             f"   {c.okblue}downloadeta{c.end} - calculate estimated time of arival: {c.okgreen}downloadeta [target(GB)] [speed(MB)]{c.end}\n"
-            f"   {c.okblue}convert{c.end} - function for converting temperatures, colors to hex, audio|files and merging them\n"
+            f"   {c.okblue}convert{c.end} - function for converting temperatures, colors to hex, audio or video files\n"
             f"   {c.okblue}power{c.end} - change your Windows powerplan\n"
             f"   {c.okblue}download{c.end} - dictionary for downloading files: {c.okgreen}download [-list | target | URL]{c.end}\n"
             f"   {c.okblue}plain2string{c.end} - convert plain text to strings: {c.okgreen}plain2string mode[space,file, fileline] text/[filename]{c.end}\n"
@@ -673,23 +676,30 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
 
             import mpv
 
+            def my_log(loglevel, component, message):
+                print('[{}] {}: {}'.format(loglevel, component, message), flush=True)
+
             if fargs.format:
-                player = mpv.MPV(player_operation_mode='pseudo-gui',
-                        input_default_bindings=True,
-                        input_vo_keyboard=True,
-                        osc=True,
-                        load_unsafe_playlists=True,
-                        ytdl_format=fargs.format,
-                        volume=fargs.volume if fargs.volume else 100,
-                        volume_max=fargs.maxvolume if fargs.maxvolume else 130)
+                player = mpv.MPV(
+                    player_operation_mode='pseudo-gui',
+                    log_handler=my_log,
+                    input_default_bindings=True,
+                    input_vo_keyboard=True,
+                    osc=True,
+                    load_unsafe_playlists=True,
+                    ytdl_format=fargs.format,
+                    volume=fargs.volume if fargs.volume else 100,
+                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
             else:
-                player = mpv.MPV(player_operation_mode='pseudo-gui',
-                        input_default_bindings=True,
-                        input_vo_keyboard=True,
-                        osc=True,
-                        load_unsafe_playlists=True,
-                        volume=fargs.volume if fargs.volume else 100,
-                        volume_max=fargs.maxvolume if fargs.maxvolume else 130)
+                player = mpv.MPV(
+                    player_operation_mode='pseudo-gui',
+                    log_handler=my_log,
+                    input_default_bindings=True,
+                    input_vo_keyboard=True,
+                    osc=True,
+                    load_unsafe_playlists=True,
+                    volume=fargs.volume if fargs.volume else 100,
+                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
 
             def play():
                 player.play(fargs.TARGET)
@@ -1343,10 +1353,13 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
 if __name__ == "__main__":
     app = Void_Terminal()
 
-    if args.command:
-        userInput = app.envirotize(args.command)
+    with patch_stdout(app):
+        if args.command:
+            userInput = app.envirotize(args.command)
 
-        app.switch(userInput)
-        sys.exit(0)
-    else: app.main()
+            app.switch(userInput)
+            sys.exit(0)
+        else: app.main()
+
+    
     
