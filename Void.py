@@ -51,7 +51,7 @@ def _import():
     import datetime
     import hashlib
     import ctypes
-    from core.elevate import elevate
+    import mpv
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
@@ -66,6 +66,7 @@ def _import():
     from prompt_toolkit.output.color_depth import ColorDepth
 
     # Project stuff
+    from core.elevate import elevate
     import core.database
     import core.osBased
     import core.utils
@@ -77,7 +78,7 @@ try:
     import hashlib
     import requests
     import ctypes
-    from core.elevate import elevate
+    import mpv
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
@@ -95,6 +96,7 @@ try:
     import core.database
     import core.osBased
     import core.utils
+    from core.elevate import elevate
 
 
 except Exception as e:
@@ -111,10 +113,10 @@ except Exception as e:
         # Ask to install all dependencies, if denied, import error will be raised
         if confirm("Install dependencies: "):
             if iswindows():
-                os.system("pip install colr python-mpv clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
+                os.system("pip install python-mpv clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
             else:
                 os.system(
-                    "sudo pip3 install colr python-mpv clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
+                    "sudo pip3 install python-mpv clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
         else:
             exit(0)
 
@@ -151,6 +153,8 @@ defPath = os.getcwd()
 
 # For use in "back"
 LASTDIR = ""
+
+VOLUME = 100
 
 playing = False
 playerInitialized = False
@@ -456,6 +460,7 @@ class Void_Terminal(PromptSession):
                         refresh_interval=refresh_interval,
                         color_depth=color_depth,
                         editing_mode=editing_mode)
+        self.player = mpv.MPV()
 
     def help(self):
         print("\n" +
@@ -573,6 +578,7 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
         userInput = userInput.replace("\\","\\\\")
         splitInput = shlex.split(userInput)
         global LASTDIR
+        global VOLUME
         global playing
         global playerInitialized
         try:
@@ -666,24 +672,23 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
             
         elif splitInput[0].lower() == "play":
             fparser = argparse.ArgumentParser(prog="play")
-            fparser.add_argument("TARGET", help="Filename or URL")
+            fparser.add_argument("TARGET", help="Filename, URL or text file with URLs")
             fparser.add_argument("--volume", help="Set default volume ( 0 - 130 )", type=int)
             fparser.add_argument("-r","--resolution", help="Set resolution target", type=int)
             fparser.add_argument("--fps", help="Set fps target", type=int)
             fparser.add_argument("--raw", help="Raw argumets to pass to the MPV", type=str)
             fparser.add_argument("--no-thread", help="Run in main thread", action="store_true")
+            fparser.add_argument("--shuffle", help="Shuffle playlist", action="store_true")
             fparser.add_argument("--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int)
             fparser.add_argument("-f","--format", help="Select stream ( best,worst,140 etc. )")
             try: fargs = fparser.parse_args(splitInput[1:])
             except SystemExit: return
 
-            import mpv
-
             def my_log(loglevel, component, message):
                 print('[{}] {}: {}'.format(loglevel, component, message), flush=True)
 
             if fargs.format:
-                player = mpv.MPV(
+                self.player = mpv.MPV(
                     player_operation_mode='pseudo-gui',
                     log_handler=my_log,
                     input_default_bindings=True,
@@ -691,10 +696,10 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
                     osc=True,
                     load_unsafe_playlists=True,
                     ytdl_format=fargs.format,
-                    volume=fargs.volume if fargs.volume else 100,
+                    volume=fargs.volume if fargs.volume else VOLUME,
                     volume_max=fargs.maxvolume if fargs.maxvolume else 130)
             elif fargs.resolution or fargs.fps:
-                player = mpv.MPV(
+                self.player = mpv.MPV(
                     player_operation_mode='pseudo-gui',
                     log_handler=my_log,
                     input_default_bindings=True,
@@ -702,17 +707,17 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
                     osc=True,
                     load_unsafe_playlists=True,
                     ytdl_format=f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best",
-                    volume=fargs.volume if fargs.volume else 100,
+                    volume=fargs.volume if fargs.volume else VOLUME,
                     volume_max=fargs.maxvolume if fargs.maxvolume else 130)
             else:
-                player = mpv.MPV(
+                self.player = mpv.MPV(
                     player_operation_mode='pseudo-gui',
                     log_handler=my_log,
                     input_default_bindings=True,
                     input_vo_keyboard=True,
                     osc=True,
                     load_unsafe_playlists=True,
-                    volume=fargs.volume if fargs.volume else 100,
+                    volume=fargs.volume if fargs.volume else VOLUME,
                     volume_max=fargs.maxvolume if fargs.maxvolume else 130)
 
             if fargs.raw:
@@ -720,20 +725,54 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
                 options = string.split(",")
                 for option in options:
                     arg,value = option.split("=")
-                    player[arg] = value
+                    self.player[arg] = value
 
             def play():
-                player.play(fargs.TARGET)
-                player.wait_for_playback()
-                player.terminate()
-                player.play
+                try:
+                    f = open(fargs.TARGET, "r")
+                    links = f.readlines()
+                    for link in links:
+                        player.playlist_append(link)
+                except:
+                    self.player.playlist_append(fargs.TARGET)
+
+                if fargs.shuffle: player.playlist_shuffle()
+                self.player.playlist_pos = 0
+
+                self.player.wait_for_playback()
+                self.player.terminate()
 
             if fargs.no_thread:
                 play()
             else:
                 thread = Thread(target=play)
                 thread.start()
-            
+
+        elif splitInput[0].lower() == "player-volume":
+            fparser = argparse.ArgumentParser(prog="player-volume")
+            fparser.add_argument("TARGET", help="Set default volume ( 0 - MAXVOLUME )", type=int)
+            fparser.add_argument("-n","--no-updating", help="Do not update global variable VOLUME", action="store_true")
+            try: fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit: return
+
+            try:
+                self.player["volume"] = fargs.TARGET
+            except:
+                print(f"{c.fail}Player not initialized{c.end}")
+                if fargs.no_updating: return
+                else: VOLUME = fargs.TARGET; print(f"{c.okgreen}Default volume for new instances updated{c.end}")
+
+        elif splitInput[0].lower() == "player-pause":
+            try:
+                self.player.keypress("p")
+            except:
+                print(f"{c.fail}Player not initialized{c.end}")
+
+        elif splitInput[0].lower() == "player-terminate":
+            try:
+                self.player.terminate()
+            except:
+                print(f"{c.fail}Player not initialized{c.end}")
 
         elif splitInput[0].lower() == "grantfiles" and iswindows():
             fparser = argparse.ArgumentParser(prog="grantfiles")
