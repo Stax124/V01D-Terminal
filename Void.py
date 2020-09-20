@@ -169,7 +169,7 @@ else:
     CONFIG = defPath + r"/config.yml"
 
 # Local version
-VERSION = "v0.8.0pre1"
+VERSION = "v0.8.0"
 
 # -------------------------------------------
 
@@ -1413,13 +1413,14 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
 if __name__ == "__main__":
     app = Void_Terminal()
 
-    with patch_stdout(app):
-        if args.command:
+    if args.command:
             userInput = app.envirotize(args.command)
 
             app.switch(userInput)
             sys.exit(0)
-        else: app.main()
+    else:
+        with patch_stdout(app):
+            app.main()
 
     
     
