@@ -670,6 +670,7 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
             fparser.add_argument("--volume", help="Set default volume ( 0 - 130 )", type=int)
             fparser.add_argument("-r","--resolution", help="Set resolution target", type=int)
             fparser.add_argument("--fps", help="Set fps target", type=int)
+            fparser.add_argument("--raw", help="Raw argumets to pass to the MPV", type=str)
             fparser.add_argument("--no-thread", help="Run in main thread", action="store_true")
             fparser.add_argument("--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int)
             fparser.add_argument("-f","--format", help="Select stream ( best,worst,140 etc. )")
@@ -713,6 +714,13 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
                     load_unsafe_playlists=True,
                     volume=fargs.volume if fargs.volume else 100,
                     volume_max=fargs.maxvolume if fargs.maxvolume else 130)
+
+            if fargs.raw:
+                string = str(fargs.raw).replace("-","_")
+                options = string.split(",")
+                for option in options:
+                    arg,value = option.split("=")
+                    player[arg] = value
 
             def play():
                 player.play(fargs.TARGET)
