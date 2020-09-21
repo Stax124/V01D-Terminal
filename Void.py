@@ -1122,6 +1122,7 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
                 if not args.quiet: self.help()
             else:
                 call("bash -c help", shell=True)
+                self.help()
                 
             return
 
