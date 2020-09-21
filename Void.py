@@ -13,6 +13,8 @@ import platform
 import os
 import sys
 
+os.environ["PATH"] = os.path.dirname(__file__) + os.pathsep + os.environ["PATH"]
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--command", help="Execute following command")
 parser.add_argument("-d", "--directory", help="Start in specified directory")
