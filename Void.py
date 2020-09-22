@@ -616,13 +616,52 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
             fparser = argparse.ArgumentParser(prog="instaloader")
             fparser.add_argument("login", help="Your instagram username")
             fparser.add_argument("target", help="Targeted instagram profile")
+            fparser.add_argument("-q","--quiet", type=bool, choices=[False,True])
+            fparser.add_argument("--user-agent")
+            fparser.add_argument("--sleep", type=bool, choices=[False,True])
+            fparser.add_argument("--download-pictures")
+            fparser.add_argument("--dirname-pattern")
+            fparser.add_argument("--filename-pattern", type=bool, choices=[False,True])
+            fparser.add_argument("--download-videos", type=bool, choices=[False,True])
+            fparser.add_argument("--download-video-thumbnails", type=bool, choices=[False,True])
+            fparser.add_argument("--download-geotags", type=bool, choices=[False,True])
+            fparser.add_argument("--download-comments", type=bool, choices=[False,True])
+            fparser.add_argument("--save-metadata", type=bool, choices=[False,True])
+            fparser.add_argument("--compress-json", type=bool, choices=[False,True])
+            fparser.add_argument("--post-metadata-pattern")
+            fparser.add_argument("--storyitem-metadata-txt-pattern")
+            fparser.add_argument("--max-connection-attempts", type=int, choices=[False,True])
+            fparser.add_argument("--request-timeout", type=int, choices=[False,True])
+            fparser.add_argument("--rate-controller")
+            fparser.add_argument("--resume-prefix")
+            fparser.add_argument("--check-resume-bbd", type=bool, choices=[False,True])
             try: fargs = fparser.parse_args(splitInput[1:])
             except SystemExit: return
 
             import instaloader
-            import getpass
-            loader = instaloader.Instaloader(save_metadata=False)
-            loader.interactive_login(fargs.login)
+            loader = instaloader.Instaloader(
+                quiet=fargs.quiet if fargs.quiet else False,
+                user_agent=fargs.user_agent if fargs.user_agent else None,
+                sleep=fargs.sleep if fargs.sleep else True,
+                dirname_pattern=fargs.dirname_pattern if fargs.dirname_pattern else None,
+                filename_pattern=fargs.filename_pattern if fargs.filename_pattern else None,
+                download_pictures=fargs.download_pictures if fargs.download_pictures else True,
+                download_videos=fargs.download_videos if fargs.download_videos else True,
+                download_video_thumbnails=fargs.download_video_thumbnails if fargs.download_video_thumbnails else True,
+                download_geotags=fargs.download_geotags if fargs.download_geotags else True,
+                download_comments=fargs.download_comments if fargs.download_comments else True,
+                save_metadata=fargs.save_metadata if fargs.save_metadata else True,
+                compress_json=fargs.compress_json if fargs.compress_json else True,
+                post_metadata_txt_pattern=fargs.post_metadata_pattern if fargs.post_metadata_pattern else None,
+                storyitem_metadata_txt_pattern=fargs.storyitem_metadata_txt_pattern if fargs.storyitem_metadata_txt_pattern else None,
+                max_connection_attempts=fargs.max_connection_attempts if fargs.max_connection_attempts else 3,
+                request_timeout=fargs.request_timeout if fargs.request_timeout else None,
+                rate_controller=fargs.rate_controller if fargs.rate_controller else None,
+                resume_prefix=fargs.resume_prefix if fargs.resume_prefix else 'iterator',
+                check_resume_bbd=fargs.check_resume_bbd if fargs.check_resume_bbd else True
+                )
+
+            loader.login(fargs.login, self.prompt("Password: ",is_password=True))
             loader.download_profile(fargs.target, download_stories=True)
             return
 
@@ -920,12 +959,6 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
             for t in threading.enumerate():
                 print("{:<30} {:<30}".format(t.name,t.is_alive()))
             return
-
-        elif splitInput[0].lower() == "webcam":
-            core.utils.webcam()
-
-        elif splitInput[0].lower() == "imgviewer":
-            core.utils.imgviewer()
 
         elif splitInput[0].lower() == "bluetooth":
             if isadmin() == True:
@@ -1353,7 +1386,7 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
                 promptMessage = HTML(f"""
 ┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]\n┗━<pointer>{privileges}</pointer> """)
 
-                userInput = self.prompt(message=promptMessage,style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                userInput = self.prompt(is_password=False,message=promptMessage,style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
                 
                 userInput = self.envirotize(userInput)
 
