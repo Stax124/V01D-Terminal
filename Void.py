@@ -60,7 +60,7 @@ def _import():
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.patch_stdout import patch_stdout
-    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, DummyAutoSuggest
     from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter
     from core.PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
@@ -87,7 +87,7 @@ try:
     from prompt_toolkit import PromptSession
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.patch_stdout import patch_stdout
-    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, DummyAutoSuggest
     from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter
     from core.PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
@@ -175,6 +175,16 @@ VERSION = "v0.8.0"
 
 # -------------------------------------------
 
+def isadmin() -> bool:
+    "Ask if run with elevated privileges"
+    try:
+        _is_admin = os.getuid() == 0
+
+    except AttributeError:
+        _is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+
+    return _is_admin
+
 if iswindows():
     os.system("title Void-Terminal")
 
@@ -215,7 +225,8 @@ except Exception as e:
         "completion-menu.completion": "bg:#000000 #ffffff",
         "completion-menu.completion.current": "bg:#00aaaa #000000",
         "scrollbar.background": "bg:#88aaaa",
-        "scrollbar.button": "bg:#222222"
+        "scrollbar.button": "bg:#222222",
+        "exeptions": tuple()
     }
 
     if not args.skipconfig:
@@ -287,7 +298,7 @@ def welcome() -> None:
     {c.okgreen}'help'{c.end} - show available commands
                 """)
 
-def password() -> None: 
+def wifipassword() -> None: 
     "Get password of wifi network (Windows only)"
 
     os.system("netsh wlan show profiles")
@@ -405,16 +416,6 @@ def void(_splitinput) -> None: # Open new terminal or configure it
     if not args.skipconfig:
         saveToYml(config,CONFIG)
 
-def isadmin() -> bool:
-    "Ask if run with elevated privileges"
-    try:
-        _is_admin = os.getuid() == 0
-
-    except AttributeError:
-        _is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
-
-    return _is_admin
-
 def read(splitInput) -> None:
     "if not args.quiet: prints text of file"
     fparser = argparse.ArgumentParser(prog="read")
@@ -463,6 +464,12 @@ class Void_Terminal(PromptSession):
                         color_depth=color_depth,
                         editing_mode=editing_mode)
         self.player = mpv.MPV()
+        self.exceptions = config.get("exeptions",tuple())
+        self.default_completer = completer
+        self.default_auto_suggest = auto_suggest
+
+    def password(self, text="Password: "):
+        self.prompt(text,is_password=True, completer=core.database.DummyCompleter(), auto_suggest=DummyAutoSuggest(), enable_history_search=False)
 
     def help(self):
         print("\n" +
@@ -579,6 +586,7 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
     def switch(self,userInput:str) -> None:
         userInput = userInput.replace("\\","\\\\")
         splitInput = shlex.split(userInput)
+
         global LASTDIR
         global VOLUME
         global playing
@@ -590,8 +598,18 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
         if splitInput == []:
             return
 
-        if splitInput[0].lower() == "password":
-            password()
+        if splitInput[0].lower() in self.exceptions:
+            if iswindows():
+                if MODE == "CMD":
+                    os.system(userInput)
+                elif MODE == "POWERSHELL":
+                    os.system(f"powershell -Command {userInput}")
+            else:
+                os.system(f'bash -c "{userInput}"')
+            return
+
+        if splitInput[0].lower() == "wifipassword":
+            wifipassword()
             return
 
         if splitInput[0].lower() == "thread":
@@ -661,7 +679,7 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
                 check_resume_bbd=fargs.check_resume_bbd if fargs.check_resume_bbd else True
                 )
 
-            loader.login(fargs.login, self.prompt("Password: ",is_password=True))
+            loader.login(fargs.login, self.password())
             loader.download_profile(fargs.target, download_stories=True)
             return
 
@@ -1382,11 +1400,9 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
         while True:
             try:
                 cd = os.getcwd() # Get current working directory
-                privileges = "#" if isadmin() == True else "$"
-                promptMessage = HTML(f"""
-┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]\n┗━<pointer>{privileges}</pointer> """)
+                promptMessage = HTML(f"""\n┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{os.getcwd()}</path>]\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
 
-                userInput = self.prompt(is_password=False,message=promptMessage,style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                userInput = self.prompt(enable_history_search=True,completer=self.default_completer, auto_suggest=self.default_auto_suggest,is_password=False,message=promptMessage,style=_style,complete_in_thread=config["multithreading"],set_exception_handler=True,color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
                 
                 userInput = self.envirotize(userInput)
 
@@ -1394,7 +1410,7 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
                     if not args.quiet: print(f"{c.okgreen}{userInput}{c.end}")
 
                 if " & " in userInput:
-                    for i in userInput.split(" & "):
+                    for i in userInput.split("&"):
                        self.switch(userInput=i)
                 else:
                     self.switch(userInput=userInput)
