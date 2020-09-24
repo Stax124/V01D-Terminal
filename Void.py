@@ -27,14 +27,14 @@ parser.add_argument("-s","--skipconfig",help="Terminal will skip loading config"
 args = parser.parse_args()
 
 class c:
-        header = '\033[95m'
-        okblue = '\033[94m'
-        okgreen = '\033[92m'
-        warning = '\033[93m'
-        fail = '\033[91m'
-        end = '\033[0m'
-        bold = '\033[1m'
-        underline = '\033[4m'
+    header = '\033[95m'
+    okblue = '\033[94m'
+    okgreen = '\033[92m'
+    warning = '\033[93m'
+    fail = '\033[91m'
+    end = '\033[0m'
+    bold = '\033[1m'
+    underline = '\033[4m'
 
 def iswindows() -> bool:
     return True if platform.system() == "Windows" else False
@@ -57,7 +57,7 @@ def _import():
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
-    from prompt_toolkit import PromptSession
+    from prompt_toolkit import PromptSession, print_formatted_text
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.patch_stdout import patch_stdout
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, DummyAutoSuggest
@@ -84,7 +84,7 @@ try:
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
-    from prompt_toolkit import PromptSession
+    from prompt_toolkit import PromptSession, print_formatted_text
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.patch_stdout import patch_stdout
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, DummyAutoSuggest
@@ -721,6 +721,61 @@ f"""   {c.okblue}void{c.end}: - config: prints out current configuration
         elif splitInput[0].lower() == "elevate" or splitInput[0].lower() == "admin":
             elevate()
             return
+
+        elif splitInput[0].lower() == "tcp-scan":
+            fparser = argparse.ArgumentParser(prog="tcp-scan")
+            fparser.add_argument("target", help="Remote target to scan", type=str, default="127.0.0.1")
+            fparser.add_argument("--threads", type=int, help="Number of threads", default=250)
+            fparser.add_argument("--port","-p", type=int, help="Port to scan")
+            try: fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit: return
+
+            from queue import Queue
+            import time
+            import socket
+
+            known_ports = core.database.known_ports
+            threading_lock = threading.Lock()
+            target = socket.gethostbyname(fargs.target)
+
+            def portscanTCP(port):
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                try:
+                    con = s.connect((target,known_ports[port-1]))
+                    with threading_lock:
+                        print_formatted_text(HTML(f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{known_ports[port-1]}</style> is open'))
+                    con.close()
+                except:
+                    pass
+
+            def threader():
+                while True:
+                    worker = q.get()
+                    portscanTCP(worker)
+                    q.task_done()
+
+            q = Queue()
+
+            for x in range(fargs.threads):
+                t = threading.Thread(target=threader)
+                t.start()
+
+            start = time.time()
+
+            if fargs.port:
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                try:
+                    s.connect((target, fargs.port))
+                    print_formatted_text(f'{c.fail}TCP{c.end} {c.okblue}{target}{c.end} {c.okgreen}{fargs.port}{c.end} is open')
+                except: pass
+            else:
+                for worker in range(1,1001):
+                    q.put(worker)
+
+            q.join()
+            end = time.time()
+
+            print(f"It took: {c.okgreen}{end-start}{c.end} seconds")
 
         elif splitInput[0].lower() == "convert":
             core.utils.convert(splitInput)
