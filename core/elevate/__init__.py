@@ -16,8 +16,8 @@ def elevate(show_console=True, graphical=True):
         programs (gksudo, etc). Ignored on Windows.
     """
     if sys.platform.startswith("win"):
-        from elevate.windows import elevate
+        from core.elevate.windows import elevate
     else:
-        from elevate.posix import elevate
+        from core.elevate.posix import elevate
     elevate(show_console, graphical)
 

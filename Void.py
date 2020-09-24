@@ -68,10 +68,10 @@ def _import():
     from prompt_toolkit.output.color_depth import ColorDepth
 
     # Project stuff
-    from core.elevate import elevate
     import core.database
     import core.osBased
     import core.utils
+    from core.elevate import elevate
 
 try:
     from sys import exit as _exit
@@ -115,10 +115,10 @@ except Exception as e:
         # Ask to install all dependencies, if denied, import error will be raised
         if confirm("Install dependencies: "):
             if iswindows():
-                os.system("pip install python-mpv clint elevate yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
+                os.system("pip install python-mpv clint yaml requests psutil gputil tabulate pickle screen-brightness-control pathlib typing pynput pytube3")
             else:
                 os.system(
-                    "sudo pip3 install python-mpv clint elevate yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
+                    "sudo pip3 install python-mpv clint yaml requests pickle screen-brightness-control pathlib typing pynput tabulate psutil gputil pytube3")
         else:
             exit(0)
 
