@@ -1,7 +1,7 @@
 import time
 import sys
 import threading
-from pynput.mouse import Button, Controller
+from pynput.mouse import Controller
 from pynput.keyboard import Listener, KeyCode
 
 class ClickMouse(threading.Thread):

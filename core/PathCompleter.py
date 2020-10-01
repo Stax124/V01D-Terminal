@@ -1,6 +1,5 @@
 import os
 import re
-import shlex
 from typing import Callable, Iterable, List, Optional
 from prompt_toolkit.completion import CompleteEvent, Completer, Completion
 from prompt_toolkit.document import Document

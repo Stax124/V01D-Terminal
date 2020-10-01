@@ -71,7 +71,7 @@ def _import():
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.patch_stdout import patch_stdout
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, DummyAutoSuggest
-    from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter
+    from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter, DummyCompleter
     from core.PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
@@ -101,7 +101,7 @@ try:
     from prompt_toolkit.shortcuts import confirm
     from prompt_toolkit.patch_stdout import patch_stdout
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, DummyAutoSuggest
-    from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter
+    from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter, DummyCompleter
     from core.PathCompleter import PathCompleter
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
@@ -545,7 +545,7 @@ class Void_Terminal(PromptSession):
         self.default_auto_suggest = auto_suggest
 
     def password(self, text="Password: "):
-        self.prompt(text, is_password=True, completer=core.database.DummyCompleter(
+        self.prompt(text, is_password=True, completer=DummyCompleter(
         ), auto_suggest=DummyAutoSuggest(), enable_history_search=False)
 
     def help(self):
@@ -843,9 +843,6 @@ class Void_Terminal(PromptSession):
                 try:
                     con = s.connect((target, known_ports[port-1]))
                     with threading_lock:
-
-                        print_formatted_text(HTML(
-                            f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{known_ports[port-1]}</style> is open'))
                         print_formatted_text(HTML(
                             f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{known_ports[port-1]}</style> is open (<style fg="green">{core.database.known_port_names.get(str(known_ports[port-1]), "unknown")}</style>)'))
                     con.close()
