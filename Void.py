@@ -233,7 +233,7 @@ try:
         config = yaml.safe_load(open(CONFIG))
         type(config.keys())
     else:
-        raise
+        raise Exception
 except Exception as e:
     config = {
         "mode": "CMD",
@@ -843,8 +843,11 @@ class Void_Terminal(PromptSession):
                 try:
                     con = s.connect((target, known_ports[port-1]))
                     with threading_lock:
+
                         print_formatted_text(HTML(
                             f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{known_ports[port-1]}</style> is open'))
+                        print_formatted_text(HTML(
+                            f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{known_ports[port-1]}</style> is open (<style fg="green">{core.database.known_port_names.get(str(known_ports[port-1]), "unknown")}</style>)'))
                     con.close()
                 except:
                     pass
@@ -869,6 +872,7 @@ class Void_Terminal(PromptSession):
                     s.connect((target, fargs.port))
                     print_formatted_text(
                         f'{c.fail}TCP{c.end} {c.okblue}{target}{c.end} {c.okgreen}{fargs.port}{c.end} is open')
+                    print_formatted_text(HTML(f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{fargs.port}</style> is open (<style fg="green">{core.database.known_port_names.get(str(fargs.port),"unknown")}</style>)'))
                 except:
                     pass
             else:
@@ -1629,7 +1633,7 @@ class Void_Terminal(PromptSession):
                         except:
                             pass
                 else:
-                    raise
+                    raise Exception
             except:
                 try:
                     for item in splitInput[1:]:
@@ -1645,7 +1649,7 @@ class Void_Terminal(PromptSession):
                     if not args.quiet:
                         print(output)
                 else:
-                    raise
+                    raise Exception
             except:  # Try if input is alias
                 try:
                     if os.getcwd() != LASTDIR:
