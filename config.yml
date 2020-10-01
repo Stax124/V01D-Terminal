@@ -4,7 +4,7 @@ completion-menu.completion.current: 'bg:#00aaaa #000000'
 default: greenyellow
 downloadDict: downloadDict.yml
 exeptions: [instaloader]
-fuzzycomplete: true
+fuzzycomplete: false
 mode: CMD
 mouseSupport: true
 multithreading: true
