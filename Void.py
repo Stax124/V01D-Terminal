@@ -1471,7 +1471,7 @@ class Void_Terminal(PromptSession):
             return
 
         elif splitInput[0].lower() == "compile":
-            call('auto-py-to-exe', shell=True)
+            call(f'auto-py-to-exe -c config.json"', shell=True)
             return
 
         elif splitInput[0].lower() == "autoclicker":
