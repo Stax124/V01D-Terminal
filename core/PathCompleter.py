@@ -25,8 +25,7 @@ class PathCompleter(Completer):
         expanduser: bool = False,
     ) -> None:
 
-        self.paths = os.environ["PATH"].split(os.pathsep)
-        self.paths.append(".")
+        self.paths = ["."]
         self.only_directories = only_directories
         self.get_paths = get_paths or (lambda: self.paths)
         self.file_filter = file_filter or (lambda _: True)

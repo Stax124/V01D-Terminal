@@ -3,7 +3,8 @@ completion-menu.completion: 'bg:#000000 #ffffff'
 completion-menu.completion.current: 'bg:#00aaaa #000000'
 default: greenyellow
 downloadDict: downloadDict.yml
-exeptions: [instaloader]
+exeptions:
+- instaloader
 fuzzycomplete: false
 mode: CMD
 mouseSupport: true
