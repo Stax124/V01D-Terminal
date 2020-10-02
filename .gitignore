@@ -14,6 +14,10 @@ Compiled/
 config.json
 commands.txt
 
+# Ignore venv
+lib
+share
+
 # Ignore all python config files
 *.pyc
 __pycache__/database.cpython-38.pyc
