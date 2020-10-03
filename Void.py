@@ -962,8 +962,7 @@ class Void_Terminal(PromptSession):
                     links = f.readlines()
                     for link in links:
                         self.player.playlist_append(link)
-                except Exception as e:
-                    print(c.fail,e,c.end)
+                except:
                     self.player.playlist_append(fargs.TARGET)
 
                 if fargs.shuffle:
