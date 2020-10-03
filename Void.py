@@ -891,7 +891,7 @@ class Void_Terminal(PromptSession):
         elif splitInput[0].lower() == "play":
             fparser = argparse.ArgumentParser(prog="play")
             fparser.add_argument(
-                "TARGET", help="Filename, URL or text file with URLs")
+                "TARGET", help="Filename, URL or text file with URLs", type=str)
             fparser.add_argument(
                 "--volume", help="Set default volume ( 0 - 130 )", type=int)
             fparser.add_argument("-r", "--resolution",
@@ -962,14 +962,15 @@ class Void_Terminal(PromptSession):
                     links = f.readlines()
                     for link in links:
                         self.player.playlist_append(link)
-                except:
+                except Exception as e:
+                    print(c.fail,e,c.end)
                     self.player.playlist_append(fargs.TARGET)
 
                 if fargs.shuffle:
                     self.player.playlist_shuffle()
                 self.player.playlist_pos = 0
 
-                self.player.wait_for_playback()
+                self.player.wait_for_shutdown()
                 self.player.terminate()
 
             if fargs.no_thread:
@@ -991,6 +992,7 @@ class Void_Terminal(PromptSession):
 
             try:
                 self.player["volume"] = fargs.TARGET
+                VOLUME = fargs.TARGET
             except:
                 print(f"{c.fail}Player not initialized{c.end}")
                 if fargs.no_updating:

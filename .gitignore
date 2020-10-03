@@ -8,7 +8,7 @@ aliases.pickle
 utils
 
 # Ignore build
-Compiled/
+output/
 
 # Other
 config.json
@@ -16,7 +16,4 @@ commands.txt
 
 # Ignore all python config files
 *.pyc
-__pycache__/database.cpython-38.pyc
-__pycache__/osBased.cpython-38.pyc
-__pycache__/utils.cpython-38.pyc
-__pycache__/Void.cpython-38.pyc
+__pycache__/
