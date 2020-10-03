@@ -539,7 +539,7 @@ class Void_Terminal(PromptSession):
                          refresh_interval=refresh_interval,
                          color_depth=color_depth,
                          editing_mode=editing_mode)
-        self.player = mpv.MPV()
+        self.player_active = False
         self.exceptions = config.get("exeptions", tuple())
         self.default_completer = completer
         self.default_auto_suggest = auto_suggest
@@ -899,8 +899,6 @@ class Void_Terminal(PromptSession):
             fparser.add_argument(
                 "--raw", help="Raw argumets to pass to the MPV", type=str)
             fparser.add_argument(
-                "--no-thread", help="Run in main thread", action="store_true")
-            fparser.add_argument(
                 "--shuffle", help="Shuffle playlist", action="store_true")
             fparser.add_argument(
                 "--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int)
@@ -966,16 +964,19 @@ class Void_Terminal(PromptSession):
 
                 if fargs.shuffle:
                     self.player.playlist_shuffle()
+
                 self.player.playlist_pos = 0
 
+                self.player_active = True
                 self.player.wait_for_shutdown()
                 self.player.terminate()
 
-            if fargs.no_thread:
-                play()
-            else:
+                self.player_active = False
+
+            if not self.player_active:
                 thread = Thread(target=play)
                 thread.start()
+            else: print(f"{c.warning}Player already started, use 'player-append [target] instead'{c.end}")
 
         elif splitInput[0].lower() == "player-volume":
             fparser = argparse.ArgumentParser(prog="player-volume")
@@ -1011,6 +1012,16 @@ class Void_Terminal(PromptSession):
                 self.player.terminate()
             except:
                 print(f"{c.fail}Player not initialized{c.end}")
+
+        elif splitInput[0].lower() == "player-append":
+            print(f"{splitInput[1]} added to active queue")
+            try:
+                f = open(splitInput[1], "r")
+                links = f.readlines()
+                for link in links:
+                    self.player.playlist_append(link)
+            except:
+                self.player.playlist_append(splitInput[1])
 
         elif splitInput[0].lower() == "grantfiles" and iswindows():
             fparser = argparse.ArgumentParser(prog="grantfiles")
@@ -1683,7 +1694,7 @@ class Void_Terminal(PromptSession):
                     f"""\n┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]━(T:<user>{threading.active_count()}</user> V:<user>{VOLUME}</user>)\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
 
                 userInput = self.prompt(enable_history_search=True, completer=self.default_completer, auto_suggest=self.default_auto_suggest, is_password=False, message=promptMessage,
-                                        style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True, color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                                        style=_style, complete_in_thread=config["multithreading"], color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
 
                 userInput = self.envirotize(userInput)
 
