@@ -627,6 +627,10 @@ class Void_Terminal(PromptSession):
 
               f"   {c.okblue}instaloader{c.end} - download instagram profile: {c.okgreen}instaloader [your username] [target username]{c.end}\n"
               f"   {c.okblue}play{c.end} - play audio or video file from URL or path: {c.okgreen}play [url | file]{c.end}\n"
+              f"   {c.okblue}player-volume{c.end} - set target player volume: {c.okgreen}player-volume [value]{c.end}\n"
+              f"   {c.okblue}player-pause{c.end} - pause or resume player: {c.okgreen}player-pause{c.end}\n"
+              f"   {c.okblue}player-append{c.end} - append track to current playlist: {c.okgreen}player-append [target]{c.end}\n"
+              f"   {c.okblue}player-terminate{c.end} - terminate active player: {c.okgreen}player-terminate{c.end}\n"
               f"   {c.okblue}ytdown{c.end} - download video from URL: {c.okgreen}ytdown [url]{c.end}\n"
 
               "\n CURL: \n\n"
@@ -821,7 +825,7 @@ class Void_Terminal(PromptSession):
         elif splitInput[0].lower() == "tcp-scan":
             fparser = argparse.ArgumentParser(prog="tcp-scan")
             fparser.add_argument(
-                "target", help="Remote target to scan", type=str, default="127.0.0.1")
+                "--target", help="Remote target to scan", type=str, default="127.0.0.1")
             fparser.add_argument("--threads", type=int,
                                  help="Number of threads", default=250)
             fparser.add_argument("--port", "-p", type=int, help="Port to scan")
@@ -1014,21 +1018,30 @@ class Void_Terminal(PromptSession):
                 print(f"{c.fail}Player not initialized{c.end}")
 
         elif splitInput[0].lower() == "player-append":
-            print(f"{splitInput[1]} added to active queue")
+            fparser = argparse.ArgumentParser(prog="player-append")
+            fparser.add_argument(
+                "target", help="Target file or URL", type=str)
             try:
-                f = open(splitInput[1], "r")
+                fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit:
+                return
+
+            try:
+                f = open(fargs.target, "r")
                 links = f.readlines()
                 for link in links:
                     self.player.playlist_append(link)
             except:
-                self.player.playlist_append(splitInput[1])
+                self.player.playlist_append(fargs.target)
+            finally:
+                print(f"{fargs.target} added to active queue")
 
         elif splitInput[0].lower() == "grantfiles" and iswindows():
             fparser = argparse.ArgumentParser(prog="grantfiles")
             fparser.add_argument(
                 "--target", "-t", help="Target folder", type=str)
             fparser.add_argument(
-                "--user", "-u", help="Target folder", type=str)
+                "--user", "-u", help="User who grants permisions to those files", type=str)
             try:
                 fargs = fparser.parse_args(splitInput[1:])
             except SystemExit:

@@ -579,13 +579,17 @@ def convert(splitInput:list):
         formating = filename.split(".")
         call(args=f'ffmpeg -i {filename} {filename.replace("."+formating[-1],"."+splitInput[1].lower())}',cwd=os.getcwd())
     elif splitInput[1].lower() == "combine":
-        args = str(" ".join(splitInput[2:]))
-        if not '"' in args:
-            args = tuple(args.split())
-        else:
-            args = tuple(list(args.split('"')))
-        print(args)
-        call(args=f'ffmpeg -i "{args[1]}" -i "{args[3]}" -c copy "{args[5]}"',cwd=os.getcwd())
+        fparser = argparse.ArgumentParser(prog="thread")
+        fparser.add_argument("first_file", help="First file")
+        fparser.add_argument("second_file", help="Second file")
+        fparser.add_argument("target_file", help="Target file")
+        try:
+            fargs = fparser.parse_args(splitInput[2:])
+        except SystemExit:
+            return
+        
+        print(fargs)
+        call(args=f'ffmpeg -i "{fargs.first_file}" -i "{fargs.second_file}" -c copy "{fargs.target_file}"',cwd=os.getcwd())
     else:
         print("Not Implement")
 
@@ -604,7 +608,3 @@ def prime(n: int) -> list:
     if n > 1:
         factors.append(n)
     return factors
-
-if __name__ == "__main__":
-    import Void
-    Void.main()
