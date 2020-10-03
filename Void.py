@@ -1199,19 +1199,7 @@ class Void_Terminal(PromptSession):
                 print("{:<30} {:<30}".format(t.name, t.is_alive()))
             return
 
-        elif splitInput[0].lower() == "bluetooth":
-            if isadmin() == True:
-                if splitInput[1].lower() == "off":
-                    os.system("net stop bthserv")
-                elif splitInput[1].lower() == "on":
-                    os.system("net start bthserv")
-            else:
-                if not args.quiet:
-                    print(
-                        f"{c.warning}Run shell as administrator or use: admin{c.end}")
-            return
-
-        elif splitInput[0].lower() == "wifi":
+        elif splitInput[0].lower() == "interface":
             if splitInput[1].lower() == "enable":
                 os.system("wmic nic get name, index")
                 index = input("Device index: ")
