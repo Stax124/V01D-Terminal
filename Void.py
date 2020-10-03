@@ -837,6 +837,7 @@ class Void_Terminal(PromptSession):
             known_ports = core.database.known_ports
             threading_lock = threading.Lock()
             target = socket.gethostbyname(fargs.target)
+            q = Queue()
 
             def portscanTCP(port):
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -850,15 +851,13 @@ class Void_Terminal(PromptSession):
                     pass
 
             def threader():
-                while True:
-                    worker = q.get()
-                    portscanTCP(worker)
-                    q.task_done()
+                worker = q.get()
+                portscanTCP(worker)
+                q.task_done()
 
-            q = Queue()
-
-            for t in range(fargs.threads):
+            for i in range(len(known_ports)):
                 t = threading.Thread(target=threader)
+                t.setName("TCP-Scanner-"+str(i))
                 t.start()
 
             start = time.time()
@@ -870,15 +869,15 @@ class Void_Terminal(PromptSession):
                     print_formatted_text(
                         f'{c.fail}TCP{c.end} {c.okblue}{target}{c.end} {c.okgreen}{fargs.port}{c.end} is open')
                     print_formatted_text(HTML(f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{fargs.port}</style> is open (<style fg="green">{core.database.known_port_names.get(str(fargs.port),"unknown")}</style>)'))
+                    s.close()
                 except:
-                    pass
+                    s.close()
             else:
                 for worker in range(1, 1001):
                     q.put(worker)
 
             q.join()
             end = time.time()
-
             print(f"It took: {c.okgreen}{end-start}{c.end} seconds")
 
         elif splitInput[0].lower() == "convert":
@@ -1680,7 +1679,7 @@ class Void_Terminal(PromptSession):
             try:
                 cd = os.getcwd()  # Get current working directory
                 promptMessage = HTML(
-                    f"""\n┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
+                    f"""\n┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]━(T:<user>{threading.active_count()}</user> V:<user>{VOLUME}</user>)\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
 
                 userInput = self.prompt(enable_history_search=True, completer=self.default_completer, auto_suggest=self.default_auto_suggest, is_password=False, message=promptMessage,
                                         style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True, color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
