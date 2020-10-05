@@ -1580,7 +1580,7 @@ class Void_Terminal(PromptSession):
         # Terminate application
         elif splitInput[0].lower() == "exit" or splitInput[0].lower() == "quit":
             try: self.player.terminate()
-            _exit()
+            finally: _exit()
 
         elif splitInput[0].lower() == "alias":  # Define own function and save it
             if splitInput[1] == "-list":
