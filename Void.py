@@ -539,7 +539,7 @@ class Void_Terminal(PromptSession):
                          refresh_interval=refresh_interval,
                          color_depth=color_depth,
                          editing_mode=editing_mode)
-        self.player = mpv.MPV()
+        self.player_active = False
         self.exceptions = config.get("exeptions", tuple())
         self.default_completer = completer
         self.default_auto_suggest = auto_suggest
@@ -627,6 +627,10 @@ class Void_Terminal(PromptSession):
 
               f"   {c.okblue}instaloader{c.end} - download instagram profile: {c.okgreen}instaloader [your username] [target username]{c.end}\n"
               f"   {c.okblue}play{c.end} - play audio or video file from URL or path: {c.okgreen}play [url | file]{c.end}\n"
+              f"   {c.okblue}player-volume{c.end} - set target player volume: {c.okgreen}player-volume [value]{c.end}\n"
+              f"   {c.okblue}player-pause{c.end} - pause or resume player: {c.okgreen}player-pause{c.end}\n"
+              f"   {c.okblue}player-append{c.end} - append track to current playlist: {c.okgreen}player-append [target]{c.end}\n"
+              f"   {c.okblue}player-terminate{c.end} - terminate active player: {c.okgreen}player-terminate{c.end}\n"
               f"   {c.okblue}ytdown{c.end} - download video from URL: {c.okgreen}ytdown [url]{c.end}\n"
 
               "\n CURL: \n\n"
@@ -821,7 +825,7 @@ class Void_Terminal(PromptSession):
         elif splitInput[0].lower() == "tcp-scan":
             fparser = argparse.ArgumentParser(prog="tcp-scan")
             fparser.add_argument(
-                "target", help="Remote target to scan", type=str, default="127.0.0.1")
+                "--target", help="Remote target to scan", type=str, default="127.0.0.1")
             fparser.add_argument("--threads", type=int,
                                  help="Number of threads", default=250)
             fparser.add_argument("--port", "-p", type=int, help="Port to scan")
@@ -837,6 +841,7 @@ class Void_Terminal(PromptSession):
             known_ports = core.database.known_ports
             threading_lock = threading.Lock()
             target = socket.gethostbyname(fargs.target)
+            q = Queue()
 
             def portscanTCP(port):
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -850,15 +855,13 @@ class Void_Terminal(PromptSession):
                     pass
 
             def threader():
-                while True:
-                    worker = q.get()
-                    portscanTCP(worker)
-                    q.task_done()
+                worker = q.get()
+                portscanTCP(worker)
+                q.task_done()
 
-            q = Queue()
-
-            for t in range(fargs.threads):
+            for i in range(len(known_ports)):
                 t = threading.Thread(target=threader)
+                t.setName("TCP-Scanner-"+str(i))
                 t.start()
 
             start = time.time()
@@ -870,15 +873,15 @@ class Void_Terminal(PromptSession):
                     print_formatted_text(
                         f'{c.fail}TCP{c.end} {c.okblue}{target}{c.end} {c.okgreen}{fargs.port}{c.end} is open')
                     print_formatted_text(HTML(f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{fargs.port}</style> is open (<style fg="green">{core.database.known_port_names.get(str(fargs.port),"unknown")}</style>)'))
+                    s.close()
                 except:
-                    pass
+                    s.close()
             else:
                 for worker in range(1, 1001):
                     q.put(worker)
 
             q.join()
             end = time.time()
-
             print(f"It took: {c.okgreen}{end-start}{c.end} seconds")
 
         elif splitInput[0].lower() == "convert":
@@ -899,8 +902,6 @@ class Void_Terminal(PromptSession):
             fparser.add_argument("--fps", help="Set fps target", type=int)
             fparser.add_argument(
                 "--raw", help="Raw argumets to pass to the MPV", type=str)
-            fparser.add_argument(
-                "--no-thread", help="Run in main thread", action="store_true")
             fparser.add_argument(
                 "--shuffle", help="Shuffle playlist", action="store_true")
             fparser.add_argument(
@@ -962,22 +963,24 @@ class Void_Terminal(PromptSession):
                     links = f.readlines()
                     for link in links:
                         self.player.playlist_append(link)
-                except Exception as e:
-                    print(c.fail,e,c.end)
+                except:
                     self.player.playlist_append(fargs.TARGET)
 
                 if fargs.shuffle:
                     self.player.playlist_shuffle()
+
                 self.player.playlist_pos = 0
 
+                self.player_active = True
                 self.player.wait_for_shutdown()
                 self.player.terminate()
 
-            if fargs.no_thread:
-                play()
-            else:
+                self.player_active = False
+
+            if not self.player_active:
                 thread = Thread(target=play)
                 thread.start()
+            else: print(f"{c.warning}Player already started, use 'player-append [target] instead'{c.end}")
 
         elif splitInput[0].lower() == "player-volume":
             fparser = argparse.ArgumentParser(prog="player-volume")
@@ -1014,12 +1017,31 @@ class Void_Terminal(PromptSession):
             except:
                 print(f"{c.fail}Player not initialized{c.end}")
 
+        elif splitInput[0].lower() == "player-append":
+            fparser = argparse.ArgumentParser(prog="player-append")
+            fparser.add_argument(
+                "target", help="Target file or URL", type=str)
+            try:
+                fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit:
+                return
+
+            try:
+                f = open(fargs.target, "r")
+                links = f.readlines()
+                for link in links:
+                    self.player.playlist_append(link)
+            except:
+                self.player.playlist_append(fargs.target)
+            finally:
+                print(f"{fargs.target} added to active queue")
+
         elif splitInput[0].lower() == "grantfiles" and iswindows():
             fparser = argparse.ArgumentParser(prog="grantfiles")
             fparser.add_argument(
                 "--target", "-t", help="Target folder", type=str)
             fparser.add_argument(
-                "--user", "-u", help="Target folder", type=str)
+                "--user", "-u", help="User who grants permisions to those files", type=str)
             try:
                 fargs = fparser.parse_args(splitInput[1:])
             except SystemExit:
@@ -1177,19 +1199,7 @@ class Void_Terminal(PromptSession):
                 print("{:<30} {:<30}".format(t.name, t.is_alive()))
             return
 
-        elif splitInput[0].lower() == "bluetooth":
-            if isadmin() == True:
-                if splitInput[1].lower() == "off":
-                    os.system("net stop bthserv")
-                elif splitInput[1].lower() == "on":
-                    os.system("net start bthserv")
-            else:
-                if not args.quiet:
-                    print(
-                        f"{c.warning}Run shell as administrator or use: admin{c.end}")
-            return
-
-        elif splitInput[0].lower() == "wifi":
+        elif splitInput[0].lower() == "interface":
             if splitInput[1].lower() == "enable":
                 os.system("wmic nic get name, index")
                 index = input("Device index: ")
@@ -1569,7 +1579,8 @@ class Void_Terminal(PromptSession):
 
         # Terminate application
         elif splitInput[0].lower() == "exit" or splitInput[0].lower() == "quit":
-            _exit()
+            try: self.player.terminate()
+            finally: _exit()
 
         elif splitInput[0].lower() == "alias":  # Define own function and save it
             if splitInput[1] == "-list":
@@ -1681,10 +1692,10 @@ class Void_Terminal(PromptSession):
             try:
                 cd = os.getcwd()  # Get current working directory
                 promptMessage = HTML(
-                    f"""\n┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
+                    f"""\n┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]━(T:<user>{threading.active_count()}</user> V:<user>{VOLUME}</user>)\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
 
                 userInput = self.prompt(enable_history_search=True, completer=self.default_completer, auto_suggest=self.default_auto_suggest, is_password=False, message=promptMessage,
-                                        style=_style, complete_in_thread=config["multithreading"], set_exception_handler=True, color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                                        style=_style, complete_in_thread=config["multithreading"], color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
 
                 userInput = self.envirotize(userInput)
 
