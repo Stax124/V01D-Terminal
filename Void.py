@@ -540,6 +540,7 @@ class Void_Terminal(PromptSession):
                          color_depth=color_depth,
                          editing_mode=editing_mode)
         self.player_active = False
+        self.player = mpv.MPV()
         self.exceptions = config.get("exeptions", tuple())
         self.default_completer = completer
         self.default_auto_suggest = auto_suggest
