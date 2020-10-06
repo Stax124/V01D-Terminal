@@ -20,7 +20,7 @@ class Vector3():
             return True
         else: return False
     def normalize(self):
-        return self.x / self.magnitude, self.y / self.magnitude, self.z / self.magnitude
+        return Vector3(self.x / self.magnitude, self.y / self.magnitude, self.z / self.magnitude)
 
 class Vector2():
     def __init__(self,x:float,y:float):
