@@ -1,6 +1,7 @@
 from __future__ import print_function
 from subprocess import call
 from datetime import datetime
+from functools import reduce
 import platform
 import argparse
 import psutil
@@ -33,30 +34,16 @@ def time_reformat(duration: int):
 
         return ', '.join(duration)
 
-def gcd(a: float, b: float) -> float:
-    "Returs greatest common dividor"
-    if b > a:
-        a, b = b, a
+def find_gcd(list):
+    x = reduce(math.gcd, list)
+    return x
 
-    while b > 0:
-        a = a % b
-        a, b = b, a
-
-    return float(a)
-
-def lcm(x: float, y: float) -> float:
-    "Returs lowest common multiple"
-    greater = 0
-    if x > y:
-        greater = x
-    else:
-        greater = y
-    while(True):
-        if((greater % x == 0) and (greater % y == 0)):
-            lcm = greater
-            break
-        greater += 1
-    return float(lcm)
+def lcm(l: list) -> int:
+    "Print lowest common multiple"
+    lcm = l[0]
+    for i in range(1,len(l)):
+        lcm = lcm*l[i]//math.gcd(lcm, l[i])
+    return lcm
 
 def version() -> str:
     try:
@@ -593,18 +580,20 @@ def convert(splitInput:list):
     else:
         print("Not Implement")
 
-def prime(n: int) -> list:
+def prime(l: list) -> list:
     """
     Returns prime factors of n as a list.
     """
-    i = 2
-    factors = []
-    while i * i <= n:
-        if n % i:
-            i += 1
-        else:
-            n //= i
-            factors.append(i)
-    if n > 1:
-        factors.append(n)
-    return factors
+    for item in l:
+        n = item
+        i = 2
+        factors = []
+        while i * i <= n:
+            if n % i:
+                i += 1
+            else:
+                n //= i
+                factors.append(i)
+        if n > 1:
+            factors.append(n)
+        print(f"{item}={factors}")

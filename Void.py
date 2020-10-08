@@ -1506,28 +1506,38 @@ class Void_Terminal(PromptSession):
 
         elif splitInput[0].lower() == "lcm":
             fparser = argparse.ArgumentParser(prog="lcm")
-            fparser.add_argument("first", help="First number", type=float)
-            fparser.add_argument("second", help="Second number", type=float)
+            fparser.add_argument("value",nargs="+", type=int, help="List of numbers")
             try:
                 fargs = fparser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
             if not args.quiet:
-                print(core.utils.lcm(fargs.first, fargs.second))
+                print(core.utils.lcm(fargs.value))
             return
 
         elif splitInput[0].lower() == "gcd":
             fparser = argparse.ArgumentParser(prog="gcd")
-            fparser.add_argument("first", help="First number", type=float)
-            fparser.add_argument("second", help="Second number", type=float)
+            fparser.add_argument("value",nargs="+", type=int, help="List of numbers")
             try:
                 fargs = fparser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
             if not args.quiet:
-                print(core.utils.gcd(fargs.first, fargs.second))
+                print(core.utils.find_gcd(fargs.value))
+            return
+
+        elif splitInput[0].lower() == "prime":
+            fparser = argparse.ArgumentParser(prog="prime")
+            fparser.add_argument("value",nargs="+", type=int, help="List of numbers")
+            try:
+                fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit:
+                return
+
+            if not args.quiet:
+                core.utils.prime(fargs.value)
             return
 
         elif splitInput[0].lower() == "rng":

@@ -159,6 +159,7 @@ if platform.system() == "Windows":
             "reboot": None,
             "instaloader": None,
             "pwd": None,
+            "prime": None,
             "autoclicker": None,
             "brightness": None,
             "plain2string": None,
