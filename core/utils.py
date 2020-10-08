@@ -1,6 +1,7 @@
 from __future__ import print_function
 from subprocess import call
 from datetime import datetime
+from functools import reduce
 import platform
 import argparse
 import psutil
@@ -33,30 +34,16 @@ def time_reformat(duration: int):
 
         return ', '.join(duration)
 
-def gcd(a: float, b: float) -> float:
-    "Returs greatest common dividor"
-    if b > a:
-        a, b = b, a
+def find_gcd(list):
+    x = reduce(math.gcd, list)
+    return x
 
-    while b > 0:
-        a = a % b
-        a, b = b, a
-
-    return float(a)
-
-def lcm(x: float, y: float) -> float:
-    "Returs lowest common multiple"
-    greater = 0
-    if x > y:
-        greater = x
-    else:
-        greater = y
-    while(True):
-        if((greater % x == 0) and (greater % y == 0)):
-            lcm = greater
-            break
-        greater += 1
-    return float(lcm)
+def lcm(l: list) -> int:
+    "Print lowest common multiple"
+    lcm = l[0]
+    for i in range(1,len(l)):
+        lcm = lcm*l[i]//math.gcd(lcm, l[i])
+    return lcm
 
 def version() -> str:
     try:
@@ -579,32 +566,34 @@ def convert(splitInput:list):
         formating = filename.split(".")
         call(args=f'ffmpeg -i {filename} {filename.replace("."+formating[-1],"."+splitInput[1].lower())}',cwd=os.getcwd())
     elif splitInput[1].lower() == "combine":
-        args = str(" ".join(splitInput[2:]))
-        if not '"' in args:
-            args = tuple(args.split())
-        else:
-            args = tuple(list(args.split('"')))
-        print(args)
-        call(args=f'ffmpeg -i "{args[1]}" -i "{args[3]}" -c copy "{args[5]}"',cwd=os.getcwd())
+        fparser = argparse.ArgumentParser(prog="thread")
+        fparser.add_argument("first_file", help="First file")
+        fparser.add_argument("second_file", help="Second file")
+        fparser.add_argument("target_file", help="Target file")
+        try:
+            fargs = fparser.parse_args(splitInput[2:])
+        except SystemExit:
+            return
+        
+        print(fargs)
+        call(args=f'ffmpeg -i "{fargs.first_file}" -i "{fargs.second_file}" -c copy "{fargs.target_file}"',cwd=os.getcwd())
     else:
         print("Not Implement")
 
-def prime(n: int) -> list:
+def prime(l: list) -> list:
     """
     Returns prime factors of n as a list.
     """
-    i = 2
-    factors = []
-    while i * i <= n:
-        if n % i:
-            i += 1
-        else:
-            n //= i
-            factors.append(i)
-    if n > 1:
-        factors.append(n)
-    return factors
-
-if __name__ == "__main__":
-    import Void
-    Void.main()
+    for item in l:
+        n = item
+        i = 2
+        factors = []
+        while i * i <= n:
+            if n % i:
+                i += 1
+            else:
+                n //= i
+                factors.append(i)
+        if n > 1:
+            factors.append(n)
+        print(f"{item}={factors}")

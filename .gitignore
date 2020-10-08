@@ -13,6 +13,8 @@ output/
 # Other
 config.json
 commands.txt
+config.yml
+.vscode/
 
 # Ignore venv
 lib

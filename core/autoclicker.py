@@ -1,7 +1,8 @@
 import time
 import sys
 import threading
-from pynput.mouse import Controller
+from prompt_toolkit import print_formatted_text
+from pynput.mouse import Controller, Button
 from pynput.keyboard import Listener, KeyCode
 
 class ClickMouse(threading.Thread):
@@ -24,12 +25,9 @@ class ClickMouse(threading.Thread):
         self.program_running = False
 
     def run(self):
+        print_formatted_text("[E]xit, [S]tart | [S]top")
         while self.program_running:
-            sys.stdout.write("\r[E]xit | [S]tart...")
-            sys.stdout.flush()
             while self.running:
-                sys.stdout.write("\r[S]top Clicking...")
-                sys.stdout.flush()
                 self.mouse.click(self.button)
                 time.sleep(self.delay)
             time.sleep(0.1)
