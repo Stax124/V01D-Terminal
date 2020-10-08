@@ -82,7 +82,6 @@ def _import():
     import core.osBased
     import core.utils
     from core.elevate import elevate
-    from core.utils import prime
     from core.vectors import Vector2, Vector3
 
 
@@ -112,7 +111,6 @@ try:
     import core.osBased
     import core.utils
     from core.elevate import elevate
-    from core.utils import prime
     from core.vectors import Vector2, Vector3
 
 
