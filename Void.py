@@ -82,7 +82,6 @@ def _import():
     import core.osBased
     import core.utils
     from core.elevate import elevate
-    from core.utils import prime
     from core.vectors import Vector2, Vector3
 
 
@@ -112,7 +111,6 @@ try:
     import core.osBased
     import core.utils
     from core.elevate import elevate
-    from core.utils import prime
     from core.vectors import Vector2, Vector3
 
 
@@ -132,10 +130,10 @@ except Exception as e:
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
-                    "pip install python-mpv youtube-dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
+                    "pip install python-mpv youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
             else:
                 os.system(
-                    "sudo pip3 install python-mpv youtube-dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
+                    "sudo pip3 install python-mpv youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
                 os.system("sudo apt-get install -y libmpv-dev")
         else:
             exit(0)
