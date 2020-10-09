@@ -160,6 +160,7 @@ if platform.system() == "Windows":
             "instaloader": None,
             "pwd": None,
             "prime": None,
+            "steam-api": None,
             "autoclicker": None,
             "brightness": None,
             "plain2string": None,
