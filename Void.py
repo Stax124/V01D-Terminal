@@ -11,6 +11,7 @@ from math import *
 import platform
 import os
 import sys
+import traceback
 
 os.environ["PATH"] = os.path.dirname(
     __file__) + os.pathsep + os.environ["PATH"]
@@ -1035,6 +1036,74 @@ class Void_Terminal(PromptSession):
             finally:
                 print(f"{fargs.target} added to active queue")
 
+        elif splitInput[0].lower() == "steam-api":
+            fparser = argparse.ArgumentParser(prog="steam-api")
+            fparser.add_argument(
+                "name", help="Name of steam store product", type=str)
+            try:
+                fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit:
+                return
+
+            import difflib
+
+            print_formatted_text("Loading Steam store details...")
+
+            initial_list = requests.get(r"http://api.steampowered.com/ISteamApps/GetAppList/v0001/").json()["applist"]["apps"]["app"]
+            game_list = dict()
+            games = []
+
+            for i in initial_list:
+                game_list[i["name"].lower()] = i["appid"]
+                games.append(i["name"].lower())
+
+            print_formatted_text(f"Closest results: {difflib.get_close_matches(fargs.name.lower(), games)}")
+            id = game_list[difflib.get_close_matches(fargs.name.lower(), games)[0]]
+
+            content = requests.get(f"https://store.steampowered.com/api/appdetails?appids={id}").json()
+            content = content.get(str(id))["data"]
+
+            name = content.get("name", "Unknown")
+            age = content.get("required_age", "Unknown")
+            publisher = content.get("publishers", "Unknown")
+            discount = content.get("price_overview", {}).get("discount_percent", "Unknown")
+            price = content.get("price_overview", {}).get("final_formatted", "Unknown")
+            metacritic = content.get("metacritic", {})
+            categories = content.get("categories", "Unknown")
+            genres = content.get("genres", "Unknown")
+            recommendations = content.get("recommendations", {}).get("total", "Unknown")
+            achievements = content.get("achievements", {}).get("total", "Unknown")
+            release_date = content.get("release_date", {}).get("date", "Unknown")
+            game_type = content.get("type", "Unknown")
+
+            category_names = []
+            for i in categories:
+                category_names.append(i.get("description", "Unknown"))
+
+            genre_names = []
+            for i in genres:
+                genre_names.append(i.get("description", "Unknown"))
+
+            print(f"""
+{c.okgreen}Name{c.end}: {c.bold}{name}{c.end}
+
+Release date: {c.okgreen}{release_date}{c.end}
+
+Publisher: {c.okgreen}{publisher}{c.end}
+Category: {c.okgreen}{category_names}{c.end}
+Genre: {c.okgreen}{genre_names}{c.end}
+Age: {c.okgreen}{age}{c.end}
+
+Metacritic: {c.okgreen}{metacritic.get("score", "Unknown")} ({c.end}{c.okblue}{metacritic.get("url", "Unknown")}{c.end})
+Recommendations: {c.okgreen}{recommendations}{c.end}
+Price: {c.okgreen}{price}{c.end}
+Discount: {c.okgreen}{discount}%{c.end}
+Achievements: {c.okgreen}{achievements}{c.end}
+Type: {c.okgreen}{game_type}{c.end}
+
+URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
+            """)
+
         elif splitInput[0].lower() == "grantfiles" and iswindows():
             fparser = argparse.ArgumentParser(prog="grantfiles")
             fparser.add_argument(
@@ -1724,7 +1793,7 @@ class Void_Terminal(PromptSession):
             except Exception as error:
                 if not args.quiet:
                     print(
-                        f"{c.fail}{error.with_traceback(error.__traceback__)}{c.end}")
+                        f"{c.fail}{traceback.format_exc()}{c.end}")
                     if iswindows():
                         os.system("pause")
 
