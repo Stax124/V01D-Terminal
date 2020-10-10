@@ -193,7 +193,7 @@ else:
     CONFIG = defPath + r"/config.yml"
 
 # Local version
-VERSION = "v0.8.0"
+VERSION = "v0.8.3"
 
 # -------------------------------------------
 
@@ -245,7 +245,7 @@ except Exception as e:
         "multithreading": True,
         "fuzzycomplete": True,
         "completeWhileTyping": True,
-        "wrapLines": True,
+        "wrapLines": False,
         "mouseSupport": True,
         "searchIgnoreCase": True,
         "default": "greenyellow",
@@ -1528,7 +1528,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
 
             return
 
-        elif splitInput[0].lower() == "welcome":  # Show welcome screen
+        elif splitInput[0].lower() == "welcome":
             welcome()
             return
 
@@ -1536,7 +1536,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             open_new_tab(url="https://www.google.com/search?q=" +
                          " ".join(splitInput[1:]))
 
-        elif splitInput[0].lower() == "sizeof":  # Show welcome screen
+        elif splitInput[0].lower() == "sizeof":
             def get_size(start_path='.'):
                 total_size = 0
                 for dirpath, dirnames, filenames in os.walk(start_path):
@@ -1551,7 +1551,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                 print(get_size(splitInput[1]) /
                       1000000, f"{c.okgreen}MB{c.end}")
 
-        elif splitInput[0].lower() == "currencyconverter":  # Show welcome screen
+        elif splitInput[0].lower() == "currencyconverter":
             fparser = argparse.ArgumentParser(prog="currencyconverter")
             fparser.add_argument("base", help="Base currency", type=str)
             fparser.add_argument("other", help="Target currency", type=str)
