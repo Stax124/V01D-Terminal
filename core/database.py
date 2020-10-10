@@ -196,6 +196,7 @@ if platform.system() == "Windows":
             "prime": None,
             "steam-api": None,
             "game-deals": None,
+            "thread": None,
             "autoclicker": None,
             "brightness": None,
             "plain2string": None,

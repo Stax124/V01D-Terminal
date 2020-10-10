@@ -630,6 +630,7 @@ class Void_Terminal(PromptSession):
               f"   {c.okblue}exit, quit{c.end} - quit application\n"
               f"   {c.okblue}os{c.end} - show operating system\n"
               f"   {c.okblue}pwd{c.end} - print out current working directory\n"
+              f"   {c.okblue}thread{c.end} - run function in thread: {c.okgreen}thread [function]{c.end}\n"
               f"   {c.okblue}threads{c.end} - print out currently running threads\n"
               f"   {c.okblue}open{c.end} - open file explorer in current directory: {c.okgreen}open [target]{c.end}\n"
               f"   {c.okblue}elevate, admin{c.end} - grant admin permission for shell\n"
@@ -680,12 +681,14 @@ class Void_Terminal(PromptSession):
 
               "\n OTHER FUNCTIONS \n\n"
 
-              f"   {c.okblue}downloadeta{c.end} - calculate estimated time of arival: {c.okgreen}downloadeta [target(GB)] [speed(MB)]{c.end}\n"
+              f"   {c.okblue}downloadeta{c.end} - calculate estimated time of arival: {c.okgreen}downloadeta [target](GB,MB,KB) [speed](GB,MB,KB){c.end}\n"
               f"   {c.okblue}convert{c.end} - function for converting temperatures, colors to hex, audio or video files\n"
               f"   {c.okblue}power{c.end} - change your Windows powerplan\n"
               f"   {c.okblue}download{c.end} - dictionary for downloading files: {c.okgreen}download [-list | target | URL]{c.end}\n"
               f"   {c.okblue}plain2string{c.end} - convert plain text to strings: {c.okgreen}plain2string mode[space,file, fileline] text/[filename]{c.end}\n"
               f"   {c.okblue}autoclicker{c.end} - integrated autoclicker\n"
+              f"   {c.okblue}steam-api{c.end} - get information about Steam application: {c.okgreen}steam-api [name]{c.end}\n"
+              f"   {c.okblue}game-deals{c.end} - get best deals on games from more than 30 stores\n"
               )
 
     def switch(self, userInput: str) -> None:
