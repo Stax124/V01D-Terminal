@@ -612,7 +612,7 @@ class Void_Terminal(PromptSession):
 
               "\n CORE: \n\n"
 
-              f"""   {c.okblue}void{c.end}: - config: prints out current configuration
+              f"""   {c.okblue}void{c.end}: - {c.okblue}config{c.end}: prints out current configuration
             - {c.okblue}mode{c.end} {c.okgreen}[ POWERSHELL | CMD ]{c.end}: change mode of executing system commands
             - {c.okblue}install{c.end} {c.okgreen}[ chocolatey ]{c.end}: install packages (will be replaced by winget)
             - {c.okblue}multithreading{c.end} {c.okgreen}[ true | false ]{c.end}: enable multithreading for some commands
