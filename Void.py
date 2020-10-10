@@ -65,6 +65,8 @@ def _import():
     import hashlib
     import ctypes
     import mpv
+    import GPUtil
+    import psutil
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
@@ -94,6 +96,8 @@ try:
     import requests
     import ctypes
     import mpv
+    import GPUtil
+    import psutil
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
@@ -252,7 +256,8 @@ except Exception as e:
         "completion-menu.completion.current": "bg:#00aaaa #000000",
         "scrollbar.background": "bg:#88aaaa",
         "scrollbar.button": "bg:#222222",
-        "exeptions": tuple()
+        "exeptions": tuple(),
+        "perfmon": False
     }
 
     if not args.skipconfig:
@@ -356,6 +361,15 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
             if not args.quiet:
                 print(
                     f"multithreading: {c.okgreen}{config['multithreading']}{c.end}")
+
+        elif (_splitinput[1] == "perfmon"):
+            if (_splitinput[2].lower() == "true"):
+                config["perfmon"] = True
+            elif (_splitinput[2].lower() == "false"):
+                config["perfmon"] = False
+            if not args.quiet:
+                print(
+                    f"perfmon: {c.okgreen}{config['perfmon']}{c.end}")
 
         elif (_splitinput[1] == "fuzzycomplete"):
             if (_splitinput[2].lower() == "true"):
@@ -500,6 +514,16 @@ def read(splitInput) -> None:
         print(content)
     file.close()
 
+def performance_toobar():
+    gpus = GPUtil.getGPUs()
+    try: 
+        gpu_util = gpus[0].load*100
+        gpu_temperature = gpus[0].temperature
+    except: 
+        gpu_util = "0"
+        gpu_temperature = "0"
+
+    return HTML(f"CPU: {psutil.cpu_percent()}%  GPU: {gpu_util}% {gpu_temperature}°C")
 
 def power() -> None:
     "Change Windows power scheme"
@@ -588,7 +612,7 @@ class Void_Terminal(PromptSession):
 
               "\n CORE: \n\n"
 
-              f"""   {c.okblue}void{c.end}: - config: prints out current configuration
+              f"""   {c.okblue}void{c.end}: - {c.okblue}config{c.end}: prints out current configuration
             - {c.okblue}mode{c.end} {c.okgreen}[ POWERSHELL | CMD ]{c.end}: change mode of executing system commands
             - {c.okblue}install{c.end} {c.okgreen}[ chocolatey ]{c.end}: install packages (will be replaced by winget)
             - {c.okblue}multithreading{c.end} {c.okgreen}[ true | false ]{c.end}: enable multithreading for some commands
@@ -606,6 +630,7 @@ class Void_Terminal(PromptSession):
               f"   {c.okblue}exit, quit{c.end} - quit application\n"
               f"   {c.okblue}os{c.end} - show operating system\n"
               f"   {c.okblue}pwd{c.end} - print out current working directory\n"
+              f"   {c.okblue}thread{c.end} - run function in thread: {c.okgreen}thread [function]{c.end}\n"
               f"   {c.okblue}threads{c.end} - print out currently running threads\n"
               f"   {c.okblue}open{c.end} - open file explorer in current directory: {c.okgreen}open [target]{c.end}\n"
               f"   {c.okblue}elevate, admin{c.end} - grant admin permission for shell\n"
@@ -656,12 +681,14 @@ class Void_Terminal(PromptSession):
 
               "\n OTHER FUNCTIONS \n\n"
 
-              f"   {c.okblue}downloadeta{c.end} - calculate estimated time of arival: {c.okgreen}downloadeta [target(GB)] [speed(MB)]{c.end}\n"
+              f"   {c.okblue}downloadeta{c.end} - calculate estimated time of arival: {c.okgreen}downloadeta [target](GB,MB,KB) [speed](GB,MB,KB){c.end}\n"
               f"   {c.okblue}convert{c.end} - function for converting temperatures, colors to hex, audio or video files\n"
               f"   {c.okblue}power{c.end} - change your Windows powerplan\n"
               f"   {c.okblue}download{c.end} - dictionary for downloading files: {c.okgreen}download [-list | target | URL]{c.end}\n"
               f"   {c.okblue}plain2string{c.end} - convert plain text to strings: {c.okgreen}plain2string mode[space,file, fileline] text/[filename]{c.end}\n"
               f"   {c.okblue}autoclicker{c.end} - integrated autoclicker\n"
+              f"   {c.okblue}steam-api{c.end} - get information about Steam application: {c.okgreen}steam-api [name]{c.end}\n"
+              f"   {c.okblue}game-deals{c.end} - get best deals on games from more than 30 stores\n"
               )
 
     def switch(self, userInput: str) -> None:
@@ -1103,6 +1130,15 @@ Type: {c.okgreen}{game_type}{c.end}
 
 URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             """)
+
+        elif splitInput[0].lower() == "game-deals":
+            from prettytable import PrettyTable
+            response = requests.get("https://www.cheapshark.com/api/1.0/deals").json()
+            t = PrettyTable(["Title", "Price", "Discount", "Store", "URL"])
+
+            for game in response:
+                t.add_row([game["title"], game["salePrice"], game["savings"]+"%", core.database.storeID.get(game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
+            print(t)
 
         elif splitInput[0].lower() == "grantfiles" and iswindows():
             fparser = argparse.ArgumentParser(prog="grantfiles")
@@ -1691,7 +1727,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             while True:
                 try:
                     _eval = self.prompt(message=HTML(f"<user>{USER}</user> <path>eval</path>""<pointer> > </pointer>"), style=_style,
-                                        complete_in_thread=config["multithreading"], set_exception_handler=True, color_depth=ColorDepth.TRUE_COLOR, completer=None)
+                                        complete_in_thread=config["multithreading"], set_exception_handler=True, color_depth=ColorDepth.TRUE_COLOR, completer=None,
+                                        bottom_toolbar=performance_toobar() if config["perfmon"] else None)
                     if _eval.lower() == "quit" or _eval.lower() == "exit":
                         break
                     else:
@@ -1773,7 +1810,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                     f"""\n┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]━(T:<user>{threading.active_count()}</user> V:<user>{VOLUME}</user>)\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
 
                 userInput = self.prompt(enable_history_search=True, completer=self.default_completer, auto_suggest=self.default_auto_suggest, is_password=False, message=promptMessage,
-                                        style=_style, complete_in_thread=config["multithreading"], color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                                        style=_style, complete_in_thread=config["multithreading"], color_depth=ColorDepth.TRUE_COLOR, 
+                                        bottom_toolbar=performance_toobar() if config["perfmon"] else None)  # Get user input (autocompetion allowed)
 
                 userInput = self.envirotize(userInput)
 
