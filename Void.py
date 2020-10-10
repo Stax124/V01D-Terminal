@@ -65,6 +65,8 @@ def _import():
     import hashlib
     import ctypes
     import mpv
+    import GPUtil
+    import psutil
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
@@ -94,6 +96,8 @@ try:
     import requests
     import ctypes
     import mpv
+    import GPUtil
+    import psutil
 
     # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
@@ -252,7 +256,8 @@ except Exception as e:
         "completion-menu.completion.current": "bg:#00aaaa #000000",
         "scrollbar.background": "bg:#88aaaa",
         "scrollbar.button": "bg:#222222",
-        "exeptions": tuple()
+        "exeptions": tuple(),
+        "perfmon": False
     }
 
     if not args.skipconfig:
@@ -356,6 +361,15 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
             if not args.quiet:
                 print(
                     f"multithreading: {c.okgreen}{config['multithreading']}{c.end}")
+
+        elif (_splitinput[1] == "perfmon"):
+            if (_splitinput[2].lower() == "true"):
+                config["perfmon"] = True
+            elif (_splitinput[2].lower() == "false"):
+                config["perfmon"] = False
+            if not args.quiet:
+                print(
+                    f"perfmon: {c.okgreen}{config['perfmon']}{c.end}")
 
         elif (_splitinput[1] == "fuzzycomplete"):
             if (_splitinput[2].lower() == "true"):
@@ -500,6 +514,16 @@ def read(splitInput) -> None:
         print(content)
     file.close()
 
+def performance_toobar():
+    gpus = GPUtil.getGPUs()
+    try: 
+        gpu_util = gpus[0].load*100
+        gpu_temperature = gpus[0].temperature
+    except: 
+        gpu_util = "0"
+        gpu_temperature = "0"
+
+    return HTML(f"CPU: {psutil.cpu_percent()}%  GPU: {gpu_util}% {gpu_temperature}°C")
 
 def power() -> None:
     "Change Windows power scheme"
@@ -1691,7 +1715,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             while True:
                 try:
                     _eval = self.prompt(message=HTML(f"<user>{USER}</user> <path>eval</path>""<pointer> > </pointer>"), style=_style,
-                                        complete_in_thread=config["multithreading"], set_exception_handler=True, color_depth=ColorDepth.TRUE_COLOR, completer=None)
+                                        complete_in_thread=config["multithreading"], set_exception_handler=True, color_depth=ColorDepth.TRUE_COLOR, completer=None,
+                                        bottom_toolbar=performance_toobar() if config["perfmon"] else None)
                     if _eval.lower() == "quit" or _eval.lower() == "exit":
                         break
                     else:
@@ -1773,7 +1798,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                     f"""\n┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]━(T:<user>{threading.active_count()}</user> V:<user>{VOLUME}</user>)\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
 
                 userInput = self.prompt(enable_history_search=True, completer=self.default_completer, auto_suggest=self.default_auto_suggest, is_password=False, message=promptMessage,
-                                        style=_style, complete_in_thread=config["multithreading"], color_depth=ColorDepth.TRUE_COLOR)  # Get user input (autocompetion allowed)
+                                        style=_style, complete_in_thread=config["multithreading"], color_depth=ColorDepth.TRUE_COLOR, 
+                                        bottom_toolbar=performance_toobar() if config["perfmon"] else None)  # Get user input (autocompetion allowed)
 
                 userInput = self.envirotize(userInput)
 

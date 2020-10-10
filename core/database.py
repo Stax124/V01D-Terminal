@@ -211,7 +211,7 @@ if platform.system() == "Windows":
             "online":{"http://localhost":None},
             "clear": None,
             "search": None,
-            "void": {"config": None, "mode": {"CMD": None, "POWERSHELL": None}, "install": {"chocolatey": None}, "multithreading": {"true": None, "false": None}, "license": {"full": None}, "version": {"latest": None, "local": None}, "mouseSupport": {"true": None, "false": None}, "fuzzycomplete": {"true": None, "false": None}, "completeWhileTyping": {"true": None, "false": None}, "wrapLines": {"true": None, "false": None}, "welcome": {"true": None, "false": None}, "start": None, "updatePythonPackages": None, "title": None},
+            "void": {"config": None, "perfmon": {"true": None, "false": None}, "mode": {"CMD": None, "POWERSHELL": None}, "install": {"chocolatey": None}, "multithreading": {"true": None, "false": None}, "license": {"full": None}, "version": {"latest": None, "local": None}, "mouseSupport": {"true": None, "false": None}, "fuzzycomplete": {"true": None, "false": None}, "completeWhileTyping": {"true": None, "false": None}, "wrapLines": {"true": None, "false": None}, "welcome": {"true": None, "false": None}, "start": None, "updatePythonPackages": None, "title": None},
             "read": None,
             "power": None,
             "wifipassword": None,

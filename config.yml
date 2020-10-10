@@ -10,6 +10,7 @@ mode: CMD
 mouseSupport: true
 multithreading: true
 path: aqua
+perfmon: false
 pointer: '#ff4500'
 scrollbar.background: bg:#88aaaa
 scrollbar.button: bg:#222222
