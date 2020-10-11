@@ -135,10 +135,10 @@ except Exception as e:
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
-                    "pip install python-mpv youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
+                    "pip3 install python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
             else:
                 os.system(
-                    "sudo pip3 install python-mpv youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
+                    "sudo pip3 install python-mpv colrprettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
                 os.system("sudo apt-get install -y libmpv-dev")
         else:
             exit(0)
@@ -193,7 +193,7 @@ else:
     CONFIG = defPath + r"/config.yml"
 
 # Local version
-VERSION = "v0.8.0"
+VERSION = "v0.8.3"
 
 # -------------------------------------------
 
@@ -241,11 +241,10 @@ except Exception as e:
     config = {
         "mode": "CMD",
         "welcome": False,
-        "downloadDict": ("downloadDict.yml"),
         "multithreading": True,
         "fuzzycomplete": True,
         "completeWhileTyping": True,
-        "wrapLines": True,
+        "wrapLines": False,
         "mouseSupport": True,
         "searchIgnoreCase": True,
         "default": "greenyellow",
@@ -274,7 +273,6 @@ except Exception as e:
                 print(
                     f"Error writing config file, please check if you are not starting Terminal from PATH, otherwise you dont have permission to write in this folder {CONFIG}")
 
-DOWNLOAD = list(config.get("downloadDict"))  # Get all download dictionaries
 MODE = config.get("mode", "CMD")
 
 # Pick completer based on config and platform
@@ -514,16 +512,18 @@ def read(splitInput) -> None:
         print(content)
     file.close()
 
+
 def performance_toobar():
     gpus = GPUtil.getGPUs()
-    try: 
+    try:
         gpu_util = gpus[0].load*100
         gpu_temperature = gpus[0].temperature
-    except: 
+    except:
         gpu_util = "0"
         gpu_temperature = "0"
 
     return HTML(f"CPU: {psutil.cpu_percent()}%  GPU: {gpu_util}% {gpu_temperature}°C")
+
 
 def power() -> None:
     "Change Windows power scheme"
@@ -684,7 +684,6 @@ class Void_Terminal(PromptSession):
               f"   {c.okblue}downloadeta{c.end} - calculate estimated time of arival: {c.okgreen}downloadeta [target](GB,MB,KB) [speed](GB,MB,KB){c.end}\n"
               f"   {c.okblue}convert{c.end} - function for converting temperatures, colors to hex, audio or video files\n"
               f"   {c.okblue}power{c.end} - change your Windows powerplan\n"
-              f"   {c.okblue}download{c.end} - dictionary for downloading files: {c.okgreen}download [-list | target | URL]{c.end}\n"
               f"   {c.okblue}plain2string{c.end} - convert plain text to strings: {c.okgreen}plain2string mode[space,file, fileline] text/[filename]{c.end}\n"
               f"   {c.okblue}autoclicker{c.end} - integrated autoclicker\n"
               f"   {c.okblue}steam-api{c.end} - get information about Steam application: {c.okgreen}steam-api [name]{c.end}\n"
@@ -899,7 +898,8 @@ class Void_Terminal(PromptSession):
                     s.connect((target, fargs.port))
                     print_formatted_text(
                         f'{c.fail}TCP{c.end} {c.okblue}{target}{c.end} {c.okgreen}{fargs.port}{c.end} is open')
-                    print_formatted_text(HTML(f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{fargs.port}</style> is open (<style fg="green">{core.database.known_port_names.get(str(fargs.port),"unknown")}</style>)'))
+                    print_formatted_text(HTML(
+                        f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{fargs.port}</style> is open (<style fg="green">{core.database.known_port_names.get(str(fargs.port),"unknown")}</style>)'))
                     s.close()
                 except:
                     s.close()
@@ -1007,7 +1007,9 @@ class Void_Terminal(PromptSession):
             if not self.player_active:
                 thread = Thread(target=play)
                 thread.start()
-            else: print(f"{c.warning}Player already started, use 'player-append [target] instead'{c.end}")
+            else:
+                print(
+                    f"{c.warning}Player already started, use 'player-append [target] instead'{c.end}")
 
         elif splitInput[0].lower() == "player-volume":
             fparser = argparse.ArgumentParser(prog="player-volume")
@@ -1076,7 +1078,8 @@ class Void_Terminal(PromptSession):
 
             print_formatted_text("Loading Steam store details...")
 
-            initial_list = requests.get(r"http://api.steampowered.com/ISteamApps/GetAppList/v0001/").json()["applist"]["apps"]["app"]
+            initial_list = requests.get(
+                r"http://api.steampowered.com/ISteamApps/GetAppList/v0001/").json()["applist"]["apps"]["app"]
             game_list = dict()
             games = []
 
@@ -1084,23 +1087,31 @@ class Void_Terminal(PromptSession):
                 game_list[i["name"].lower()] = i["appid"]
                 games.append(i["name"].lower())
 
-            print_formatted_text(f"Closest results: {difflib.get_close_matches(fargs.name.lower(), games)}")
-            id = game_list[difflib.get_close_matches(fargs.name.lower(), games)[0]]
+            print_formatted_text(
+                f"Closest results: {difflib.get_close_matches(fargs.name.lower(), games)}")
+            id = game_list[difflib.get_close_matches(
+                fargs.name.lower(), games)[0]]
 
-            content = requests.get(f"https://store.steampowered.com/api/appdetails?appids={id}").json()
+            content = requests.get(
+                f"https://store.steampowered.com/api/appdetails?appids={id}").json()
             content = content.get(str(id))["data"]
 
             name = content.get("name", "Unknown")
             age = content.get("required_age", "Unknown")
             publisher = content.get("publishers", "Unknown")
-            discount = content.get("price_overview", {}).get("discount_percent", "Unknown")
-            price = content.get("price_overview", {}).get("final_formatted", "Unknown")
+            discount = content.get("price_overview", {}).get(
+                "discount_percent", "Unknown")
+            price = content.get("price_overview", {}).get(
+                "final_formatted", "Unknown")
             metacritic = content.get("metacritic", {})
             categories = content.get("categories", "Unknown")
             genres = content.get("genres", "Unknown")
-            recommendations = content.get("recommendations", {}).get("total", "Unknown")
-            achievements = content.get("achievements", {}).get("total", "Unknown")
-            release_date = content.get("release_date", {}).get("date", "Unknown")
+            recommendations = content.get(
+                "recommendations", {}).get("total", "Unknown")
+            achievements = content.get(
+                "achievements", {}).get("total", "Unknown")
+            release_date = content.get(
+                "release_date", {}).get("date", "Unknown")
             game_type = content.get("type", "Unknown")
 
             category_names = []
@@ -1133,11 +1144,13 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
 
         elif splitInput[0].lower() == "game-deals":
             from prettytable import PrettyTable
-            response = requests.get("https://www.cheapshark.com/api/1.0/deals").json()
+            response = requests.get(
+                "https://www.cheapshark.com/api/1.0/deals").json()
             t = PrettyTable(["Title", "Price", "Discount", "Store", "URL"])
 
             for game in response:
-                t.add_row([game["title"], game["salePrice"], game["savings"]+"%", core.database.storeID.get(game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
+                t.add_row([game["title"], game["salePrice"], game["savings"]+"%", core.database.storeID.get(
+                    game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
             print(t)
 
         elif splitInput[0].lower() == "grantfiles" and iswindows():
@@ -1528,7 +1541,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
 
             return
 
-        elif splitInput[0].lower() == "welcome":  # Show welcome screen
+        elif splitInput[0].lower() == "welcome":
             welcome()
             return
 
@@ -1536,7 +1549,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             open_new_tab(url="https://www.google.com/search?q=" +
                          " ".join(splitInput[1:]))
 
-        elif splitInput[0].lower() == "sizeof":  # Show welcome screen
+        elif splitInput[0].lower() == "sizeof":
             def get_size(start_path='.'):
                 total_size = 0
                 for dirpath, dirnames, filenames in os.walk(start_path):
@@ -1551,7 +1564,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                 print(get_size(splitInput[1]) /
                       1000000, f"{c.okgreen}MB{c.end}")
 
-        elif splitInput[0].lower() == "currencyconverter":  # Show welcome screen
+        elif splitInput[0].lower() == "currencyconverter":
             fparser = argparse.ArgumentParser(prog="currencyconverter")
             fparser.add_argument("base", help="Base currency", type=str)
             fparser.add_argument("other", help="Target currency", type=str)
@@ -1609,7 +1622,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
 
         elif splitInput[0].lower() == "lcm":
             fparser = argparse.ArgumentParser(prog="lcm")
-            fparser.add_argument("value",nargs="+", type=int, help="List of numbers")
+            fparser.add_argument("value", nargs="+",
+                                 type=int, help="List of numbers")
             try:
                 fargs = fparser.parse_args(splitInput[1:])
             except SystemExit:
@@ -1621,7 +1635,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
 
         elif splitInput[0].lower() == "gcd":
             fparser = argparse.ArgumentParser(prog="gcd")
-            fparser.add_argument("value",nargs="+", type=int, help="List of numbers")
+            fparser.add_argument("value", nargs="+",
+                                 type=int, help="List of numbers")
             try:
                 fargs = fparser.parse_args(splitInput[1:])
             except SystemExit:
@@ -1633,7 +1648,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
 
         elif splitInput[0].lower() == "prime":
             fparser = argparse.ArgumentParser(prog="prime")
-            fparser.add_argument("value",nargs="+", type=int, help="List of numbers")
+            fparser.add_argument("value", nargs="+",
+                                 type=int, help="List of numbers")
             try:
                 fargs = fparser.parse_args(splitInput[1:])
             except SystemExit:
@@ -1693,8 +1709,10 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
 
         # Terminate application
         elif splitInput[0].lower() == "exit" or splitInput[0].lower() == "quit":
-            try: self.player.terminate()
-            finally: _exit()
+            try:
+                self.player.terminate()
+            finally:
+                _exit()
 
         elif splitInput[0].lower() == "alias":  # Define own function and save it
             if splitInput[1] == "-list":
@@ -1738,34 +1756,21 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                         print(f"{c.fail}{e}{c.end}")
             return
 
-        # Dictionary for downloading (direct link to website mirror) or download straight to active folder
         elif splitInput[0].lower() == "download":
             fparser = argparse.ArgumentParser(prog="download")
-            fparser.add_argument(
-                "-l", "--list", help="List all dictionary keys", action="store_true")
-            fparser.add_argument("-k", "--key", help="URL or dictionary key")
+            fparser.add_argument("URL")
+            fparser.add_argument("-o","--output", help="Output filename")
             try:
                 fargs = fparser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
-            try:
-                if fargs.list:
-                    for i in DOWNLOAD:
-                        try:
-                            if not args.quiet:
-                                print(dict(yaml.safe_load(open(i))).keys())
-                        except:
-                            pass
-                else:
-                    raise Exception
-            except:
-                try:
-                    for item in splitInput[1:]:
-                        core.utils.download(item)
-                except Exception as e:
-                    if not args.quiet:
-                        print(f"{c.fail}{e}{c.end}")
+            if fargs.output:
+                filename = fargs.output
+            else:
+                filename = fargs.URL.split("/")[-1]
+
+            os.system(f"curl {fargs.URL} -o {filename}")
 
         else:
             try:  # Calculator
@@ -1810,7 +1815,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                     f"""\n┏━━(<user>{USER}</user> Ʃ <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]━(T:<user>{threading.active_count()}</user> V:<user>{VOLUME}</user>)\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
 
                 userInput = self.prompt(enable_history_search=True, completer=self.default_completer, auto_suggest=self.default_auto_suggest, is_password=False, message=promptMessage,
-                                        style=_style, complete_in_thread=config["multithreading"], color_depth=ColorDepth.TRUE_COLOR, 
+                                        style=_style, complete_in_thread=config[
+                                            "multithreading"], color_depth=ColorDepth.TRUE_COLOR,
                                         bottom_toolbar=performance_toobar() if config["perfmon"] else None)  # Get user input (autocompetion allowed)
 
                 userInput = self.envirotize(userInput)
