@@ -14,7 +14,6 @@ import requests
 from youtube_dl import YoutubeDL
 import random
 import time
-from core.download import Download
 import os
 
 def time_reformat(duration: int):
@@ -144,12 +143,6 @@ def PlainToString(splitInput) -> str:
             out = ",\n".join(lines)
 
     return(out)
-
-def download(target: str) -> None:
-    "Downloads file from the web"
-    from Void import DOWNLOAD
-    d = Download(promptinstall=True, dictionarypath=DOWNLOAD, startifexeption=True, returnexeption=True)
-    d.download(target=target)
 
 def rng(_min: int, _max: int) -> int:
     "Returns random number between min and max. Min included, max excluded"

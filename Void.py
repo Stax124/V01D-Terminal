@@ -135,7 +135,7 @@ except Exception as e:
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
-                    "pip install python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
+                    "pip3 install python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
             else:
                 os.system(
                     "sudo pip3 install python-mpv colrprettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
@@ -241,7 +241,6 @@ except Exception as e:
     config = {
         "mode": "CMD",
         "welcome": False,
-        "downloadDict": ("downloadDict.yml"),
         "multithreading": True,
         "fuzzycomplete": True,
         "completeWhileTyping": True,
@@ -274,7 +273,6 @@ except Exception as e:
                 print(
                     f"Error writing config file, please check if you are not starting Terminal from PATH, otherwise you dont have permission to write in this folder {CONFIG}")
 
-DOWNLOAD = list(config.get("downloadDict"))  # Get all download dictionaries
 MODE = config.get("mode", "CMD")
 
 # Pick completer based on config and platform
@@ -686,7 +684,6 @@ class Void_Terminal(PromptSession):
               f"   {c.okblue}downloadeta{c.end} - calculate estimated time of arival: {c.okgreen}downloadeta [target](GB,MB,KB) [speed](GB,MB,KB){c.end}\n"
               f"   {c.okblue}convert{c.end} - function for converting temperatures, colors to hex, audio or video files\n"
               f"   {c.okblue}power{c.end} - change your Windows powerplan\n"
-              f"   {c.okblue}download{c.end} - dictionary for downloading files: {c.okgreen}download [-list | target | URL]{c.end}\n"
               f"   {c.okblue}plain2string{c.end} - convert plain text to strings: {c.okgreen}plain2string mode[space,file, fileline] text/[filename]{c.end}\n"
               f"   {c.okblue}autoclicker{c.end} - integrated autoclicker\n"
               f"   {c.okblue}steam-api{c.end} - get information about Steam application: {c.okgreen}steam-api [name]{c.end}\n"
@@ -1759,34 +1756,21 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                         print(f"{c.fail}{e}{c.end}")
             return
 
-        # Dictionary for downloading (direct link to website mirror) or download straight to active folder
         elif splitInput[0].lower() == "download":
             fparser = argparse.ArgumentParser(prog="download")
-            fparser.add_argument(
-                "-l", "--list", help="List all dictionary keys", action="store_true")
-            fparser.add_argument("-k", "--key", help="URL or dictionary key")
+            fparser.add_argument("URL")
+            fparser.add_argument("-o","--output", help="Output filename")
             try:
                 fargs = fparser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
-            try:
-                if fargs.list:
-                    for i in DOWNLOAD:
-                        try:
-                            if not args.quiet:
-                                print(dict(yaml.safe_load(open(i))).keys())
-                        except:
-                            pass
-                else:
-                    raise Exception
-            except:
-                try:
-                    for item in splitInput[1:]:
-                        core.utils.download(item)
-                except Exception as e:
-                    if not args.quiet:
-                        print(f"{c.fail}{e}{c.end}")
+            if fargs.output:
+                filename = fargs.output
+            else:
+                filename = fargs.URL.split("/")[-1]
+
+            os.system(f"curl {fargs.URL} -o {filename}")
 
         else:
             try:  # Calculator
