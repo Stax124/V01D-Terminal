@@ -1,6 +1,13 @@
 #! /usr/bin/env python3
 # Project V01D-Terminal
 
+import core.database
+import core.osBased
+import core.utils
+from core.elevate import elevate
+from core.vectors import Vector2, Vector3
+from core import steam_api
+
 import argparse
 import shlex
 from subprocess import call
@@ -80,13 +87,6 @@ def _import():
     from prompt_toolkit.styles import Style
     from prompt_toolkit.output.color_depth import ColorDepth
 
-    # Project stuff
-    import core.database
-    import core.osBased
-    import core.utils
-    from core.elevate import elevate
-    from core.vectors import Vector2, Vector3
-
 
 try:
     from sys import exit as _exit
@@ -110,13 +110,6 @@ try:
     from prompt_toolkit.formatted_text import HTML
     from prompt_toolkit.styles import Style
     from prompt_toolkit.output.color_depth import ColorDepth
-
-    # Project stuff
-    import core.database
-    import core.osBased
-    import core.utils
-    from core.elevate import elevate
-    from core.vectors import Vector2, Vector3
 
 
 except Exception as e:
@@ -256,7 +249,9 @@ except Exception as e:
         "scrollbar.background": "bg:#88aaaa",
         "scrollbar.button": "bg:#222222",
         "exeptions": tuple(),
-        "perfmon": False
+        "perfmon": False,
+        "steamapikey":"",
+        "steamurl":""
     }
 
     if not args.skipconfig:
@@ -567,9 +562,14 @@ class Void_Terminal(PromptSession):
         self.exceptions = config.get("exeptions", tuple())
         self.default_completer = completer
         self.default_auto_suggest = auto_suggest
+        self.skipsteam = False if config.get("steamapikey") != "" and config.get("steamurl") != "" else True
+
+
+        if not self.skipsteam: steam_api.connect(config["steamapikey"])
+        if not self.skipsteam: steam_api.profile(config["steamurl"])
 
     def password(self, text="Password: "):
-        self.prompt(text, is_password=True, completer=DummyCompleter(
+        return self.prompt(text, is_password=True, completer=DummyCompleter(
         ), auto_suggest=DummyAutoSuggest(), enable_history_search=False)
 
     def help(self):
@@ -686,7 +686,7 @@ class Void_Terminal(PromptSession):
               f"   {c.okblue}power{c.end} - change your Windows powerplan\n"
               f"   {c.okblue}plain2string{c.end} - convert plain text to strings: {c.okgreen}plain2string mode[space,file, fileline] text/[filename]{c.end}\n"
               f"   {c.okblue}autoclicker{c.end} - integrated autoclicker\n"
-              f"   {c.okblue}steam-api{c.end} - get information about Steam application: {c.okgreen}steam-api [name]{c.end}\n"
+              f"   {c.okblue}steam{c.end} - get Steam information (requires steamapikey in config): {c.okgreen}steam [name]{c.end}\n"
               f"   {c.okblue}game-deals{c.end} - get best deals on games from more than 30 stores\n"
               )
 
@@ -1065,65 +1065,112 @@ class Void_Terminal(PromptSession):
             finally:
                 print(f"{fargs.target} added to active queue")
 
-        elif splitInput[0].lower() == "steam-api":
-            fparser = argparse.ArgumentParser(prog="steam-api")
-            fparser.add_argument(
-                "name", help="Name of steam store product", type=str)
+        elif splitInput[0].lower() == "steam" and not self.skipsteam:
+            xparser = argparse.ArgumentParser(prog="steam")
+            xparser.add_argument("mode", type=str, choices=["game", "friends", "user", "me"])
+            xparser.add_argument("value", type=str, nargs="*")
             try:
-                fargs = fparser.parse_args(splitInput[1:])
+                xargs = xparser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
-            import difflib
+            if xargs.mode == "user":
+                fparser = argparse.ArgumentParser(prog="steam user")
+                fparser.add_argument(
+                    "ID", type=int)
+                try:
+                    fargs = fparser.parse_args(splitInput[2:])
+                except SystemExit:
+                    return
+                    
+                steam_api.profileID(fargs.ID)
 
-            print_formatted_text("Loading Steam store details...")
+            elif xargs.mode == "friends":
+                print(steam_api.friends())
 
-            initial_list = requests.get(
-                r"http://api.steampowered.com/ISteamApps/GetAppList/v0001/").json()["applist"]["apps"]["app"]
-            game_list = dict()
-            games = []
+            elif xargs.mode == "me":
+                me = steam_api.SteamUser(steam_api.me.id)
+                print(f"""
+{c.bold}Name{c.end}: {c.okgreen}{me.name}{c.end}
 
-            for i in initial_list:
-                game_list[i["name"].lower()] = i["appid"]
-                games.append(i["name"].lower())
+Real name: {c.okgreen}{me.real_name}{c.end}
+ID: {c.okgreen}{me.id}{c.end}
+URL: {c.okgreen}{me.profile_url}{c.end}
+Avatar: {c.okgreen}{me.avatar_full}{c.end}
+State: {c.okgreen}{me.state}{c.end}
+Games owned: {c.okgreen}{len(me.owned_games)}{c.end}
+Friends: {c.okgreen}{len(me.friends)}{c.end}
+Badges: {c.okgreen}{len(me.badges)}{c.end}
 
-            print_formatted_text(
-                f"Closest results: {difflib.get_close_matches(fargs.name.lower(), games)}")
-            id = game_list[difflib.get_close_matches(
-                fargs.name.lower(), games)[0]]
+Last online: {c.okgreen}{me.last_logoff}{c.end}
+Recently played: {c.okgreen}{me.recently_played}{c.end}
+Playing: {c.okgreen}{me.currently_playing}{c.end}
+Group: {c.okgreen}{me.group}{c.end}
+Level: {c.okgreen}{me.level}{c.end}
+Privacy: {c.okgreen}{me.privacy}{c.end}
 
-            content = requests.get(
-                f"https://store.steampowered.com/api/appdetails?appids={id}").json()
-            content = content.get(str(id))["data"]
+VAC: {c.okgreen}{me.is_vac_banned}{c.end}
+Country code: {c.okgreen}{me.country_code}{c.end}
+""")
 
-            name = content.get("name", "Unknown")
-            age = content.get("required_age", "Unknown")
-            publisher = content.get("publishers", "Unknown")
-            discount = content.get("price_overview", {}).get(
-                "discount_percent", "Unknown")
-            price = content.get("price_overview", {}).get(
-                "final_formatted", "Unknown")
-            metacritic = content.get("metacritic", {})
-            categories = content.get("categories", "Unknown")
-            genres = content.get("genres", "Unknown")
-            recommendations = content.get(
-                "recommendations", {}).get("total", "Unknown")
-            achievements = content.get(
-                "achievements", {}).get("total", "Unknown")
-            release_date = content.get(
-                "release_date", {}).get("date", "Unknown")
-            game_type = content.get("type", "Unknown")
+            elif xargs.mode == "game":
+                fparser = argparse.ArgumentParser(prog="steam game")
+                fparser.add_argument(
+                    "name", help="Name of game", type=str)
+                try:
+                    fargs = fparser.parse_args(splitInput[2:])
+                except SystemExit:
+                    return
 
-            category_names = []
-            for i in categories:
-                category_names.append(i.get("description", "Unknown"))
+                import difflib
+                print_formatted_text("Loading Steam store details...")
 
-            genre_names = []
-            for i in genres:
-                genre_names.append(i.get("description", "Unknown"))
+                initial_list = requests.get(
+                    r"http://api.steampowered.com/ISteamApps/GetAppList/v0001/").json()["applist"]["apps"]["app"]
+                game_list = dict()
+                games = []
 
-            print(f"""
-{c.okgreen}Name{c.end}: {c.bold}{name}{c.end}
+                for i in initial_list:
+                    game_list[i["name"].lower()] = i["appid"]
+                    games.append(i["name"].lower())
+
+                print_formatted_text(
+                    f"Closest results: {difflib.get_close_matches(fargs.name.lower(), games)}")
+                id = game_list[difflib.get_close_matches(
+                    fargs.name.lower(), games)[0]]
+
+                content = requests.get(
+                    f"https://store.steampowered.com/api/appdetails?appids={id}").json()
+                content = content.get(str(id))["data"]
+
+                name = content.get("name", "Unknown")
+                age = content.get("required_age", "Unknown")
+                publisher = content.get("publishers", "Unknown")
+                discount = content.get("price_overview", {}).get(
+                    "discount_percent", "Unknown")
+                price = content.get("price_overview", {}).get(
+                    "final_formatted", "Unknown")
+                metacritic = content.get("metacritic", {})
+                categories = content.get("categories", "Unknown")
+                genres = content.get("genres", "Unknown")
+                recommendations = content.get(
+                    "recommendations", {}).get("total", "Unknown")
+                achievements = content.get(
+                    "achievements", {}).get("total", "Unknown")
+                release_date = content.get(
+                    "release_date", {}).get("date", "Unknown")
+                game_type = content.get("type", "Unknown")
+
+                category_names = []
+                for i in categories:
+                    category_names.append(i.get("description", "Unknown"))
+
+                genre_names = []
+                for i in genres:
+                    genre_names.append(i.get("description", "Unknown"))
+
+                print(f"""
+{c.bold}Name{c.end}: {c.okgreen}{name}{c.end}
 
 Release date: {c.okgreen}{release_date}{c.end}
 

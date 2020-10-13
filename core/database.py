@@ -194,7 +194,7 @@ if platform.system() == "Windows":
             "instaloader": None,
             "pwd": None,
             "prime": None,
-            "steam-api": None,
+            "steam": None,
             "game-deals": None,
             "thread": None,
             "autoclicker": None,
