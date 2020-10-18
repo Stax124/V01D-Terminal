@@ -66,6 +66,7 @@ if iswindows():
 
 def _import():
     from sys import exit as _exit
+    from python_ls import ls
     import yaml
     import requests
     import datetime
@@ -90,6 +91,7 @@ def _import():
 
 try:
     from sys import exit as _exit
+    from python_ls import ls
     import yaml
     import datetime
     import hashlib
