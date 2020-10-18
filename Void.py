@@ -183,9 +183,9 @@ __location__ = defPath + "\\V01D-Terminal.exe"
 
 # Find config file
 if iswindows():
-    CONFIG = defPath + r"\config.yml"
+    CONFIG = os.environ["userprofile"] + r"\.void"
 else:
-    CONFIG = defPath + r"/config.yml"
+    CONFIG = os.environ["home"] + r"/.void"
 
 # Local version
 VERSION = "v0.8.3"
@@ -211,11 +211,6 @@ aliases = core.database.GetAliases()  # Get user alias from database
 
 
 def saveToYml(data, path) -> None:
-    if not os.path.exists(path):
-        if not confirm("config.yml not found, create new one ? "):
-            if not args.quiet:
-                print("config not saved !")
-                return
     try:
         with open(path, "w") as f:
             f.flush()
@@ -260,15 +255,12 @@ except Exception as e:
         if not args.quiet:
             print(e)
         try:
-            if os.path.exists(CONFIG):
-                saveToYml(config, CONFIG)  # Create new config file
-            else:
-                if confirm("config.yml not found, ignoring settings and using defaults, would you like to save new config? "):
-                    saveToYml(config, CONFIG)  # Create new config file
+            print(f"{c.bold}Creating new config file:{c.end} {c.okgreen}{CONFIG}{c.end}")
+            saveToYml(config, CONFIG)  # Create new config file
         except:
             if not args.quiet:
                 print(
-                    f"Error writing config file, please check if you are not starting Terminal from PATH, otherwise you dont have permission to write in this folder {CONFIG}")
+                    f"Error writing config file, please check if you have permission to write in this location {CONFIG}")
 
 MODE = config.get("mode", "CMD")
 
