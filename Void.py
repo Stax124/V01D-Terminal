@@ -117,7 +117,7 @@ try:
 
 
 except Exception as e:
-    if "python" in sys.executable:
+    if "python" in sys.executable.lower():
         if not args.quiet:
             print(e)
         # Install main lib
@@ -135,7 +135,7 @@ except Exception as e:
                     "pip3 install packaging python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
             else:
                 os.system(
-                    "sudo pip3 install packaging python-mpv colrprettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
+                    "sudo pip3 install packaging python-mpv colr prettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
                 os.system("sudo apt-get install -y libmpv-dev")
         else:
             exit(0)
