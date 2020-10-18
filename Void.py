@@ -145,8 +145,6 @@ except Exception as e:
             print(e)
         if iswindows():
             os.system("pause")
-        else:
-            os.system("bash -c pause")
 
 # -------------------------------------------
 
@@ -173,13 +171,8 @@ defPath = os.getcwd()
 # For use in "back"
 LASTDIR = ""
 
-VOLUME = 100
-
 playing = False
 playerInitialized = False
-
-# Path to executable
-__location__ = defPath + "\\V01D-Terminal.exe"
 
 # Find config file
 if iswindows():
@@ -188,7 +181,7 @@ else:
     CONFIG = os.environ["home"] + r"/.void"
 
 # Local version
-VERSION = "v0.8.3"
+VERSION = "v0.8.4"
 
 # -------------------------------------------
 
@@ -248,7 +241,8 @@ except Exception as e:
         "exeptions": tuple(),
         "perfmon": False,
         "steamapikey":"",
-        "steamurl":""
+        "steamurl":"",
+        "volume":100
     }
 
     if not args.skipconfig:
@@ -263,6 +257,7 @@ except Exception as e:
                     f"Error writing config file, please check if you have permission to write in this location {CONFIG}")
 
 MODE = config.get("mode", "CMD")
+VOLUME = config.get("volume", 100)
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and iswindows():
@@ -1019,6 +1014,8 @@ class Void_Terminal(PromptSession):
             try:
                 self.player["volume"] = fargs.TARGET
                 VOLUME = fargs.TARGET
+                config["volume"] = fargs.TARGET
+                saveToYml(config, CONFIG)
             except:
                 print(f"{c.fail}Player not initialized{c.end}")
                 if fargs.no_updating:
