@@ -67,6 +67,7 @@ if iswindows():
 def _import():
     from sys import exit as _exit
     from python_ls import ls
+    from packaging import version
     import yaml
     import requests
     import datetime
@@ -92,6 +93,7 @@ def _import():
 try:
     from sys import exit as _exit
     from python_ls import ls
+    from packaging import version
     import yaml
     import datetime
     import hashlib
@@ -130,10 +132,10 @@ except Exception as e:
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
-                    "pip3 install python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
+                    "pip3 install packaging python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
             else:
                 os.system(
-                    "sudo pip3 install python-mpv colrprettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
+                    "sudo pip3 install packaging python-mpv colrprettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
                 os.system("sudo apt-get install -y libmpv-dev")
         else:
             exit(0)
@@ -304,12 +306,12 @@ logo = """
             J###                         ###L                      
             {###K                       J###K                      
             ]####K      ___aaa___      J####F                      
-        __gmM######_  w#P""   ""9#m  _d#####Mmw__               ██╗   ██╗  ██████╗  ██╗ ██████╗         ████████╗ ███████╗ ██████╗  ███╗   ███╗ ██╗ ███╗   ██╗  █████╗  ██╗
-     _g##############mZ_         __g##############m_            ██║   ██║ ██╔═══██╗ ██║ ██╔══██╗        ╚══██╔══╝ ██╔════╝ ██╔══██╗ ████╗ ████║ ██║ ████╗  ██║ ██╔══██╗ ██║
-   _d####M@PPPP@@M#######Mmp gm#########@@PPP9@M####m_          ██║   ██║ ██║   ██║ ██║ ██║  ██║ █████╗    ██║    █████╗   ██████╔╝ ██╔████╔██║ ██║ ██╔██╗ ██║ ███████║ ██║
-  a###""          ,Z"#####@" '######"\g          ""M##m         ╚██╗ ██╔╝ ██║   ██║ ██║ ██║  ██║ ╚════╝    ██║    ██╔══╝   ██╔══██╗ ██║╚██╔╝██║ ██║ ██║╚██╗██║ ██╔══██║ ██║
- J#@"             0L  "*##     ##@"  J#              *#K         ╚████╔╝  ╚██████╔╝ ██║ ██████╔╝           ██║    ███████╗ ██║  ██║ ██║ ╚═╝ ██║ ██║ ██║ ╚████║ ██║  ██║ ███████╗
- #"               `#    "_gmwgm_~    dF               `#_         ╚═══╝    ╚═════╝  ╚═╝ ╚═════╝            ╚═╝    ╚══════╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚══════╝
+        __gmM######_  w#P""   ""9#m  _d#####Mmw__               
+     _g##############mZ_         __g##############m_            
+   _d####M@PPPP@@M#######Mmp gm#########@@PPP9@M####m_          
+  a###""          ,Z"#####@" '######"\g          ""M##m         
+ J#@"             0L  "*##     ##@"  J#              *#K        
+ #"               `#    "_gmwgm_~    dF               `#_       
 7F                 "#_   ]#####F   _dK                 JE          
 ]                    *m__ ##### __g@"                   F          
                        "PJ#####LP"                                 
@@ -318,6 +320,13 @@ logo = """
      .               _d#####^#####m__              ,              
       "*w_________am#####P"   ~9#####mw_________w*"                  
           ""9@#####@M""           ""P@#####@M""                    
+
+██╗   ██╗  ██████╗  ██╗ ██████╗         ████████╗ ███████╗ ██████╗  ███╗   ███╗ ██╗ ███╗   ██╗  █████╗  ██╗
+██║   ██║ ██╔═══██╗ ██║ ██╔══██╗        ╚══██╔══╝ ██╔════╝ ██╔══██╗ ████╗ ████║ ██║ ████╗  ██║ ██╔══██╗ ██║
+██║   ██║ ██║   ██║ ██║ ██║  ██║ █████╗    ██║    █████╗   ██████╔╝ ██╔████╔██║ ██║ ██╔██╗ ██║ ███████║ ██║
+╚██╗ ██╔╝ ██║   ██║ ██║ ██║  ██║ ╚════╝    ██║    ██╔══╝   ██╔══██╗ ██║╚██╔╝██║ ██║ ██║╚██╗██║ ██╔══██║ ██║
+ ╚████╔╝  ╚██████╔╝ ██║ ██████╔╝           ██║    ███████╗ ██║  ██║ ██║ ╚═╝ ██║ ██║ ██║ ╚████║ ██║  ██║ ███████╗
+  ╚═══╝    ╚═════╝  ╚═╝ ╚═════╝            ╚═╝    ╚══════╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚══════╝
 """
 
 def argget(_splitInput: list) -> str:
@@ -327,7 +336,7 @@ def argget(_splitInput: list) -> str:
 
 def welcome() -> None:
     if not args.quiet:
-        print(f"""{c.fail}{logo}{c.end}
+        print(f"""{c.bold}{logo}{c.end}
 
     {c.okblue}Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users{c.end}
 
@@ -1855,6 +1864,12 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
         """
         Terminal main loop
         """
+        try:
+            remote = core.utils.version()
+            if version.parse(VERSION) < version.parse(remote):
+                print("Update is available")
+        except: pass
+
         if args.directory:
             try:
                 os.chdir(args.directory)
