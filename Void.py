@@ -66,6 +66,8 @@ if iswindows():
 
 def _import():
     from sys import exit as _exit
+    from python_ls import ls
+    from packaging import version
     import yaml
     import requests
     import datetime
@@ -90,6 +92,8 @@ def _import():
 
 try:
     from sys import exit as _exit
+    from python_ls import ls
+    from packaging import version
     import yaml
     import datetime
     import hashlib
@@ -113,7 +117,7 @@ try:
 
 
 except Exception as e:
-    if "python" in sys.executable:
+    if "python" in sys.executable.lower():
         if not args.quiet:
             print(e)
         # Install main lib
@@ -128,10 +132,10 @@ except Exception as e:
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
-                    "pip3 install python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
+                    "pip3 install packaging python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
             else:
                 os.system(
-                    "sudo pip3 install python-mpv colrprettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
+                    "sudo pip3 install packaging python-mpv colr prettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
                 os.system("sudo apt-get install -y libmpv-dev")
         else:
             exit(0)
@@ -143,8 +147,6 @@ except Exception as e:
             print(e)
         if iswindows():
             os.system("pause")
-        else:
-            os.system("bash -c pause")
 
 # -------------------------------------------
 
@@ -171,22 +173,17 @@ defPath = os.getcwd()
 # For use in "back"
 LASTDIR = ""
 
-VOLUME = 100
-
 playing = False
 playerInitialized = False
 
-# Path to executable
-__location__ = defPath + "\\V01D-Terminal.exe"
-
 # Find config file
 if iswindows():
-    CONFIG = defPath + r"\config.yml"
+    CONFIG = os.environ["userprofile"] + r"\.void"
 else:
-    CONFIG = defPath + r"/config.yml"
+    CONFIG = os.environ["home"] + r"/.void"
 
 # Local version
-VERSION = "v0.8.3"
+VERSION = "v0.8.4"
 
 # -------------------------------------------
 
@@ -209,11 +206,6 @@ aliases = core.database.GetAliases()  # Get user alias from database
 
 
 def saveToYml(data, path) -> None:
-    if not os.path.exists(path):
-        if not confirm("config.yml not found, create new one ? "):
-            if not args.quiet:
-                print("config not saved !")
-                return
     try:
         with open(path, "w") as f:
             f.flush()
@@ -251,24 +243,23 @@ except Exception as e:
         "exeptions": tuple(),
         "perfmon": False,
         "steamapikey":"",
-        "steamurl":""
+        "steamurl":"",
+        "volume":100
     }
 
     if not args.skipconfig:
         if not args.quiet:
             print(e)
         try:
-            if os.path.exists(CONFIG):
-                saveToYml(config, CONFIG)  # Create new config file
-            else:
-                if confirm("config.yml not found, ignoring settings and using defaults, would you like to save new config? "):
-                    saveToYml(config, CONFIG)  # Create new config file
+            print(f"{c.bold}Creating new config file:{c.end} {c.okgreen}{CONFIG}{c.end}")
+            saveToYml(config, CONFIG)  # Create new config file
         except:
             if not args.quiet:
                 print(
-                    f"Error writing config file, please check if you are not starting Terminal from PATH, otherwise you dont have permission to write in this folder {CONFIG}")
+                    f"Error writing config file, please check if you have permission to write in this location {CONFIG}")
 
 MODE = config.get("mode", "CMD")
+VOLUME = config.get("volume", 100)
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and iswindows():
@@ -305,6 +296,38 @@ _style = Style.from_dict(
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 
+logo = """
+                         __ .  _                                   
+                    _wr""        "-q__                             
+                 _dP                 9m_     
+               _#P                     9#_                         
+              d#@                       9#m                        
+             d##                         ###                       
+            J###                         ###L                      
+            {###K                       J###K                      
+            ]####K      ___aaa___      J####F                      
+        __gmM######_  w#P""   ""9#m  _d#####Mmw__               
+     _g##############mZ_         __g##############m_            
+   _d####M@PPPP@@M#######Mmp gm#########@@PPP9@M####m_          
+  a###""          ,Z"#####@" '######"\g          ""M##m         
+ J#@"             0L  "*##     ##@"  J#              *#K        
+ #"               `#    "_gmwgm_~    dF               `#_       
+7F                 "#_   ]#####F   _dK                 JE          
+]                    *m__ ##### __g@"                   F          
+                       "PJ#####LP"                                 
+ `                       0######_                      '           
+   .                   _0########_                   .               
+     .               _d#####^#####m__              ,              
+      "*w_________am#####P"   ~9#####mw_________w*"                  
+          ""9@#####@M""           ""P@#####@M""                    
+
+██╗   ██╗  ██████╗  ██╗ ██████╗         ████████╗ ███████╗ ██████╗  ███╗   ███╗ ██╗ ███╗   ██╗  █████╗  ██╗
+██║   ██║ ██╔═══██╗ ██║ ██╔══██╗        ╚══██╔══╝ ██╔════╝ ██╔══██╗ ████╗ ████║ ██║ ████╗  ██║ ██╔══██╗ ██║
+██║   ██║ ██║   ██║ ██║ ██║  ██║ █████╗    ██║    █████╗   ██████╔╝ ██╔████╔██║ ██║ ██╔██╗ ██║ ███████║ ██║
+╚██╗ ██╔╝ ██║   ██║ ██║ ██║  ██║ ╚════╝    ██║    ██╔══╝   ██╔══██╗ ██║╚██╔╝██║ ██║ ██║╚██╗██║ ██╔══██║ ██║
+ ╚████╔╝  ╚██████╔╝ ██║ ██████╔╝           ██║    ███████╗ ██║  ██║ ██║ ╚═╝ ██║ ██║ ██║ ╚████║ ██║  ██║ ███████╗
+  ╚═══╝    ╚═════╝  ╚═╝ ╚═════╝            ╚═╝    ╚══════╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚══════╝
+"""
 
 def argget(_splitInput: list) -> str:
     "Returns rebuild string"
@@ -313,13 +336,7 @@ def argget(_splitInput: list) -> str:
 
 def welcome() -> None:
     if not args.quiet:
-        print(f"""{c.fail}
- ██╗   ██╗  ██████╗  ██╗ ██████╗         ████████╗ ███████╗ ██████╗  ███╗   ███╗ ██╗ ███╗   ██╗  █████╗  ██╗
- ██║   ██║ ██╔═══██╗ ██║ ██╔══██╗        ╚══██╔══╝ ██╔════╝ ██╔══██╗ ████╗ ████║ ██║ ████╗  ██║ ██╔══██╗ ██║
- ██║   ██║ ██║   ██║ ██║ ██║  ██║ █████╗    ██║    █████╗   ██████╔╝ ██╔████╔██║ ██║ ██╔██╗ ██║ ███████║ ██║
- ╚██╗ ██╔╝ ██║   ██║ ██║ ██║  ██║ ╚════╝    ██║    ██╔══╝   ██╔══██╗ ██║╚██╔╝██║ ██║ ██║╚██╗██║ ██╔══██║ ██║
-  ╚████╔╝  ╚██████╔╝ ██║ ██████╔╝           ██║    ███████╗ ██║  ██║ ██║ ╚═╝ ██║ ██║ ██║ ╚████║ ██║  ██║ ███████╗
-   ╚═══╝    ╚═════╝  ╚═╝ ╚═════╝            ╚═╝    ╚══════╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚══════╝{c.end}
+        print(f"""{c.bold}{logo}{c.end}
 
     {c.okblue}Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users{c.end}
 
@@ -1025,6 +1042,8 @@ class Void_Terminal(PromptSession):
             try:
                 self.player["volume"] = fargs.TARGET
                 VOLUME = fargs.TARGET
+                config["volume"] = fargs.TARGET
+                saveToYml(config, CONFIG)
             except:
                 print(f"{c.fail}Player not initialized{c.end}")
                 if fargs.no_updating:
@@ -1845,6 +1864,12 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
         """
         Terminal main loop
         """
+        try:
+            remote = core.utils.version()
+            if version.parse(VERSION) < version.parse(remote):
+                print("Update is available")
+        except: pass
+
         if args.directory:
             try:
                 os.chdir(args.directory)

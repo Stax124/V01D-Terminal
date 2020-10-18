@@ -53,7 +53,7 @@ def version() -> str:
 
         return content.get('html_url').split('/')[-1]
     except:
-        return None
+        return "unreachable"
 
 def ytdown(splitInput: str) -> None:
     "Downloads youtube stream from share link"
