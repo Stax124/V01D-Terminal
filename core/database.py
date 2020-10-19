@@ -5,6 +5,7 @@ import platform
 import json
 from pathlib import Path
 
+defPath = os.getcwd()
 
 def writedata(data, filename: str, location: str, mode: str) -> None:
     "Writes data to target file"
@@ -191,7 +192,6 @@ winWordCompleter = WordCompleter([
 
 if platform.system() == "Linux":
     if os.path.exists("commands.txt") == False:
-        from Void import defPath
         os.system(f'bash -c "compgen -c >{defPath}/commands.txt"')
     f = open("commands.txt", "r")
     l = f.read().splitlines()
