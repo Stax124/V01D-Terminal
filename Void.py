@@ -1,7 +1,10 @@
-#! /usr/bin/env python3
 # Project V01D-Terminal
 
 import core
+import core.database
+import core.osBased
+import core.utils
+import core.autoclicker
 from core.elevate import elevate
 from core.vectors import Vector2, Vector3
 from core import steam_api
