@@ -1,6 +1,6 @@
+from tabulate import tabulate
 from steamapi.user import SteamUser
 import steamapi
-from prettytable import PrettyTable
 
 me = None
 
@@ -15,15 +15,15 @@ def profileID(userID: str) -> None:
     global me
     me = steamapi.user.SteamUser(userID)
 
-def friends() -> PrettyTable:
-    t = PrettyTable(["Name", "Id"])
+def friends() -> str:
+    t = list()
 
     friendlist = []
     for friend in me.friends:
         friendlist.append(friend.name)
-        t.add_row([friend.name, friend.id])
+        t.append([friend.name, friend.id])
 
-    return t
+    return tabulate(t,["Name", "Id"])
 
 def me() -> SteamUser:
     return me
