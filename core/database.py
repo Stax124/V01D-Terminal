@@ -5,6 +5,7 @@ import platform
 import json
 from pathlib import Path
 
+defPath = os.getcwd()
 
 def writedata(data, filename: str, location: str, mode: str) -> None:
     "Writes data to target file"
@@ -42,37 +43,37 @@ __location__ = os.path.realpath(
 # --------------------------------------------------------------------
 
 storeID = {
-    "1":"Steam",
-    "2":"GamersGate",
-    "3":"GreenManGaming",
-    "4":"Amazon",
-    "5":"GameStop",
-    "6":"Direct2Drive",
-    "7":"GoG",
-    "8":"Origin",
-    "9":"Get Games",
-    "10":"Shiny Loot",
-    "11":"Humble Store",
-    "12":"Desura",
-    "13":"Uplay",
-    "14":"IndieGameStand",
-    "15":"Fanatical",
-    "16":"Gamesrocket",
-    "17":"Games Republic",
-    "18":"SilaGames",
-    "19":"Playfield",
-    "20":"ImperialGames",
-    "21":"WinGameStore",
-    "22":"FunStockDigital",
-    "23":"GameBillet",
-    "24":"Voidu",
-    "25":"Epic Games Store",
-    "26":"Razer Game Store",
-    "27":"Gamesplanet",
-    "28":"Gamesload",
-    "29":"2Game",
-    "30":"IndieGala",
-    "31":"Blizard Shop"
+    "1": "Steam",
+    "2": "GamersGate",
+    "3": "GreenManGaming",
+    "4": "Amazon",
+    "5": "GameStop",
+    "6": "Direct2Drive",
+    "7": "GoG",
+    "8": "Origin",
+    "9": "Get Games",
+    "10": "Shiny Loot",
+    "11": "Humble Store",
+    "12": "Desura",
+    "13": "Uplay",
+    "14": "IndieGameStand",
+    "15": "Fanatical",
+    "16": "Gamesrocket",
+    "17": "Games Republic",
+    "18": "SilaGames",
+    "19": "Playfield",
+    "20": "ImperialGames",
+    "21": "WinGameStore",
+    "22": "FunStockDigital",
+    "23": "GameBillet",
+    "24": "Voidu",
+    "25": "Epic Games Store",
+    "26": "Razer Game Store",
+    "27": "Gamesplanet",
+    "28": "Gamesload",
+    "29": "2Game",
+    "30": "IndieGala",
+    "31": "Blizard Shop"
 }
 
 known_ports = [1, 3, 4, 6, 7, 9, 13, 17, 19, 20, 21, 22, 23, 24, 25, 26, 30, 32, 33, 37, 42, 43, 49, 53, 70, 79, 80, 81, 82, 83, 84, 85, 88, 89, 90, 99, 100, 106, 109, 110, 111, 113, 119, 125, 135, 139, 143, 144, 146, 161, 163, 179, 199, 211, 212, 222, 254, 255, 256, 259, 264, 280, 301, 306, 311, 340, 366, 389, 406, 407, 416, 417, 425, 427, 443, 444, 445, 458, 464, 465, 481, 497, 500, 512, 513, 514, 515, 524, 541, 543, 544, 545, 548, 554, 555, 563, 587, 593, 616, 617, 625, 631, 636, 646, 648, 666, 667, 668, 683, 687, 691, 700, 705, 711, 714, 720, 722, 726, 749, 765, 777, 783, 787, 800, 801, 808, 843, 873, 880, 888, 898, 900, 901, 902, 903, 911, 912, 981, 987, 990, 992, 993, 995, 999, 1000, 1001, 1002, 1007, 1009, 1010, 1011, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1036, 1037, 1038, 1039, 1040, 1041, 1042, 1043, 1044, 1045, 1046, 1047, 1048, 1049, 1050, 1051, 1052, 1053, 1054, 1055, 1056, 1057, 1058, 1059, 1060, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072, 1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086, 1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 1095, 1096, 1097, 1098, 1099, 1100, 1102, 1104, 1105, 1106, 1107, 1108, 1110, 1111, 1112, 1113, 1114, 1117, 1119, 1121, 1122, 1123, 1124, 1126, 1130, 1131, 1132, 1137, 1138, 1141, 1145, 1147, 1148, 1149, 1151, 1152, 1154, 1163, 1164, 1165, 1166, 1169, 1174, 1175, 1183, 1185, 1186, 1187, 1192, 1198, 1199, 1201, 1213, 1216, 1217, 1218, 1233, 1234, 1236, 1244, 1247, 1248, 1259, 1271, 1272, 1277, 1287, 1296, 1300, 1301, 1309, 1310, 1311, 1322, 1328, 1334, 1352, 1417, 1433, 1434, 1443, 1455, 1461, 1494, 1500, 1501, 1503, 1521, 1524, 1533, 1556, 1580, 1583, 1594, 1600, 1641, 1658, 1666, 1687, 1688, 1700, 1717, 1718, 1719, 1720, 1721, 1723, 1755, 1761, 1782, 1783, 1801, 1805, 1812, 1839, 1840, 1862, 1863, 1864, 1875, 1900, 1914, 1935, 1947, 1971, 1972, 1974, 1984, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2013, 2020, 2021, 2022, 2030, 2033, 2034, 2035, 2038, 2040, 2041, 2042, 2043, 2045, 2046, 2047, 2048, 2049, 2065, 2068, 2099, 2100, 2103, 2105, 2106, 2107, 2111, 2119, 2121, 2126, 2135, 2144, 2160, 2161, 2170, 2179, 2190, 2191, 2196, 2200, 2222, 2251, 2260, 2288, 2301, 2323, 2366, 2381, 2382, 2383, 2393, 2394, 2399, 2401, 2492, 2500, 2522, 2525, 2557, 2601, 2602, 2604, 2605, 2607, 2608, 2638, 2701, 2702, 2710, 2717, 2718, 2725, 2800, 2809, 2811, 2869, 2875, 2909, 2910, 2920, 2967, 2968, 2998, 3000, 3001, 3003, 3005, 3006, 3007, 3011, 3013, 3017, 3030, 3031, 3052, 3071, 3077, 3128, 3168, 3211, 3221, 3260, 3261, 3268, 3269, 3283, 3300, 3301, 3306, 3322, 3323, 3324, 3325, 3333, 3351, 3367, 3369, 3370, 3371, 3372, 3389, 3390, 3404, 3476, 3493, 3517, 3527, 3546, 3551, 3580, 3659, 3689, 3690, 3703, 3737, 3766, 3784, 3800, 3801, 3809, 3814, 3826, 3827, 3828, 3851, 3869, 3871, 3878, 3880, 3889, 3905, 3914, 3918, 3920, 3945, 3971, 3986, 3995, 3998, 4000, 4001, 4002, 4003,
@@ -182,8 +183,8 @@ known_port_names = {
 }
 
 if platform.system() == "Windows":
-    f = open("wincommands.json","r")
-    WinCompleter = NestedCompleter.from_nested_dict(json.load(f))
+    f = {'tcp-scan': None, 'refreshenv': None, 'ytdown': None, 'grantfiles': None, 'back': None, 'downloadeta': None, 'poweroff': None, 'reboot': None, 'instaloader': None, 'pwd': None, 'prime': None, 'steam': None, 'game-deals': None, 'thread': None, 'autoclicker': None, 'brightness': None, 'plain2string': None, 'cryptocurrency': {'btc': None, 'eth': None, 'xrp': None, 'usdt': None, 'bch': None, 'ltc': None, 'ada': None, 'bnb': None}, 'eval': None, 'sizeof': None, 'godmode': None, 'cheat': None, 'threads': None, 'currencyconverter': None, 'checklastvid': None, 'checklasttweet': None, 'checktwitchonline': None, 'fileconverter': None, 'ping.gg': None, 'guid': None, 'dns': None, 'shorten': None, 'transfer': None, 'speedtest': None, 'weather': None, 'covid19': None, 'ip': None, 'geoip': None, 'qrcode': None, 'stonks': None, 'md5': None, 'welcome': None, 'startup': None, 'open': None, 'settings': None, 'sha1': None, 'sha224': None, 'sha256': None, 'sha384': None, 'sha512': None, 'md5sum': None, 'sha1sum': None, 'sha224sum': None, 'sha256sum': None, 'sha384sum': None, 'sha512sum': None, 'elevate': None, 'admin': None, 'compile': None, 'interface': {'enable': None, 'disable': None}, 'online': {'http://localhost': None}, 'clear': None, 'search': None, 'void': {'config': None, 'perfmon': {'true': None, 'false': None}, 'mode': {'CMD': None, 'POWERSHELL': None}, 'install': {'chocolatey': None}, 'multithreading': {'true': None, 'false': None}, 'license': {'full': None}, 'version': {'latest': None, 'local': None}, 'mouseSupport': {'true': None, 'false': None}, 'fuzzycomplete': {'true': None, 'false':None}, 'completeWhileTyping': {'true': None, 'false': None}, 'wrapLines': {'true': None, 'false': None}, 'welcome': {'true': None, 'false': None}, 'start': None, 'updatePythonPackages': None, 'title':None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None, 'control': None, 'msconfig': None, 'msinfo32': None, 'regedit': None, 'sysdm.cpl': None, 'firewall': None, 'component': None, 'services': None, 'manager': None, 'event': None, 'ping': {'/?': None, '-t': None, '-a': None, '-n': None, '-l': None, '-f': None, '-i': None, '-v': None, '-r': None, '-s': None, '-j': None, '-k': None, '-w': None, '-R': None, '-S': None, '-C': None, '-p': None, '-4': None, '-6': None}, 'os': None, 'pwned': None, 'cd': None, 'quit': None, 'alias': {'-list': None}, 'delalias': None, '+': None, '-': None, '*': None, '/': None, '**': None, '//': None, '%': None, 'download': None}
+    WinCompleter = NestedCompleter.from_nested_dict(f)
 
 winWordCompleter = WordCompleter([
     "play", "player-volume", "player-append", "player-terminate", "player-pause", 'append', 'arp', 'assoc', 'at', 'atmadm', 'attrib', 'auditpol', 'backup', 'bcdboot', 'bcdedit', 'bdehdcfg', 'bitsadmin', 'bootcfg', 'bootsect', 'break', 'cacls', 'call', 'cd', 'certreq', 'certutil', 'cipher', 'clip', 'cls', 'cmd', 'cmdkey', 'cmstp', 'color', 'command', 'comp', 'compact', 'copy', 'cscript', 'ctty', 'date', 'dblspace', 'debug', 'defrag', 'del', 'deltree', 'diantz', 'dir', 'diskcomp', 'diskcopy', 'diskpart', 'diskperf', 'diskraid', 'dism', 'dispdiag', 'djoin', 'doskey', 'dosshell', 'dosx', 'driverquery', 'drvspace', 'edit', 'edlin', 'echo', 'emm386', 'endlocal', 'erase', 'esentutl', 'eventcreate', 'eventtriggers', 'exe2bin', 'exit', 'expand', 'extrac32', 'extract', 'fasthelp', 'fastopen', 'fc', 'fdisk', 'find', 'findstr', 'finger', 'fltmc', 'fondue', 'for', 'forcedos', 'forfiles', 'format', 'fsutil', 'ftp', 'ftype', 'getmac', 'goto', 'gpresult', 'gpupdate', 'graftabl', 'graphics', 'help', 'hostname', 'hwrcomp', 'hwrreg', 'change', 'chcp', 'chdir', 'checknetisolation', 'chglogon', 'chgport', 'chgusr', 'chkdsk', 'chkntfs', 'choice', 'icacls', 'if', 'interlnk', 'intersvr', 'ipconfig', 'ipxroute', 'irftp', 'iscsicli', 'kb16', 'keyb', 'klist', 'ksetup', 'ktmutil', 'label', 'lh', 'licensingdiag', 'loadfix', 'loadhigh', 'lock', 'lodctr', 'logman', 'logoff', 'lpq', 'lpr', 'makecab', 'manage-bde', 'md', 'mem', 'memmaker', 'mkdir', 'mklink', 'mode', 'mofcomp', 'more', 'mount', 'mountvol', 'move', 'mrinfo', 'msav', 'msbackup', 'mscdex', 'msd', 'msg', 'msiexec', 'muiunattend', 'nbtstat', 'net', 'net1', 'netcfg', 'netsh', 'netstat', 'nfsadmin', 'nlsfunc', 'nltest', 'nslookup', 'ntbackup', 'ntsd', 'ocsetup', 'openfiles', 'path', 'pathping', 'pause', 'pentnt', 'ping', 'pkgmgr', 'pnpunattend', 'pnputil', 'popd', 'powercfg', 'print', 'prompt', 'pushd', 'pwlauncher', 'qappsrv', 'qbasic', 'qprocess', 'query', 'quser', 'qwinsta', 'rasautou', 'rasdial', 'rcp', 'rd', 'rdpsign', 'reagentc', 'recimg', 'recover', 'reg', 'regini', 'register-cimprovider', 'regsvr32', 'relog', 'rem', 'ren', 'rename', 'repair-bde', 'replace', 'reset', 'restore', 'rexec', 'rmdir', 'robocopy', 'route', 'rpcinfo', 'rpcping', 'rsh', 'rsm', 'runas', 'rwinsta', 'sc', 'scandisk', 'scanreg', 'sdbinst', 'secedit', 'set', 'setlocal', 'setspn', 'setver', 'setx', 'sfc', 'shadow', 'share', 'shift', 'showmount', 'shutdown', 'schtasks', 'smartdrv', 'sort', 'start', 'subst', 'sxstrace', 'sys', 'systeminfo', 'takeown', 'taskkill', 'tasklist', 'tcmsetup', 'telnet', 'tftp', 'time', 'timeout', 'title', 'tlntadmn', 'tpmvscmgr', 'tracerpt', 'tracert', 'tree', 'tscon', 'tsdiscon', 'tskill', 'tsshutdn', 'type', 'typeperf', 'tzutil', 'umount', 'undelete', 'unformat', 'unlock', 'unlodctr', 'vaultcmd', 'ver', 'verify', 'vol', 'vsafe', 'vssadmin', 'w32tm', 'waitfor', 'wbadmin', 'wecutil', 'wevtutil', 'where', 'whoami', 'winmgmt', 'winrm', 'winrs', 'winsat', 'wmic', 'wsmanhttpconfig', 'xcopy', 'xwizard'
@@ -191,12 +192,11 @@ winWordCompleter = WordCompleter([
 
 if platform.system() == "Linux":
     if os.path.exists("commands.txt") == False:
-        from Void import defPath
         os.system(f'bash -c "compgen -c >{defPath}/commands.txt"')
     f = open("commands.txt", "r")
     l = f.read().splitlines()
     l = list(dict.fromkeys(l))
-    LinuxCompleter = WordCompleter(list(dict.fromkeys(l + ["tcp-scan", "autoclicker", "threads", "instaloader", "play","player-append","player-volume", "player-terminate", "player-pause", "back", "currencyconverter", "downloadeta", "sizeof", "md5", "sha1", "sha224", "sha256", "sha384", "sha512", "void", "plain2string", "eval", "welcome", "help", "elevate", "admin", "compile",
+    LinuxCompleter = WordCompleter(list(dict.fromkeys(l + ["tcp-scan", "autoclicker", "threads", "instaloader", "play", "player-append", "player-volume", "player-terminate", "player-pause", "back", "currencyconverter", "downloadeta", "sizeof", "md5", "sha1", "sha224", "sha256", "sha384", "sha512", "void", "plain2string", "eval", "welcome", "help", "elevate", "admin", "compile",
                                                            "cls", "clear", "read", "gcd", "lcm", "rng", "os", "pwned", "exit", "quit", "alias", "delalias", "+", "-", "*", "/", "**", "//", "download", "cheat", "checklastvid", "checklasttweet", "checktwitchonline", "fileconverter", "ping.gg", "guid", "dns", "shorten", "transfer", "speedtest", "weather", "covid19", "ip", "geoip", "qrcode", "stonks", "welcome"])))
 else:
     LinuxCompleter = None
