@@ -1209,15 +1209,16 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             """)
 
         elif splitInput[0].lower() == "game-deals":
-            from prettytable import PrettyTable
+            from tabulate import tabulate,TableFormat
             response = requests.get(
                 "https://www.cheapshark.com/api/1.0/deals").json()
-            t = PrettyTable(["Title", "Price", "Discount", "Store", "URL"])
+
+            l = list()
 
             for game in response:
-                t.add_row([game["title"], game["salePrice"], game["savings"]+"%", core.database.storeID.get(
+                l.append([game["title"], game["salePrice"], game["savings"]+"%", core.database.storeID.get(
                     game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
-            print(t)
+            print(tabulate(l,["Title", "Price", "Discount", "Store", "URL"]))
 
         elif splitInput[0].lower() == "grantfiles" and iswindows():
             fparser = argparse.ArgumentParser(prog="grantfiles")
