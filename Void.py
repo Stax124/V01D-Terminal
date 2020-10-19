@@ -130,10 +130,10 @@ except Exception as e:
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
-                    "pip3 install packaging python-ls python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader --user")
+                    "pip3 install packaging python-ls python-mpv colr prettytable youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader")
             else:
                 os.system(
-                    "sudo pip3 install packaging python-ls python-mpv colr prettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader --user")
+                    "sudo pip3 install packaging python-ls python-mpv colr prettytable youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader")
                 os.system("sudo apt-get install -y libmpv-dev")
         else:
             exit(0)
