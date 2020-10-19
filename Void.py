@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
 # Project V01D-Terminal
 
-import core.database
-import core.osBased
-import core.utils
+import core
 from core.elevate import elevate
 from core.vectors import Vector2, Vector3
 from core import steam_api
@@ -180,7 +178,7 @@ playerInitialized = False
 if iswindows():
     CONFIG = os.environ["userprofile"] + r"\.void"
 else:
-    CONFIG = os.environ["home"] + r"/.void"
+    CONFIG = os.environ["HOME"] + r"/.void"
 
 # Local version
 VERSION = "v0.8.4"

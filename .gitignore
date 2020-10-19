@@ -18,8 +18,11 @@ config.yml
 .vscode/
 
 # Ignore venv
-lib
+bin
+lib64
 share
+lib
+pyvenv.cfg
 
 # Ignore all python config files
 *.pyc
