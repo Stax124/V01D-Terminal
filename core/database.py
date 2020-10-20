@@ -2,7 +2,6 @@ from prompt_toolkit.completion import WordCompleter, NestedCompleter
 import os
 import pickle
 import platform
-import json
 from pathlib import Path
 
 defPath = os.getcwd()
