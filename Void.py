@@ -183,7 +183,7 @@ else:
     CONFIG = os.environ["HOME"] + r"/.void"
 
 # Local version
-VERSION = "v0.8.4"
+VERSION = "v0.8.5"
 
 # -------------------------------------------
 
