@@ -10,6 +10,9 @@ utils
 
 # Ignore build
 output/
+dist/
+build/
+Void-Terminal.spec
 
 # Other
 config.json
