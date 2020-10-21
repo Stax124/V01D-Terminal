@@ -436,7 +436,7 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
         elif (_splitinput[1] == "linux") and platform.system() == "Linux":
             if (_splitinput[2].lower() == "generate"):
                 if not args.quiet:
-                    print(f"{c.okgreen}This will take a while...")
+                    print_formatted_text(f"{c.okgreen}This will take a while...{c.end}")
                 target = "commands.txt"
                 os.system(f'bash -c "compgen -c >{defPath+"/"+target}"')
                 if not args.quiet:
