@@ -1,8 +1,8 @@
 # Project V01D-Terminal
 
 import core
-import core.database
 import core.osBased
+from core.database import *
 import core.utils
 from core.elevate import elevate
 from core.vectors import Vector2, Vector3
@@ -10,7 +10,8 @@ from core import steam_api
 
 import argparse
 import shlex
-from subprocess import call
+import subprocess
+from subprocess import call, check_output
 import threading
 from threading import Thread
 from webbrowser import open_new_tab
@@ -202,8 +203,16 @@ def isadmin() -> bool:
 if iswindows():
     os.system("title Void-Terminal")
 
-aliases = core.database.GetAliases()  # Get user alias from database
-
+def run_command(command):
+    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+    while True:
+        output = process.stdout.readline()
+        if output == b'' and process.poll() is not None:
+            break
+        if output:
+            print(output.strip().decode("utf-8"))
+    rc = process.poll()
+    return rc
 
 def saveToYml(data, path) -> None:
     try:
@@ -244,7 +253,8 @@ except Exception as e:
         "perfmon": False,
         "steamapikey":"",
         "steamurl":"",
-        "volume":100
+        "volume":100,
+        "completer": {'tcp-scan': None, 'refreshenv': None, 'ytdown': None, 'grantfiles': None, 'back': None, 'downloadeta': None, 'poweroff': None, 'reboot': None, 'instaloader': None, 'pwd': None, 'prime': None, 'steam': None, 'game-deals': None, 'thread': None, 'autoclicker': None, 'brightness': None, 'plain2string': None, 'cryptocurrency': {'btc': None, 'eth': None, 'xrp': None, 'usdt': None, 'bch': None, 'ltc': None, 'ada': None, 'bnb': None}, 'eval': None, 'sizeof': None, 'godmode': None, 'cheat': None, 'threads': None, 'currencyconverter': None, 'checklastvid': None, 'checklasttweet': None, 'checktwitchonline': None, 'fileconverter': None, 'ping.gg': None, 'guid': None, 'dns': None, 'shorten': None, 'transfer': None, 'speedtest': None, 'weather': None, 'covid19': None, 'ip': None, 'geoip': None, 'qrcode': None, 'stonks': None, 'md5': None, 'welcome': None, 'startup': None, 'open': None, 'settings': None, 'sha1': None, 'sha224': None, 'sha256': None, 'sha384': None, 'sha512': None, 'md5sum': None, 'sha1sum': None, 'sha224sum': None, 'sha256sum': None, 'sha384sum': None, 'sha512sum': None, 'elevate': None, 'admin': None, 'compile': None, 'interface': {'enable': None, 'disable': None}, 'online': {'http://localhost': None}, 'clear': None, 'search': None, 'void': {'config': None, 'perfmon': {'true': None, 'false': None}, 'mode': {'CMD': None, 'POWERSHELL': None}, 'install': {'chocolatey': None}, 'multithreading': {'true': None, 'false': None}, 'license': {'full': None}, 'version': {'latest': None, 'local': None}, 'mouseSupport': {'true': None, 'false': None}, 'fuzzycomplete': {'true': None, 'false':None}, 'completeWhileTyping': {'true': None, 'false': None}, 'wrapLines': {'true': None, 'false': None}, 'welcome': {'true': None, 'false': None}, 'start': None, 'updatePythonPackages': None, 'title':None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None, 'control': None, 'msconfig': None, 'msinfo32': None, 'regedit': None, 'sysdm.cpl': None, 'firewall': None, 'component': None, 'services': None, 'manager': None, 'event': None, 'ping': {'/?': None, '-t': None, '-a': None, '-n': None, '-l': None, '-f': None, '-i': None, '-v': None, '-r': None, '-s': None, '-j': None, '-k': None, '-w': None, '-R': None, '-S': None, '-C': None, '-p': None, '-4': None, '-6': None}, 'os': None, 'pwned': None, 'cd': None, 'quit': None, 'alias': {'-list': None}, 'delalias': None, '+': None, '-': None, '*': None, '/': None, '**': None, '//': None, '%': None, 'download': None}
     }
 
     if not args.skipconfig:
@@ -258,22 +268,26 @@ except Exception as e:
                 print(
                     f"Error writing config file, please check if you have permission to write in this location {CONFIG}")
 
+aliases = GetAliases()
+if platform.system() == "Windows":
+    WinCompleter = NestedCompleter.from_nested_dict(config["completer"])
+
 MODE = config.get("mode", "CMD")
 VOLUME = config.get("volume", 100)
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and iswindows():
-    combinedcompleter = ThreadedCompleter(FuzzyCompleter(merge_completers([core.database.WinCompleter, PathCompleter(
-    ), core.database.winWordCompleter, core.database.WordCompleter(list(aliases.keys()))])))
+    combinedcompleter = ThreadedCompleter(FuzzyCompleter(merge_completers([WinCompleter, PathCompleter(
+    ), winWordCompleter, WordCompleter(list(aliases.keys()))])))
 elif iswindows():
     combinedcompleter = ThreadedCompleter(merge_completers(
-        [core.database.WinCompleter, PathCompleter(), core.database.winWordCompleter]))
+        [WinCompleter, PathCompleter(), winWordCompleter]))
 elif platform.system() == "Linux" and config["fuzzycomplete"]:
     combinedcompleter = ThreadedCompleter(FuzzyCompleter(
-        merge_completers([core.database.LinuxCompleter, PathCompleter()])))
+        merge_completers([LinuxCompleter, PathCompleter()])))
 else:
     combinedcompleter = ThreadedCompleter(merge_completers(
-        [core.database.LinuxCompleter, PathCompleter()]))
+        [LinuxCompleter, PathCompleter()]))
 
 # Define console style
 _style = Style.from_dict(
@@ -881,7 +895,6 @@ class Void_Terminal(PromptSession):
             import time
             import socket
 
-            known_ports = core.database.known_ports
             threading_lock = threading.Lock()
             target = socket.gethostbyname(fargs.target)
             q = Queue()
@@ -892,7 +905,7 @@ class Void_Terminal(PromptSession):
                     con = s.connect((target, known_ports[port-1]))
                     with threading_lock:
                         print_formatted_text(HTML(
-                            f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{known_ports[port-1]}</style> is open (<style fg="green">{core.database.known_port_names.get(str(known_ports[port-1]), "unknown")}</style>)'))
+                            f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{known_ports[port-1]}</style> is open (<style fg="green">{known_port_names.get(str(known_ports[port-1]), "unknown")}</style>)'))
                     con.close()
                 except:
                     pass
@@ -916,7 +929,7 @@ class Void_Terminal(PromptSession):
                     print_formatted_text(
                         f'{c.fail}TCP{c.end} {c.okblue}{target}{c.end} {c.okgreen}{fargs.port}{c.end} is open')
                     print_formatted_text(HTML(
-                        f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{fargs.port}</style> is open (<style fg="green">{core.database.known_port_names.get(str(fargs.port),"unknown")}</style>)'))
+                        f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{fargs.port}</style> is open (<style fg="green">{known_port_names.get(str(fargs.port),"unknown")}</style>)'))
                     s.close()
                 except:
                     s.close()
@@ -1216,7 +1229,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             l = list()
 
             for game in response:
-                l.append([game["title"], game["salePrice"], game["savings"]+"%", core.database.storeID.get(
+                l.append([game["title"], game["salePrice"], game["savings"]+"%", storeID.get(
                     game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
             print(tabulate(l,["Title", "Price", "Discount", "Store", "URL"]))
 
@@ -1667,7 +1680,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             return
 
         elif splitInput[0].lower() == "compile":
-            call(f'auto-py-to-exe -c config.json"', shell=True)
+            call(f'auto-py-to-exe -c config.json', shell=True)
             return
 
         elif splitInput[0].lower() == "autoclicker":
@@ -1795,14 +1808,14 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                     return
                 complete = " ".join(l)
                 aliases[splitInput[1]] = complete
-                core.database.WriteAliases(aliases)
+                WriteAliases(aliases)
             return
 
         # Remove alias from dictionary and update save
         elif splitInput[0].lower() == "delalias":
             try:
                 aliases.pop(splitInput[1])
-                core.database.WriteAliases(aliases)
+                WriteAliases(aliases)
             except:
                 if not args.quiet:
                     print(
@@ -1840,14 +1853,14 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             os.system(f"curl {fargs.URL} -o {filename}")
 
         else:
-            try:  # Calculator
+            try:
                 output = eval(userInput)
                 if type(output) in [float, int, list, tuple, str, bool, Vector2, Vector3]:
                     if not args.quiet:
                         print(output)
                 else:
                     raise Exception
-            except:  # Try if input is alias
+            except:
                 try:
                     if os.getcwd() != LASTDIR:
                         LASTDIR = os.getcwd()
@@ -1855,11 +1868,11 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                 except:
                     if iswindows():
                         if MODE == "CMD":
-                            os.system(userInput)
+                            print(run_command(userInput))
                         elif MODE == "POWERSHELL":
-                            os.system(f"powershell -Command {userInput}")
+                            print(run_command(f'powershell -c "{userInput}"'))
                     else:
-                        os.system(f'bash -c "{userInput}"')
+                        print(run_command(f'bash -c "{userInput}"'))
 
     def main(self) -> None:
         """
