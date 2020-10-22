@@ -1868,11 +1868,11 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                 except:
                     if iswindows():
                         if MODE == "CMD":
-                            print(run_command(userInput))
+                            run_command(userInput)
                         elif MODE == "POWERSHELL":
-                            print(run_command(f'powershell -c "{userInput}"'))
+                            run_command(f'powershell -c "{userInput}"')
                     else:
-                        print(run_command(f'bash -c "{userInput}"'))
+                        run_command(f'bash -c "{userInput}"')
 
     def main(self) -> None:
         """
