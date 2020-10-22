@@ -442,8 +442,10 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
         elif (_splitinput[1] == "mode"):
             if (_splitinput[2].lower() == "powershell"):
                 config["mode"] = "POWERSHELL"
+                MODE = "POWERSHELL"
             elif (_splitinput[2].lower() == "cmd"):
                 config["mode"] = "CMD"
+                MODE = "CMD"
             if not args.quiet:
                 print(f"mode: {c.okgreen}{config['mode']}{c.end}")
 
@@ -1866,19 +1868,25 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                         LASTDIR = os.getcwd()
                     os.chdir(userInput)
                 except:
-                    def run_async():
-                        if iswindows():
-                            if MODE == "CMD":
-                                e = run_command(userInput)
-                                print(f"{c.bold}Error code: {e}{c.end}")
-                            elif MODE == "POWERSHELL":
-                                e = run_command(f'powershell -c "{userInput}"')
-                                print(f"{c.bold}Error code: {e}{c.end}")
+                    if MODE == "CMD":
+                        os.system(userInput)
+                    else:
+                        if config["multithreading"]:
+                            def run_async():
+                                if iswindows():
+                                    e = run_command(
+                                        f'powershell -c "{userInput}"')
+                                    print(f"{c.bold}Error code: {e}{c.end}")
+                                else:
+                                    e = run_command(f'bash -c "{userInput}"')
+                                    print(f"{c.bold}Error code: {e}{c.end}")
+                            __thread = Thread(target=run_async)
+                            __thread.start()
                         else:
-                            e = run_command(f'bash -c "{userInput}"')
-                            print(f"{c.bold}Error code: {e}{c.end}")
-                    __thread = Thread(target=run_async)
-                    __thread.start()
+                            if iswindows():
+                                os.system(f'powershell -c "{userInput}"')
+                            else:
+                                os.system(f'bash -c "{userInput}"')
                     
 
     def main(self) -> None:
