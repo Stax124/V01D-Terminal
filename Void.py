@@ -1866,13 +1866,20 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                         LASTDIR = os.getcwd()
                     os.chdir(userInput)
                 except:
-                    if iswindows():
-                        if MODE == "CMD":
-                            run_command(userInput)
-                        elif MODE == "POWERSHELL":
-                            run_command(f'powershell -c "{userInput}"')
-                    else:
-                        run_command(f'bash -c "{userInput}"')
+                    def run_async():
+                        if iswindows():
+                            if MODE == "CMD":
+                                e = run_command(userInput)
+                                print(f"{c.bold}Error code: {e}{c.end}")
+                            elif MODE == "POWERSHELL":
+                                e = run_command(f'powershell -c "{userInput}"')
+                                print(f"{c.bold}Error code: {e}{c.end}")
+                        else:
+                            e = run_command(f'bash -c "{userInput}"')
+                            print(f"{c.bold}Error code: {e}{c.end}")
+                    __thread = Thread(target=run_async)
+                    __thread.start()
+                    
 
     def main(self) -> None:
         """
