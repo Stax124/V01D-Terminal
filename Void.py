@@ -36,6 +36,11 @@ try:
     loaded.append("steam-api")
 except: pass
 
+try:
+    import core.autoclicker as autoclicker
+    loaded.append("autoclicker")
+except: pass
+
 
 
 # Add to PATH ---------------------------------------------
@@ -1712,7 +1717,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             call(f'auto-py-to-exe -c config.json', shell=True)
             return
 
-        elif splitInput[0].lower() == "autoclicker":
+        elif splitInput[0].lower() == "autoclicker" and "autoclicker" in loaded:
             fparser = argparse.ArgumentParser(prog="autoclicker")
             fparser.add_argument(
                 "--right", help="Use right mouse button instead of left", action="store_true")
@@ -1723,9 +1728,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             except SystemExit:
                 return
 
-            from core.autoclicker import Autoclicker
-            clicker = Autoclicker(
-                core.autoclicker.Button.left if not fargs.right else core.autoclicker.Button.right, fargs.delay if fargs.delay else 0.05)
+            clicker = autoclicker.Autoclicker(
+                autoclicker.Button.left if not fargs.right else autoclicker.Button.right, fargs.delay if fargs.delay else 0.05)
             clicker.start()
             return
 
