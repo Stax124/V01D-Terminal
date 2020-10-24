@@ -4,9 +4,6 @@ import core
 import core.osBased
 from core.database import *
 import core.utils
-from core.elevate import elevate
-from core.vectors import Vector2, Vector3
-from core import steam_api
 
 import argparse
 import shlex
@@ -21,9 +18,31 @@ import os
 import sys
 import traceback
 
+# Plugin loader -------------------------------------------
+loaded = []
+
+try:
+    from plugins.vectors import Vector2, Vector3
+    loaded.append("vectors")
+except: pass
+
+try:
+    from plugins.elevate import elevate
+    loaded.append("elevate")
+except: pass
+
+try:
+    from plugins import steam_api
+    loaded.append("steam-api")
+except: pass
+
+
+
+# Add to PATH ---------------------------------------------
 os.environ["PATH"] = os.path.dirname(
     __file__) + os.pathsep + os.environ["PATH"]
 
+# Setup parser --------------------------------------------
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--command", help="Execute following command")
 parser.add_argument("-d", "--directory", help="Start in specified directory")
@@ -597,9 +616,9 @@ class Void_Terminal(PromptSession):
         self.default_auto_suggest = auto_suggest
         self.skipsteam = False if config.get("steamapikey") != "" and config.get("steamurl") != "" else True
 
-
-        if not self.skipsteam: steam_api.connect(config["steamapikey"])
-        if not self.skipsteam: steam_api.profile(config["steamurl"])
+        if "steam-api" in loaded:
+            if not self.skipsteam: steam_api.connect(config["steamapikey"])
+            if not self.skipsteam: steam_api.profile(config["steamurl"])
 
     def password(self, text="Password: "):
         return self.prompt(text, is_password=True, completer=DummyCompleter(
@@ -752,6 +771,14 @@ class Void_Terminal(PromptSession):
             wifipassword()
             return
 
+        if splitInput[0].lower() == "leauge-of-legends":
+            fparser = argparse.ArgumentParser(prog="leauge-of-legends")
+            fparser.add_argument("champion", help="Name of champion")
+            try:
+                fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit:
+                return
+
         if splitInput[0].lower() == "thread":
             fparser = argparse.ArgumentParser(prog="thread")
             fparser.add_argument("function", help="Fuction to run")
@@ -877,7 +904,7 @@ class Void_Terminal(PromptSession):
                 LASTDIR = __placeholder
             return
 
-        elif splitInput[0].lower() == "elevate" or splitInput[0].lower() == "admin":
+        elif (splitInput[0].lower() == "elevate" or splitInput[0].lower() == "admin") and "elevate" in loaded:
             elevate()
             return
 

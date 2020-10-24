@@ -30,3 +30,4 @@ pyvenv.cfg
 # Ignore all python config files
 *.pyc
 __pycache__/
+debug.log
