@@ -989,108 +989,102 @@ class Void_Terminal(PromptSession):
             core.utils.ytdown(splitInput)
             return
 
-        elif splitInput[0].lower() == "play" and "player" in loaded:
-            fparser = argparse.ArgumentParser(prog="play")
-            fparser.add_argument(
+        elif splitInput[0].lower() == "player" and "player" in loaded:
+            parent_parser = argparse.ArgumentParser("player")
+            sub_parsers = parent_parser.add_subparsers(dest="function")
+            
+            play_parser = sub_parsers.add_parser("play")
+            play_parser.add_argument(
                 "TARGET", help="Filename, URL or text file with URLs", type=str)
-            fparser.add_argument(
+            play_parser.add_argument(
                 "--volume", help="Set default volume ( 0 - 130 )", type=int, default=VOLUME)
-            fparser.add_argument("-r", "--resolution",
-                                 help="Set resolution target", type=int)
-            fparser.add_argument("--fps", help="Set fps target", type=int)
-            fparser.add_argument(
+            play_parser.add_argument("-r", "--resolution",
+                                help="Set resolution target", type=int)
+            play_parser.add_argument("--fps", help="Set fps target", type=int)
+            play_parser.add_argument(
                 "--raw", help="Raw argumets to pass to the MPV", type=str)
-            fparser.add_argument(
+            play_parser.add_argument(
                 "--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int, default=130)
-            fparser.add_argument(
+            play_parser.add_argument(
                 "-f", "--format", help="Select stream ( best,worst,140 etc. )")
+
+            volume_parser = sub_parsers.add_parser("volume")
+            volume_parser.add_argument(
+                    "TARGET", help="Set default volume ( 0 - MAXVOLUME )", type=int)
+            volume_parser.add_argument(
+                "-n", "--no-updating", help="Do not update global variable VOLUME", action="store_true")
+
+            pause_parser = sub_parsers.add_parser("pause")
+            next_parser = sub_parsers.add_parser("next")
+            prev_parser = sub_parsers.add_parser("prev")
+            terminate_parser = sub_parsers.add_parser("terminate")
+
             try:
-                fargs = fparser.parse_args(splitInput[1:])
+                fargs = parent_parser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
-            if fargs.format: _format = fargs.format
-            elif fargs.fps or fargs.resolution: _format = f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best"
-            else: _format = "bestvideo+bestaudio"
+            if fargs.function == "play":
+                if fargs.format: _format = fargs.format
+                elif fargs.fps or fargs.resolution: _format = f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best"
+                else: _format = "bestvideo+bestaudio"
 
-            try:
-                self.mpv
-            except Exception as e:
-                print(e)
-                self.mpv = player.Player(volume=fargs.volume, volume_max=fargs.maxvolume, _format=_format)
+                try:
+                    self.mpv
+                except:
+                    self.mpv = player.Player(volume=fargs.volume, volume_max=fargs.maxvolume, _format=_format)
 
-            if not self.playing:
-                print("Starting MPV session...")
                 def run():
                     self.mpv.global_play(fargs.TARGET)
                 thread = Thread(target=run)
                 thread.start()
                 self.playing = True
-            else:
-                self.mpv.global_play(fargs.TARGET)
 
-        elif splitInput[0].lower() == "player-volume":
-            fparser = argparse.ArgumentParser(prog="player-volume")
-            fparser.add_argument(
-                "TARGET", help="Set default volume ( 0 - MAXVOLUME )", type=int)
-            fparser.add_argument(
-                "-n", "--no-updating", help="Do not update global variable VOLUME", action="store_true")
-            try:
-                fargs = fparser.parse_args(splitInput[1:])
-            except SystemExit:
-                return
-
-            try:
-                self.mpv["volume"] = fargs.TARGET
-                VOLUME = fargs.TARGET
-                config["volume"] = fargs.TARGET
-                saveToYml(config, CONFIG)
-            except:
-                print(f"{c.fail}Player not initialized{c.end}")
-                if fargs.no_updating:
-                    return
-                else:
+            elif fargs.function == "volume":
+                try:
+                    self.mpv["volume"] = fargs.TARGET
                     VOLUME = fargs.TARGET
-                    print(
-                        f"{c.okgreen}Default volume for new instances updated{c.end}")
+                    config["volume"] = fargs.TARGET
+                    saveToYml(config, CONFIG)
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
+                    if fargs.no_updating:
+                        return
+                    else:
+                        VOLUME = fargs.TARGET
+                        print(
+                            f"{c.okgreen}Default volume for new instances updated{c.end}")
 
-        elif splitInput[0].lower() == "player-pause":
-            try:
-                self.mpv.keypress("p")
-            except:
-                print(f"{c.fail}Player not initialized{c.end}")
+            elif fargs.function == "pause":
+                try:
+                    self.mpv.keypress("p")
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
 
-        elif splitInput[0].lower() == "player-terminate":
-            try:
-                self.mpv.terminate()
-            except:
-                print(f"{c.fail}Player not initialized{c.end}")
+            elif fargs.function == "next":
+                try:
+                    self.mpv.playlist_next()
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
 
-        elif splitInput[0].lower() == "player-append":
-            fparser = argparse.ArgumentParser(prog="player-append")
-            fparser.add_argument(
-                "target", help="Target file or URL", type=str)
-            try:
-                fargs = fparser.parse_args(splitInput[1:])
-            except SystemExit:
-                return
+            elif fargs.function == "prev":
+                try:
+                    self.mpv.playlist_prev()
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
 
-            try:
-                f = open(fargs.target, "r")
-                links = f.readlines()
-                for link in links:
-                    self.player.playlist_append(link)
-            except:
-                self.player.playlist_append(fargs.target)
-            finally:
-                print(f"{fargs.target} added to active queue")
+            elif fargs.function == "terminate":
+                try:
+                    self.mpv.terminate()
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
 
         elif splitInput[0].lower() == "steam" and not self.skipsteam:
-            xparser = argparse.ArgumentParser(prog="steam")
-            xparser.add_argument("mode", type=str, choices=["game", "friends", "user", "me"])
-            xparser.add_argument("value", type=str, nargs="*")
+            parent_parser = argparse.ArgumentParser(prog="steam")
+            parent_parser.add_argument("mode", type=str, choices=["game", "friends", "user", "me"])
+            parent_parser.add_argument("value", type=str, nargs="*")
             try:
-                xargs = xparser.parse_args(splitInput[1:])
+                xargs = parent_parser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
