@@ -37,8 +37,13 @@ try:
 except: pass
 
 try:
-    import core.autoclicker as autoclicker
+    import plugins.autoclicker as autoclicker
     loaded.append("autoclicker")
+except: pass
+
+try:
+    import plugins.pwned as pwned
+    loaded.append("pwned")
 except: pass
 
 
@@ -1802,9 +1807,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                 r"explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")
 
         # Check if your password is in someones dictionary
-        elif splitInput[0].lower() == "pwned":
+        elif splitInput[0].lower() == "pwned" and "pwned" in loaded:
             try:
-                import core.pwned as pwned
                 if not args.quiet:
                     print(pwned.lookup_pwned_api(splitInput[1]))
             except:
