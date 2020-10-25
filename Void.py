@@ -1081,28 +1081,28 @@ class Void_Terminal(PromptSession):
 
         elif splitInput[0].lower() == "steam" and not self.skipsteam:
             parent_parser = argparse.ArgumentParser(prog="steam")
-            parent_parser.add_argument("mode", type=str, choices=["game", "friends", "user", "me"])
-            parent_parser.add_argument("value", type=str, nargs="*")
+            sub_parsers = parent_parser.add_subparsers(dest="function")
+            
+            user_parser = sub_parsers.add_parser("user")
+            user_parser.add_argument("ID",type=int)
+            friends_parser = sub_parsers.add_parser("friends")
+            me_parser = sub_parsers.add_parser("me")
+
+            game_parser = sub_parsers.add_parser("game")
+            game_parser.add_argument("name", help="Name of game", type=str)
+            
             try:
-                xargs = parent_parser.parse_args(splitInput[1:])
+                fargs = parent_parser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
-            if xargs.mode == "user":
-                fparser = argparse.ArgumentParser(prog="steam user")
-                fparser.add_argument(
-                    "ID", type=int)
-                try:
-                    fargs = fparser.parse_args(splitInput[2:])
-                except SystemExit:
-                    return
-                    
+            if fargs.function == "user":
                 steam_api.profileID(fargs.ID)
 
-            elif xargs.mode == "friends":
+            elif fargs.function == "friends":
                 print(steam_api.friends())
 
-            elif xargs.mode == "me":
+            elif fargs.function == "me":
                 me = steam_api.SteamUser(steam_api.me.id)
                 print(f"""
 {c.bold}Name{c.end}: {c.okgreen}{me.name}{c.end}
@@ -1127,15 +1127,7 @@ VAC: {c.okgreen}{me.is_vac_banned}{c.end}
 Country code: {c.okgreen}{me.country_code}{c.end}
 """)
 
-            elif xargs.mode == "game":
-                fparser = argparse.ArgumentParser(prog="steam game")
-                fparser.add_argument(
-                    "name", help="Name of game", type=str)
-                try:
-                    fargs = fparser.parse_args(splitInput[2:])
-                except SystemExit:
-                    return
-
+            elif fargs.function == "game":
                 import difflib
                 print_formatted_text("Loading Steam store details...")
 
