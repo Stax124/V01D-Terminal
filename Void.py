@@ -1013,7 +1013,11 @@ class Void_Terminal(PromptSession):
             elif fargs.fps or fargs.resolution: _format = f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best"
             else: _format = "bestvideo+bestaudio"
 
-            self.mpv = player.Player(volume=fargs.volume, volume_max=fargs.maxvolume, _format=_format)
+            try:
+                self.mpv
+            except Exception as e:
+                print(e)
+                self.mpv = player.Player(volume=fargs.volume, volume_max=fargs.maxvolume, _format=_format)
 
             if not self.playing:
                 print("Starting MPV session...")
@@ -1023,7 +1027,7 @@ class Void_Terminal(PromptSession):
                 thread.start()
                 self.playing = True
             else:
-                print("Drag and drop URL or file to gui with SHIFT pressed")
+                self.mpv.global_play(fargs.TARGET)
 
         elif splitInput[0].lower() == "player-volume":
             fparser = argparse.ArgumentParser(prog="player-volume")
