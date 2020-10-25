@@ -46,6 +46,11 @@ try:
     loaded.append("pwned")
 except: pass
 
+try:
+    import plugins.player as player
+    loaded.append("player")
+except: pass
+
 
 
 # Add to PATH ---------------------------------------------
@@ -103,7 +108,6 @@ def _import():
     import datetime
     import hashlib
     import ctypes
-    import mpv
     import GPUtil
     import psutil
 
@@ -129,7 +133,6 @@ try:
     import hashlib
     import requests
     import ctypes
-    import mpv
     import GPUtil
     import psutil
 
@@ -619,9 +622,8 @@ class Void_Terminal(PromptSession):
                          refresh_interval=refresh_interval,
                          color_depth=color_depth,
                          editing_mode=editing_mode)
-        self.player_active = False
-        self.player = mpv.MPV()
         self.exceptions = config.get("exeptions", tuple())
+        self.playing = False
         self.default_completer = completer
         self.default_auto_suggest = auto_suggest
         self.skipsteam = False if config.get("steamapikey") != "" and config.get("steamurl") != "" else True
@@ -987,21 +989,19 @@ class Void_Terminal(PromptSession):
             core.utils.ytdown(splitInput)
             return
 
-        elif splitInput[0].lower() == "play":
+        elif splitInput[0].lower() == "play" and "player" in loaded:
             fparser = argparse.ArgumentParser(prog="play")
             fparser.add_argument(
                 "TARGET", help="Filename, URL or text file with URLs", type=str)
             fparser.add_argument(
-                "--volume", help="Set default volume ( 0 - 130 )", type=int)
+                "--volume", help="Set default volume ( 0 - 130 )", type=int, default=VOLUME)
             fparser.add_argument("-r", "--resolution",
                                  help="Set resolution target", type=int)
             fparser.add_argument("--fps", help="Set fps target", type=int)
             fparser.add_argument(
                 "--raw", help="Raw argumets to pass to the MPV", type=str)
             fparser.add_argument(
-                "--shuffle", help="Shuffle playlist", action="store_true")
-            fparser.add_argument(
-                "--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int)
+                "--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int, default=130)
             fparser.add_argument(
                 "-f", "--format", help="Select stream ( best,worst,140 etc. )")
             try:
@@ -1009,76 +1009,21 @@ class Void_Terminal(PromptSession):
             except SystemExit:
                 return
 
-            def my_log(loglevel, component, message):
-                print('[{}] {}: {}'.format(
-                    loglevel, component, message), flush=True)
+            if fargs.format: _format = fargs.format
+            elif fargs.fps or fargs.resolution: _format = f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best"
+            else: _format = "bestvideo+bestaudio"
 
-            if fargs.format:
-                self.player = mpv.MPV(
-                    player_operation_mode='pseudo-gui',
-                    log_handler=my_log,
-                    input_default_bindings=True,
-                    input_vo_keyboard=True,
-                    osc=True,
-                    load_unsafe_playlists=True,
-                    ytdl_format=fargs.format,
-                    volume=fargs.volume if fargs.volume else VOLUME,
-                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
-            elif fargs.resolution or fargs.fps:
-                self.player = mpv.MPV(
-                    player_operation_mode='pseudo-gui',
-                    log_handler=my_log,
-                    input_default_bindings=True,
-                    input_vo_keyboard=True,
-                    osc=True,
-                    load_unsafe_playlists=True,
-                    ytdl_format=f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best",
-                    volume=fargs.volume if fargs.volume else VOLUME,
-                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
-            else:
-                self.player = mpv.MPV(
-                    player_operation_mode='pseudo-gui',
-                    log_handler=my_log,
-                    input_default_bindings=True,
-                    input_vo_keyboard=True,
-                    osc=True,
-                    load_unsafe_playlists=True,
-                    volume=fargs.volume if fargs.volume else VOLUME,
-                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
+            self.mpv = player.Player(volume=fargs.volume, volume_max=fargs.maxvolume, _format=_format)
 
-            if fargs.raw:
-                string = str(fargs.raw).replace("-", "_")
-                options = string.split(",")
-                for option in options:
-                    arg, value = option.split("=")
-                    self.player[arg] = value
-
-            def play():
-                try:
-                    f = open(fargs.TARGET, "r")
-                    links = f.readlines()
-                    for link in links:
-                        self.player.playlist_append(link)
-                except:
-                    self.player.playlist_append(fargs.TARGET)
-
-                if fargs.shuffle:
-                    self.player.playlist_shuffle()
-
-                self.player.playlist_pos = 0
-
-                self.player_active = True
-                self.player.wait_for_shutdown()
-                self.player.terminate()
-
-                self.player_active = False
-
-            if not self.player_active:
-                thread = Thread(target=play)
+            if not self.playing:
+                print("Starting MPV session...")
+                def run():
+                    self.mpv.global_play(fargs.TARGET)
+                thread = Thread(target=run)
                 thread.start()
+                self.playing = True
             else:
-                print(
-                    f"{c.warning}Player already started, use 'player-append [target] instead'{c.end}")
+                print("Drag and drop URL or file to gui with SHIFT pressed")
 
         elif splitInput[0].lower() == "player-volume":
             fparser = argparse.ArgumentParser(prog="player-volume")
@@ -1092,7 +1037,7 @@ class Void_Terminal(PromptSession):
                 return
 
             try:
-                self.player["volume"] = fargs.TARGET
+                self.mpv["volume"] = fargs.TARGET
                 VOLUME = fargs.TARGET
                 config["volume"] = fargs.TARGET
                 saveToYml(config, CONFIG)
@@ -1107,13 +1052,13 @@ class Void_Terminal(PromptSession):
 
         elif splitInput[0].lower() == "player-pause":
             try:
-                self.player.keypress("p")
+                self.mpv.keypress("p")
             except:
                 print(f"{c.fail}Player not initialized{c.end}")
 
         elif splitInput[0].lower() == "player-terminate":
             try:
-                self.player.terminate()
+                self.mpv.terminate()
             except:
                 print(f"{c.fail}Player not initialized{c.end}")
 
