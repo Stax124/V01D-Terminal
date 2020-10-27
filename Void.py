@@ -165,11 +165,12 @@ except Exception as e:
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
-                    "pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader")
+                    "pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader {0}".format("--user" if not confirm("Root (Admin) user: ") else ""))
             else:
+                root = confirm("Root (Admin) user: ")
                 os.system(
-                    "sudo pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader")
-                os.system("sudo apt-get install -y libmpv-dev")
+                    "{0}pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader {1}".format("sudo " if root else "","--user" if not root else ""))
+                os.system("{0}apt-get install -y libmpv-dev".format("sudo " if root else ""))
         else:
             exit(0)
 
