@@ -1,8 +1,6 @@
 # Ignore testing file
-check.py
 test.py
 test
-pytest
 aliases.pickle
 
 # Ignore utils
