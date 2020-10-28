@@ -1,6 +1,6 @@
 from tabulate import tabulate
-from steamapi.user import SteamUser
-import steamapi
+from plugins.steamapi.user import SteamUser
+import plugins.steamapi as steamapi
 
 me = None
 

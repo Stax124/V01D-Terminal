@@ -1,16 +1,14 @@
 # Project V01D-Terminal
 
 import core
-import core.database
 import core.osBased
+from core.database import *
 import core.utils
-from core.elevate import elevate
-from core.vectors import Vector2, Vector3
-from core import steam_api
 
 import argparse
 import shlex
-from subprocess import call
+import subprocess
+from subprocess import call, check_output
 import threading
 from threading import Thread
 from webbrowser import open_new_tab
@@ -20,9 +18,46 @@ import os
 import sys
 import traceback
 
+# Plugin loader -------------------------------------------
+loaded = []
+
+try:
+    from plugins.vectors import Vector2, Vector3
+    loaded.append("vectors")
+except: pass
+
+try:
+    from plugins.elevate import elevate
+    loaded.append("elevate")
+except: pass
+
+try:
+    from plugins import steam_api
+    loaded.append("steam-api")
+except: pass
+
+try:
+    import plugins.autoclicker as autoclicker
+    loaded.append("autoclicker")
+except: pass
+
+try:
+    import plugins.pwned as pwned
+    loaded.append("pwned")
+except: pass
+
+try:
+    import plugins.player as player
+    loaded.append("player")
+except: pass
+
+
+
+# Add to PATH ---------------------------------------------
 os.environ["PATH"] = os.path.dirname(
     __file__) + os.pathsep + os.environ["PATH"]
 
+# Setup parser --------------------------------------------
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--command", help="Execute following command")
 parser.add_argument("-d", "--directory", help="Start in specified directory")
@@ -73,7 +108,6 @@ def _import():
     import datetime
     import hashlib
     import ctypes
-    import mpv
     import GPUtil
     import psutil
 
@@ -99,7 +133,6 @@ try:
     import hashlib
     import requests
     import ctypes
-    import mpv
     import GPUtil
     import psutil
 
@@ -132,11 +165,12 @@ except Exception as e:
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
-                    "pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader")
+                    "pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader {0}".format("--user" if not confirm("Root (Admin) user: ") else ""))
             else:
+                root = confirm("Root (Admin) user: ")
                 os.system(
-                    "sudo pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader")
-                os.system("sudo apt-get install -y libmpv-dev")
+                    "{0}pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader {1}".format("sudo " if root else "","--user" if not root else ""))
+                os.system("{0}apt-get install -y libmpv-dev".format("sudo " if root else ""))
         else:
             exit(0)
 
@@ -183,7 +217,7 @@ else:
     CONFIG = os.environ["HOME"] + r"/.void"
 
 # Local version
-VERSION = "v0.8.4"
+VERSION = "v0.8.5"
 
 # -------------------------------------------
 
@@ -202,8 +236,16 @@ def isadmin() -> bool:
 if iswindows():
     os.system("title Void-Terminal")
 
-aliases = core.database.GetAliases()  # Get user alias from database
-
+def run_command(command):
+    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+    while True:
+        output = process.stdout.readline()
+        if output == b'' and process.poll() is not None:
+            break
+        if output:
+            print(output.strip().decode("utf-8"))
+    rc = process.poll()
+    return rc
 
 def saveToYml(data, path) -> None:
     try:
@@ -244,7 +286,8 @@ except Exception as e:
         "perfmon": False,
         "steamapikey":"",
         "steamurl":"",
-        "volume":100
+        "volume":100,
+        "completer": {'tcp-scan': None, 'refreshenv': None, 'ytdown': None, 'grantfiles': None, 'back': None, 'downloadeta': None, 'poweroff': None, 'reboot': None, 'instaloader': None, 'pwd': None, 'prime': None, 'steam': None, 'game-deals': None, 'thread': None, 'autoclicker': None, 'brightness': None, 'plain2string': None, 'cryptocurrency': {'btc': None, 'eth': None, 'xrp': None, 'usdt': None, 'bch': None, 'ltc': None, 'ada': None, 'bnb': None}, 'eval': None, 'sizeof': None, 'godmode': None, 'cheat': None, 'threads': None, 'currencyconverter': None, 'checklastvid': None, 'checklasttweet': None, 'checktwitchonline': None, 'fileconverter': None, 'ping.gg': None, 'guid': None, 'dns': None, 'shorten': None, 'transfer': None, 'speedtest': None, 'weather': None, 'covid19': None, 'ip': None, 'geoip': None, 'qrcode': None, 'stonks': None, 'md5': None, 'welcome': None, 'startup': None, 'open': None, 'settings': None, 'sha1': None, 'sha224': None, 'sha256': None, 'sha384': None, 'sha512': None, 'md5sum': None, 'sha1sum': None, 'sha224sum': None, 'sha256sum': None, 'sha384sum': None, 'sha512sum': None, 'elevate': None, 'admin': None, 'compile': None, 'interface': {'enable': None, 'disable': None}, 'online': {'http://localhost': None}, 'clear': None, 'search': None, 'void': {'config': None, 'perfmon': {'true': None, 'false': None}, 'mode': {'CMD': None, 'POWERSHELL': None}, 'install': {'chocolatey': None}, 'multithreading': {'true': None, 'false': None}, 'license': {'full': None}, 'version': {'latest': None, 'local': None}, 'mouseSupport': {'true': None, 'false': None}, 'fuzzycomplete': {'true': None, 'false':None}, 'completeWhileTyping': {'true': None, 'false': None}, 'wrapLines': {'true': None, 'false': None}, 'welcome': {'true': None, 'false': None}, 'start': None, 'updatePythonPackages': None, 'title':None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None, 'control': None, 'msconfig': None, 'msinfo32': None, 'regedit': None, 'sysdm.cpl': None, 'firewall': None, 'component': None, 'services': None, 'manager': None, 'event': None, 'ping': {'/?': None, '-t': None, '-a': None, '-n': None, '-l': None, '-f': None, '-i': None, '-v': None, '-r': None, '-s': None, '-j': None, '-k': None, '-w': None, '-R': None, '-S': None, '-C': None, '-p': None, '-4': None, '-6': None}, 'os': None, 'pwned': None, 'cd': None, 'quit': None, 'alias': {'-list': None}, 'delalias': None, '+': None, '-': None, '*': None, '/': None, '**': None, '//': None, '%': None, 'download': None}
     }
 
     if not args.skipconfig:
@@ -258,22 +301,26 @@ except Exception as e:
                 print(
                     f"Error writing config file, please check if you have permission to write in this location {CONFIG}")
 
+aliases = GetAliases()
+if platform.system() == "Windows":
+    WinCompleter = NestedCompleter.from_nested_dict(config["completer"])
+
 MODE = config.get("mode", "CMD")
 VOLUME = config.get("volume", 100)
 
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and iswindows():
-    combinedcompleter = ThreadedCompleter(FuzzyCompleter(merge_completers([core.database.WinCompleter, PathCompleter(
-    ), core.database.winWordCompleter, core.database.WordCompleter(list(aliases.keys()))])))
+    combinedcompleter = ThreadedCompleter(FuzzyCompleter(merge_completers([WinCompleter, PathCompleter(
+    ), winWordCompleter, WordCompleter(list(aliases.keys()))])))
 elif iswindows():
     combinedcompleter = ThreadedCompleter(merge_completers(
-        [core.database.WinCompleter, PathCompleter(), core.database.winWordCompleter]))
+        [WinCompleter, PathCompleter(), winWordCompleter]))
 elif platform.system() == "Linux" and config["fuzzycomplete"]:
     combinedcompleter = ThreadedCompleter(FuzzyCompleter(
-        merge_completers([core.database.LinuxCompleter, PathCompleter()])))
+        merge_completers([LinuxCompleter, PathCompleter()])))
 else:
     combinedcompleter = ThreadedCompleter(merge_completers(
-        [core.database.LinuxCompleter, PathCompleter()]))
+        [LinuxCompleter, PathCompleter()]))
 
 # Define console style
 _style = Style.from_dict(
@@ -428,15 +475,17 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
         elif (_splitinput[1] == "mode"):
             if (_splitinput[2].lower() == "powershell"):
                 config["mode"] = "POWERSHELL"
+                MODE = "POWERSHELL"
             elif (_splitinput[2].lower() == "cmd"):
                 config["mode"] = "CMD"
+                MODE = "CMD"
             if not args.quiet:
                 print(f"mode: {c.okgreen}{config['mode']}{c.end}")
 
         elif (_splitinput[1] == "linux") and platform.system() == "Linux":
             if (_splitinput[2].lower() == "generate"):
                 if not args.quiet:
-                    print(f"{c.okgreen}This will take a while...")
+                    print_formatted_text(f"{c.okgreen}This will take a while...{c.end}")
                 target = "commands.txt"
                 os.system(f'bash -c "compgen -c >{defPath+"/"+target}"')
                 if not args.quiet:
@@ -574,16 +623,15 @@ class Void_Terminal(PromptSession):
                          refresh_interval=refresh_interval,
                          color_depth=color_depth,
                          editing_mode=editing_mode)
-        self.player_active = False
-        self.player = mpv.MPV()
         self.exceptions = config.get("exeptions", tuple())
+        self.playing = False
         self.default_completer = completer
         self.default_auto_suggest = auto_suggest
         self.skipsteam = False if config.get("steamapikey") != "" and config.get("steamurl") != "" else True
 
-
-        if not self.skipsteam: steam_api.connect(config["steamapikey"])
-        if not self.skipsteam: steam_api.profile(config["steamurl"])
+        if "steam-api" in loaded:
+            if not self.skipsteam: steam_api.connect(config["steamapikey"])
+            if not self.skipsteam: steam_api.profile(config["steamurl"])
 
     def password(self, text="Password: "):
         return self.prompt(text, is_password=True, completer=DummyCompleter(
@@ -736,6 +784,14 @@ class Void_Terminal(PromptSession):
             wifipassword()
             return
 
+        if splitInput[0].lower() == "leauge-of-legends":
+            fparser = argparse.ArgumentParser(prog="leauge-of-legends")
+            fparser.add_argument("champion", help="Name of champion")
+            try:
+                fargs = fparser.parse_args(splitInput[1:])
+            except SystemExit:
+                return
+
         if splitInput[0].lower() == "thread":
             fparser = argparse.ArgumentParser(prog="thread")
             fparser.add_argument("function", help="Fuction to run")
@@ -861,7 +917,7 @@ class Void_Terminal(PromptSession):
                 LASTDIR = __placeholder
             return
 
-        elif splitInput[0].lower() == "elevate" or splitInput[0].lower() == "admin":
+        elif (splitInput[0].lower() == "elevate" or splitInput[0].lower() == "admin") and "elevate" in loaded:
             elevate()
             return
 
@@ -881,7 +937,6 @@ class Void_Terminal(PromptSession):
             import time
             import socket
 
-            known_ports = core.database.known_ports
             threading_lock = threading.Lock()
             target = socket.gethostbyname(fargs.target)
             q = Queue()
@@ -892,7 +947,7 @@ class Void_Terminal(PromptSession):
                     con = s.connect((target, known_ports[port-1]))
                     with threading_lock:
                         print_formatted_text(HTML(
-                            f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{known_ports[port-1]}</style> is open (<style fg="green">{core.database.known_port_names.get(str(known_ports[port-1]), "unknown")}</style>)'))
+                            f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{known_ports[port-1]}</style> is open (<style fg="green">{known_port_names.get(str(known_ports[port-1]), "unknown")}</style>)'))
                     con.close()
                 except:
                     pass
@@ -916,7 +971,7 @@ class Void_Terminal(PromptSession):
                     print_formatted_text(
                         f'{c.fail}TCP{c.end} {c.okblue}{target}{c.end} {c.okgreen}{fargs.port}{c.end} is open')
                     print_formatted_text(HTML(
-                        f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{fargs.port}</style> is open (<style fg="green">{core.database.known_port_names.get(str(fargs.port),"unknown")}</style>)'))
+                        f'<style fg="red">TCP</style> <style fg="blue">{target}</style> <style fg="green">{fargs.port}</style> is open (<style fg="green">{known_port_names.get(str(fargs.port),"unknown")}</style>)'))
                     s.close()
                 except:
                     s.close()
@@ -935,179 +990,120 @@ class Void_Terminal(PromptSession):
             core.utils.ytdown(splitInput)
             return
 
-        elif splitInput[0].lower() == "play":
-            fparser = argparse.ArgumentParser(prog="play")
-            fparser.add_argument(
+        elif splitInput[0].lower() == "player" and "player" in loaded:
+            parent_parser = argparse.ArgumentParser("player")
+            sub_parsers = parent_parser.add_subparsers(dest="function")
+            
+            play_parser = sub_parsers.add_parser("play")
+            play_parser.add_argument(
                 "TARGET", help="Filename, URL or text file with URLs", type=str)
-            fparser.add_argument(
-                "--volume", help="Set default volume ( 0 - 130 )", type=int)
-            fparser.add_argument("-r", "--resolution",
-                                 help="Set resolution target", type=int)
-            fparser.add_argument("--fps", help="Set fps target", type=int)
-            fparser.add_argument(
+            play_parser.add_argument(
+                "--volume", help="Set default volume ( 0 - 130 )", type=int, default=VOLUME)
+            play_parser.add_argument("-r", "--resolution",
+                                help="Set resolution target", type=int)
+            play_parser.add_argument("--fps", help="Set fps target", type=int)
+            play_parser.add_argument(
                 "--raw", help="Raw argumets to pass to the MPV", type=str)
-            fparser.add_argument(
-                "--shuffle", help="Shuffle playlist", action="store_true")
-            fparser.add_argument(
-                "--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int)
-            fparser.add_argument(
+            play_parser.add_argument(
+                "--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int, default=130)
+            play_parser.add_argument(
                 "-f", "--format", help="Select stream ( best,worst,140 etc. )")
-            try:
-                fargs = fparser.parse_args(splitInput[1:])
-            except SystemExit:
-                return
 
-            def my_log(loglevel, component, message):
-                print('[{}] {}: {}'.format(
-                    loglevel, component, message), flush=True)
-
-            if fargs.format:
-                self.player = mpv.MPV(
-                    player_operation_mode='pseudo-gui',
-                    log_handler=my_log,
-                    input_default_bindings=True,
-                    input_vo_keyboard=True,
-                    osc=True,
-                    load_unsafe_playlists=True,
-                    ytdl_format=fargs.format,
-                    volume=fargs.volume if fargs.volume else VOLUME,
-                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
-            elif fargs.resolution or fargs.fps:
-                self.player = mpv.MPV(
-                    player_operation_mode='pseudo-gui',
-                    log_handler=my_log,
-                    input_default_bindings=True,
-                    input_vo_keyboard=True,
-                    osc=True,
-                    load_unsafe_playlists=True,
-                    ytdl_format=f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best",
-                    volume=fargs.volume if fargs.volume else VOLUME,
-                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
-            else:
-                self.player = mpv.MPV(
-                    player_operation_mode='pseudo-gui',
-                    log_handler=my_log,
-                    input_default_bindings=True,
-                    input_vo_keyboard=True,
-                    osc=True,
-                    load_unsafe_playlists=True,
-                    volume=fargs.volume if fargs.volume else VOLUME,
-                    volume_max=fargs.maxvolume if fargs.maxvolume else 130)
-
-            if fargs.raw:
-                string = str(fargs.raw).replace("-", "_")
-                options = string.split(",")
-                for option in options:
-                    arg, value = option.split("=")
-                    self.player[arg] = value
-
-            def play():
-                try:
-                    f = open(fargs.TARGET, "r")
-                    links = f.readlines()
-                    for link in links:
-                        self.player.playlist_append(link)
-                except:
-                    self.player.playlist_append(fargs.TARGET)
-
-                if fargs.shuffle:
-                    self.player.playlist_shuffle()
-
-                self.player.playlist_pos = 0
-
-                self.player_active = True
-                self.player.wait_for_shutdown()
-                self.player.terminate()
-
-                self.player_active = False
-
-            if not self.player_active:
-                thread = Thread(target=play)
-                thread.start()
-            else:
-                print(
-                    f"{c.warning}Player already started, use 'player-append [target] instead'{c.end}")
-
-        elif splitInput[0].lower() == "player-volume":
-            fparser = argparse.ArgumentParser(prog="player-volume")
-            fparser.add_argument(
-                "TARGET", help="Set default volume ( 0 - MAXVOLUME )", type=int)
-            fparser.add_argument(
+            volume_parser = sub_parsers.add_parser("volume")
+            volume_parser.add_argument(
+                    "TARGET", help="Set default volume ( 0 - MAXVOLUME )", type=int)
+            volume_parser.add_argument(
                 "-n", "--no-updating", help="Do not update global variable VOLUME", action="store_true")
+
+            pause_parser = sub_parsers.add_parser("pause")
+            next_parser = sub_parsers.add_parser("next")
+            prev_parser = sub_parsers.add_parser("prev")
+            terminate_parser = sub_parsers.add_parser("terminate")
+
             try:
-                fargs = fparser.parse_args(splitInput[1:])
+                fargs = parent_parser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
-            try:
-                self.player["volume"] = fargs.TARGET
-                VOLUME = fargs.TARGET
-                config["volume"] = fargs.TARGET
-                saveToYml(config, CONFIG)
-            except:
-                print(f"{c.fail}Player not initialized{c.end}")
-                if fargs.no_updating:
-                    return
-                else:
+            if fargs.function == "play":
+                if fargs.format: _format = fargs.format
+                elif fargs.fps or fargs.resolution: _format = f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best"
+                else: _format = "bestvideo+bestaudio"
+
+                try:
+                    self.mpv
+                except:
+                    self.mpv = player.Player(volume=fargs.volume, volume_max=fargs.maxvolume, _format=_format)
+
+                def run():
+                    self.mpv.global_play(fargs.TARGET)
+                thread = Thread(target=run)
+                thread.start()
+                self.playing = True
+
+            elif fargs.function == "volume":
+                try:
+                    self.mpv["volume"] = fargs.TARGET
                     VOLUME = fargs.TARGET
-                    print(
-                        f"{c.okgreen}Default volume for new instances updated{c.end}")
+                    config["volume"] = fargs.TARGET
+                    saveToYml(config, CONFIG)
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
+                    if fargs.no_updating:
+                        return
+                    else:
+                        VOLUME = fargs.TARGET
+                        print(
+                            f"{c.okgreen}Default volume for new instances updated{c.end}")
 
-        elif splitInput[0].lower() == "player-pause":
-            try:
-                self.player.keypress("p")
-            except:
-                print(f"{c.fail}Player not initialized{c.end}")
+            elif fargs.function == "pause":
+                try:
+                    self.mpv.keypress("p")
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
 
-        elif splitInput[0].lower() == "player-terminate":
-            try:
-                self.player.terminate()
-            except:
-                print(f"{c.fail}Player not initialized{c.end}")
+            elif fargs.function == "next":
+                try:
+                    self.mpv.playlist_next()
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
 
-        elif splitInput[0].lower() == "player-append":
-            fparser = argparse.ArgumentParser(prog="player-append")
-            fparser.add_argument(
-                "target", help="Target file or URL", type=str)
-            try:
-                fargs = fparser.parse_args(splitInput[1:])
-            except SystemExit:
-                return
+            elif fargs.function == "prev":
+                try:
+                    self.mpv.playlist_prev()
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
 
-            try:
-                f = open(fargs.target, "r")
-                links = f.readlines()
-                for link in links:
-                    self.player.playlist_append(link)
-            except:
-                self.player.playlist_append(fargs.target)
-            finally:
-                print(f"{fargs.target} added to active queue")
+            elif fargs.function == "terminate":
+                try:
+                    self.mpv.terminate()
+                except:
+                    print(f"{c.fail}Player not initialized{c.end}")
 
         elif splitInput[0].lower() == "steam" and not self.skipsteam:
-            xparser = argparse.ArgumentParser(prog="steam")
-            xparser.add_argument("mode", type=str, choices=["game", "friends", "user", "me"])
-            xparser.add_argument("value", type=str, nargs="*")
+            parent_parser = argparse.ArgumentParser(prog="steam")
+            sub_parsers = parent_parser.add_subparsers(dest="function")
+            
+            user_parser = sub_parsers.add_parser("user")
+            user_parser.add_argument("ID",type=int)
+            friends_parser = sub_parsers.add_parser("friends")
+            me_parser = sub_parsers.add_parser("me")
+
+            game_parser = sub_parsers.add_parser("game")
+            game_parser.add_argument("name", help="Name of game", type=str)
+            
             try:
-                xargs = xparser.parse_args(splitInput[1:])
+                fargs = parent_parser.parse_args(splitInput[1:])
             except SystemExit:
                 return
 
-            if xargs.mode == "user":
-                fparser = argparse.ArgumentParser(prog="steam user")
-                fparser.add_argument(
-                    "ID", type=int)
-                try:
-                    fargs = fparser.parse_args(splitInput[2:])
-                except SystemExit:
-                    return
-                    
+            if fargs.function == "user":
                 steam_api.profileID(fargs.ID)
 
-            elif xargs.mode == "friends":
+            elif fargs.function == "friends":
                 print(steam_api.friends())
 
-            elif xargs.mode == "me":
+            elif fargs.function == "me":
                 me = steam_api.SteamUser(steam_api.me.id)
                 print(f"""
 {c.bold}Name{c.end}: {c.okgreen}{me.name}{c.end}
@@ -1132,15 +1128,7 @@ VAC: {c.okgreen}{me.is_vac_banned}{c.end}
 Country code: {c.okgreen}{me.country_code}{c.end}
 """)
 
-            elif xargs.mode == "game":
-                fparser = argparse.ArgumentParser(prog="steam game")
-                fparser.add_argument(
-                    "name", help="Name of game", type=str)
-                try:
-                    fargs = fparser.parse_args(splitInput[2:])
-                except SystemExit:
-                    return
-
+            elif fargs.function == "game":
                 import difflib
                 print_formatted_text("Loading Steam store details...")
 
@@ -1216,7 +1204,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             l = list()
 
             for game in response:
-                l.append([game["title"], game["salePrice"], game["savings"]+"%", core.database.storeID.get(
+                l.append([game["title"], game["salePrice"], game["savings"]+"%", storeID.get(
                     game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
             print(tabulate(l,["Title", "Price", "Discount", "Store", "URL"]))
 
@@ -1667,10 +1655,10 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             return
 
         elif splitInput[0].lower() == "compile":
-            call(f'auto-py-to-exe -c config.json"', shell=True)
+            call(f'auto-py-to-exe -c config.json', shell=True)
             return
 
-        elif splitInput[0].lower() == "autoclicker":
+        elif splitInput[0].lower() == "autoclicker" and "autoclicker" in loaded:
             fparser = argparse.ArgumentParser(prog="autoclicker")
             fparser.add_argument(
                 "--right", help="Use right mouse button instead of left", action="store_true")
@@ -1681,9 +1669,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             except SystemExit:
                 return
 
-            from core.autoclicker import Autoclicker
-            clicker = Autoclicker(
-                core.autoclicker.Button.left if not fargs.right else core.autoclicker.Button.right, fargs.delay if fargs.delay else 0.05)
+            clicker = autoclicker.Autoclicker(
+                autoclicker.Button.left if not fargs.right else autoclicker.Button.right, fargs.delay if fargs.delay else 0.05)
             clicker.start()
             return
 
@@ -1756,9 +1743,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                 r"explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")
 
         # Check if your password is in someones dictionary
-        elif splitInput[0].lower() == "pwned":
+        elif splitInput[0].lower() == "pwned" and "pwned" in loaded:
             try:
-                import core.pwned as pwned
                 if not args.quiet:
                     print(pwned.lookup_pwned_api(splitInput[1]))
             except:
@@ -1795,14 +1781,14 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                     return
                 complete = " ".join(l)
                 aliases[splitInput[1]] = complete
-                core.database.WriteAliases(aliases)
+                WriteAliases(aliases)
             return
 
         # Remove alias from dictionary and update save
         elif splitInput[0].lower() == "delalias":
             try:
                 aliases.pop(splitInput[1])
-                core.database.WriteAliases(aliases)
+                WriteAliases(aliases)
             except:
                 if not args.quiet:
                     print(
@@ -1840,26 +1826,39 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             os.system(f"curl {fargs.URL} -o {filename}")
 
         else:
-            try:  # Calculator
+            try:
                 output = eval(userInput)
                 if type(output) in [float, int, list, tuple, str, bool, Vector2, Vector3]:
                     if not args.quiet:
                         print(output)
                 else:
                     raise Exception
-            except:  # Try if input is alias
+            except:
                 try:
                     if os.getcwd() != LASTDIR:
                         LASTDIR = os.getcwd()
                     os.chdir(userInput)
                 except:
-                    if iswindows():
-                        if MODE == "CMD":
-                            os.system(userInput)
-                        elif MODE == "POWERSHELL":
-                            os.system(f"powershell -Command {userInput}")
+                    if MODE == "CMD":
+                        os.system(userInput)
                     else:
-                        os.system(f'bash -c "{userInput}"')
+                        if config["multithreading"]:
+                            def run_async():
+                                if iswindows():
+                                    e = run_command(
+                                        f'powershell -c "{userInput}"')
+                                    print(f"{c.bold}Error code: {e}{c.end}")
+                                else:
+                                    e = run_command(f'bash -c "{userInput}"')
+                                    print(f"{c.bold}Error code: {e}{c.end}")
+                            __thread = Thread(target=run_async)
+                            __thread.start()
+                        else:
+                            if iswindows():
+                                os.system(f'powershell -c "{userInput}"')
+                            else:
+                                os.system(f'bash -c "{userInput}"')
+                    
 
     def main(self) -> None:
         """
