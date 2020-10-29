@@ -266,7 +266,7 @@ def isadmin() -> bool:
     return _is_admin
 
 def default_completer():
-    config["complerer"] = defcompleter
+    config["completer"] = defcompleter
     saveToYml(config,CONFIG)
 
 if iswindows():
@@ -666,8 +666,10 @@ class Void_Terminal(PromptSession):
         self.skipsteam = False if config.get("steamapikey") != "" and config.get("steamurl") != "" else True
 
         if "steam-api" in loaded:
-            if not self.skipsteam: steam_api.connect(config["steamapikey"])
-            if not self.skipsteam: steam_api.profile(config["steamurl"])
+            try:
+                if not self.skipsteam: steam_api.connect(config["steamapikey"])
+                if not self.skipsteam: steam_api.profile(config["steamurl"])
+            except: print(f"{c.warning}Cannot contact steam servers{c.end}")
 
     def password(self, text="Password: "):
         return self.prompt(text, is_password=True, completer=DummyCompleter(
