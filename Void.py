@@ -203,6 +203,39 @@ except:
     USERDOMAIN = "ERROR"
 
 defPath = os.getcwd()
+defcompleter = {'append': None, 'arp': None, 'assoc': None, 'at': None, 'atmadm': None, 'attrib': None, 'auditpol': None, 'backup': None, 'bcdboot': None, 'bcdedit': None,
+'bdehdcfg': None, 'bitsadmin': None, 'bootcfg': None, 'bootsect': None, 'break': None, 'cacls': None, 'call': None, 'cd': None, 'certreq': None, 'certutil': None, 'cipher': None,
+'clip': None, 'cls': None, 'cmd': None, 'cmdkey': None, 'cmstp': None, 'color': None, 'command': None, 'comp': None, 'compact': None, 'copy': None, 'cscript': None, 'ctty': None, 
+'date': None, 'dblspace': None, 'debug': None, 'defrag': None, 'del': None, 'deltree': None, 'diantz': None, 'dir': None, 'diskcomp': None, 'diskcopy': None, 'diskpart': None, 
+'diskperf': None, 'diskraid': None, 'dism': None, 'dispdiag': None, 'djoin': None, 'doskey': None, 'dosshell': None, 'dosx': None, 'driverquery': None, 'drvspace': None, 'edit': None,
+'edlin': None, 'echo': None, 'emm386': None, 'endlocal': None, 'erase': None, 'esentutl': None, 'eventcreate': None, 'eventtriggers': None, 'exe2bin': None, 'exit': None, 'expand': None, 
+'extrac32': None, 'extract': None, 'fasthelp': None, 'fastopen': None, 'fc': None, 'fdisk': None, 'find': None, 'findstr': None, 'finger': None, 'fltmc': None, 'fondue': None, 'for': None,
+'forcedos': None, 'forfiles': None, 'format': None, 'fsutil': None, 'ftp': None, 'ftype': None, 'getmac': None, 'goto': None, 'gpresult': None, 'gpupdate': None, 'graftabl': None, 'graphics': None,
+'help': None, 'hostname': None, 'hwrcomp': None, 'hwrreg': None, 'change': None, 'chcp': None, 'chdir': None, 'checknetisolation': None, 'chglogon': None, 'chgport': None, 'chgusr': None, 'chkdsk': None,
+'chkntfs': None, 'choice': None, 'icacls': None, 'if': None, 'interlnk': None, 'intersvr': None, 'ipconfig': None, 'ipxroute': None, 'irftp': None, 'iscsicli': None, 'kb16': None, 'keyb': None, 'klist': None,
+'ksetup': None, 'ktmutil': None, 'label': None, 'lh': None, 'licensingdiag': None, 'loadfix': None, 'loadhigh': None, 'lock': None, 'lodctr': None, 'logman': None, 'logoff': None, 'lpq': None, 'lpr': None, 'makecab': None, 'manage-bde': None, 'md': None, 'mem': 
+None, 'memmaker': None, 'mkdir': None, 'mklink': None, 'mode': None, 'mofcomp': None, 'more': None, 'mount': None, 'mountvol': None, 'move': None, 'mrinfo': None, 'msav': None, 
+'msbackup': None, 'mscdex': None, 'msd': None, 'msg': None, 'msiexec': None, 'muiunattend': None, 'nbtstat': None, 'net': None, 'net1': None, 'netcfg': None, 'netsh': None, 'netstat': None, 'nfsadmin': None,
+'nlsfunc': None, 'nltest': None, 'nslookup': None, 'ntbackup': None, 'ntsd': None, 'ocsetup': None, 'openfiles': None, 'path': None, 'pathping': None, 'pause': None, 'pentnt': None,
+'ping': {'/?': None, '-t': None, '-a': None, '-n': None, '-l': None, '-f': None, '-i': None, '-v': None, '-r': None, '-s': None, '-j': None, 
+'-k': None, '-w': None, '-R': None, '-S': None, '-C': None, '-p': None, '-4': None, '-6': None}, 'pkgmgr': None, 'pnpunattend': None, 'pnputil': None, 'popd': None, 'powercfg': 
+None, 'print': None, 'prompt': None, 'pushd': None, 'pwlauncher': None, 'qappsrv': None, 'qbasic': None, 'qprocess': None, 'query': None, 'quser': None, 'qwinsta': None, 'rasautou': None, 'rasdial': None,
+'rcp': None, 'rd': None, 'rdpsign': None, 'reagentc': None, 'recimg': None, 'recover': None, 'reg': None, 'regini': None, 'register-cimprovider': None, 'regsvr32': None, 'relog': None, 'rem': None, 'ren': None,
+'rename': None, 'repair-bde': None, 'replace': None, 'reset': None, 'restore': None, 'rexec': None, 'rmdir': None, 'robocopy': None, 'route': None, 'rpcinfo': None, 'rpcping': None, 'rsh': None, 'rsm': None, 'runas': None,
+'rwinsta': None, 'sc': None, 'scandisk': None, 'scanreg': None, 'sdbinst': None, 'secedit': None, 'set': None, 'setlocal': None, 'setspn': None, 'setver': None, 'setx': None, 'sfc': None, 'shadow': None, 'share': None,
+'shift': None, 'showmount': None, 'shutdown': None, 'schtasks': None, 'smartdrv': None, 'sort': None, 'start': None, 'subst': None, 'sxstrace': None, 'sys': None, 'systeminfo': None, 'takeown': None, 'taskkill': None, 'tasklist': None,
+'tcmsetup': None, 'telnet': None, 'tftp': None, 'time': None, 'timeout': None, 'title': None, 'tlntadmn': None, 'tpmvscmgr': None, 'tracerpt': None, 'tracert': None, 'tree': None, 'tscon': None, 'tsdiscon': None, 'tskill': None, 'tsshutdn': None,
+'type': None, 'typeperf': None, 'tzutil': None, 'umount': None, 'undelete': None, 'unformat': None, 'unlock': None, 'unlodctr': None, 'vaultcmd': None, 'ver': None, 'verify': None, 'vol': None, 'vsafe': None, 'vssadmin': None, 'w32tm': None, 'waitfor': None,
+'wbadmin': None, 'wecutil': None, 'wevtutil': None, 'where': None, 'whoami': None, 'winmgmt': None, 'winrm': None, 'winrs': None, 'winsat': None, 'wmic': None, 'wsmanhttpconfig': None, 'xcopy': None, 'xwizard': None, 'player': {'play': None, 'volume': None,
+'pause': None, 'next': None, 'prev': None, 'terminate': None}, 'tcp-scan': None, 'refreshenv': None, 'ytdown': None, 'grantfiles': None, 'back': None, 'downloadeta': None, 'poweroff': None, 'reboot': None, 'instaloader': None, 'pwd': None, 'prime': None,
+'steam': {'user': None, 'friends': None, 'me': None, 'game': None}, 'game-deals': None, 'thread': None, 'autoclicker': None, 'brightness': None, 'plain2string': None, 'cryptocurrency': {'btc': None, 'eth': None, 'xrp': None, 'usdt': None, 'bch': None,
+'ltc': None, 'ada': None, 'bnb': None}, 'eval': None, 'sizeof': None, 'godmode': None, 'cheat': None, 'threads': None, 'currencyconverter': None, 'checklastvid': None, 'checklasttweet': None, 'checktwitchonline': None, 'fileconverter': None, 'ping.gg': None,
+'guid': None, 'dns': None, 'shorten': None, 'transfer': None, 'speedtest': None, 'weather': None, 'covid19': None, 'ip': None, 'geoip': None, 'qrcode': None, 'stonks': None, 'md5': None, 'welcome': None, 'startup': None, 'open': None, 'settings': None, 'sha1': None,
+'sha224': None, 'sha256': None, 'sha384': None, 'sha512': None, 'md5sum': None, 'sha1sum': None, 'sha224sum': None, 'sha256sum': None, 'sha384sum': None, 'sha512sum': None, 'elevate': None, 'admin': None, 'compile': None, 'interface': {'enable': None, 'disable': None},
+'online': {'http://localhost': None}, 'clear': None, 'search': None, 'void': {'config': None, 'perfmon': {'true': None, 'false': None}, 'mode': {'CMD': None, 'POWERSHELL': None}, 'install': {'chocolatey': None}, 'multithreading': {'true': None, 'false': None}, 'license': {'full': None},
+'version': {'latest': None, 'local': None}, 'mouseSupport': {'true': None, 'false': None}, 'fuzzycomplete': {'true': None, 'false': None}, 'completeWhileTyping': {'true': None, 'false': None}, 'wrapLines': {'true': None, 'false': None}, 'welcome': {'true': None, 'false': None},
+'start': None, 'updatePythonPackages': None, 'title': None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None,
+'control': None, 'msconfig': None, 'msinfo32': None, 'regedit': None, 'sysdm.cpl': None, 'firewall': None, 'component': None, 'services': None, 'manager': None, 'event': None, 'os': None, 'pwned': None, 'quit': None, 'alias': {'-list': None}, 'delalias': None, '+': None, '-': None, '*': None, '/': None, '**': None, '//': None, '%': None, 'download': None}
 
 # For use in "back"
 LASTDIR = ""
@@ -232,6 +265,9 @@ def isadmin() -> bool:
 
     return _is_admin
 
+def default_completer():
+    config["complerer"] = defcompleter
+    saveToYml(config,CONFIG)
 
 if iswindows():
     os.system("title Void-Terminal")
@@ -287,7 +323,7 @@ except Exception as e:
         "steamapikey":"",
         "steamurl":"",
         "volume":100,
-        "completer": {'tcp-scan': None, 'refreshenv': None, 'ytdown': None, 'grantfiles': None, 'back': None, 'downloadeta': None, 'poweroff': None, 'reboot': None, 'instaloader': None, 'pwd': None, 'prime': None, 'steam': None, 'game-deals': None, 'thread': None, 'autoclicker': None, 'brightness': None, 'plain2string': None, 'cryptocurrency': {'btc': None, 'eth': None, 'xrp': None, 'usdt': None, 'bch': None, 'ltc': None, 'ada': None, 'bnb': None}, 'eval': None, 'sizeof': None, 'godmode': None, 'cheat': None, 'threads': None, 'currencyconverter': None, 'checklastvid': None, 'checklasttweet': None, 'checktwitchonline': None, 'fileconverter': None, 'ping.gg': None, 'guid': None, 'dns': None, 'shorten': None, 'transfer': None, 'speedtest': None, 'weather': None, 'covid19': None, 'ip': None, 'geoip': None, 'qrcode': None, 'stonks': None, 'md5': None, 'welcome': None, 'startup': None, 'open': None, 'settings': None, 'sha1': None, 'sha224': None, 'sha256': None, 'sha384': None, 'sha512': None, 'md5sum': None, 'sha1sum': None, 'sha224sum': None, 'sha256sum': None, 'sha384sum': None, 'sha512sum': None, 'elevate': None, 'admin': None, 'compile': None, 'interface': {'enable': None, 'disable': None}, 'online': {'http://localhost': None}, 'clear': None, 'search': None, 'void': {'config': None, 'perfmon': {'true': None, 'false': None}, 'mode': {'CMD': None, 'POWERSHELL': None}, 'install': {'chocolatey': None}, 'multithreading': {'true': None, 'false': None}, 'license': {'full': None}, 'version': {'latest': None, 'local': None}, 'mouseSupport': {'true': None, 'false': None}, 'fuzzycomplete': {'true': None, 'false':None}, 'completeWhileTyping': {'true': None, 'false': None}, 'wrapLines': {'true': None, 'false': None}, 'welcome': {'true': None, 'false': None}, 'start': None, 'updatePythonPackages': None, 'title':None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None, 'control': None, 'msconfig': None, 'msinfo32': None, 'regedit': None, 'sysdm.cpl': None, 'firewall': None, 'component': None, 'services': None, 'manager': None, 'event': None, 'ping': {'/?': None, '-t': None, '-a': None, '-n': None, '-l': None, '-f': None, '-i': None, '-v': None, '-r': None, '-s': None, '-j': None, '-k': None, '-w': None, '-R': None, '-S': None, '-C': None, '-p': None, '-4': None, '-6': None}, 'os': None, 'pwned': None, 'cd': None, 'quit': None, 'alias': {'-list': None}, 'delalias': None, '+': None, '-': None, '*': None, '/': None, '**': None, '//': None, '%': None, 'download': None}
+        "completer": defcompleter
     }
 
     if not args.skipconfig:
@@ -311,16 +347,16 @@ VOLUME = config.get("volume", 100)
 # Pick completer based on config and platform
 if config["fuzzycomplete"] and iswindows():
     combinedcompleter = ThreadedCompleter(FuzzyCompleter(merge_completers([WinCompleter, PathCompleter(
-    ), winWordCompleter, WordCompleter(list(aliases.keys()))])))
+    ), WordCompleter(list(aliases.keys()))])))
 elif iswindows():
     combinedcompleter = ThreadedCompleter(merge_completers(
-        [WinCompleter, PathCompleter(), winWordCompleter]))
+        [WinCompleter, PathCompleter(), WordCompleter(list(aliases.keys()))]))
 elif platform.system() == "Linux" and config["fuzzycomplete"]:
     combinedcompleter = ThreadedCompleter(FuzzyCompleter(
-        merge_completers([LinuxCompleter, PathCompleter()])))
+        merge_completers([LinuxCompleter, PathCompleter(),WordCompleter(list(aliases.keys()))])))
 else:
     combinedcompleter = ThreadedCompleter(merge_completers(
-        [LinuxCompleter, PathCompleter()]))
+        [LinuxCompleter, PathCompleter(),WordCompleter(list(aliases.keys()))]))
 
 # Define console style
 _style = Style.from_dict(
@@ -716,11 +752,7 @@ class Void_Terminal(PromptSession):
               "\n MULTIMEDIA: \n\n"
 
               f"   {c.okblue}instaloader{c.end} - download instagram profile: {c.okgreen}instaloader [your username] [target username]{c.end}\n"
-              f"   {c.okblue}play{c.end} - play audio or video file from URL or path: {c.okgreen}play [url | file]{c.end}\n"
-              f"   {c.okblue}player-volume{c.end} - set target player volume: {c.okgreen}player-volume [value]{c.end}\n"
-              f"   {c.okblue}player-pause{c.end} - pause or resume player: {c.okgreen}player-pause{c.end}\n"
-              f"   {c.okblue}player-append{c.end} - append track to current playlist: {c.okgreen}player-append [target]{c.end}\n"
-              f"   {c.okblue}player-terminate{c.end} - terminate active player: {c.okgreen}player-terminate{c.end}\n"
+              f"   {c.okblue}player{c.end} - play audio or video file from URL or path and configure player class: {c.okgreen}play [url | file]{c.end}\n"
               f"   {c.okblue}ytdown{c.end} - download video from URL: {c.okgreen}ytdown [url]{c.end}\n"
 
               "\n CURL: \n\n"
@@ -783,14 +815,6 @@ class Void_Terminal(PromptSession):
         if splitInput[0].lower() == "wifipassword":
             wifipassword()
             return
-
-        if splitInput[0].lower() == "leauge-of-legends":
-            fparser = argparse.ArgumentParser(prog="leauge-of-legends")
-            fparser.add_argument("champion", help="Name of champion")
-            try:
-                fargs = fparser.parse_args(splitInput[1:])
-            except SystemExit:
-                return
 
         if splitInput[0].lower() == "thread":
             fparser = argparse.ArgumentParser(prog="thread")
