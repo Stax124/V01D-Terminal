@@ -967,7 +967,9 @@ class Void_Terminal(PromptSession):
             core.utils.convert(splitInput)
 
         elif splitInput[0].lower() == "ytdown":
-            core.utils.ytdown(splitInput)
+            try:
+                core.utils.ytdown(splitInput)
+            except: pass
             return
 
         elif splitInput[0].lower() == "player" and "player" in loaded:
@@ -1080,14 +1082,21 @@ class Void_Terminal(PromptSession):
                 return
 
             if fargs.function == "user":
-                steam_api.profileID(fargs.ID)
+                try:
+                    steam_api.profileID(fargs.ID)
+                except Exception as e: print(f"{c.fail}{e}{c.end}")
+                return
 
             elif fargs.function == "friends":
-                print(steam_api.friends())
+                try:
+                    print(steam_api.friends())
+                except Exception as e: print(f"{c.fail}{e}{c.end}")
+                return
 
             elif fargs.function == "me":
-                me = steam_api.SteamUser(steam_api.me.id)
-                print(f"""
+                try:
+                    me = steam_api.SteamUser(steam_api.me.id)
+                    print(f"""
 {c.bold}Name{c.end}: {c.okgreen}{me.name}{c.end}
 
 Real name: {c.okgreen}{me.real_name}{c.end}
@@ -1108,57 +1117,60 @@ Privacy: {c.okgreen}{me.privacy}{c.end}
 
 VAC: {c.okgreen}{me.is_vac_banned}{c.end}
 Country code: {c.okgreen}{me.country_code}{c.end}
-""")
+""") 
+                except Exception as e: print(f"{c.fail}{e}{c.end}")
+                return
 
             elif fargs.function == "game":
-                import difflib
-                print_formatted_text("Loading Steam store details...")
+                try:
+                    import difflib
+                    print_formatted_text("Loading Steam store details...")
 
-                initial_list = requests.get(
-                    r"http://api.steampowered.com/ISteamApps/GetAppList/v0001/").json()["applist"]["apps"]["app"]
-                game_list = dict()
-                games = []
+                    initial_list = requests.get(
+                        r"http://api.steampowered.com/ISteamApps/GetAppList/v0001/").json()["applist"]["apps"]["app"]
+                    game_list = dict()
+                    games = []
 
-                for i in initial_list:
-                    game_list[i["name"].lower()] = i["appid"]
-                    games.append(i["name"].lower())
+                    for i in initial_list:
+                        game_list[i["name"].lower()] = i["appid"]
+                        games.append(i["name"].lower())
 
-                print_formatted_text(
-                    f"Closest results: {difflib.get_close_matches(fargs.name.lower(), games)}")
-                id = game_list[difflib.get_close_matches(
-                    fargs.name.lower(), games)[0]]
+                    print_formatted_text(
+                        f"Closest results: {difflib.get_close_matches(fargs.name.lower(), games)}")
+                    id = game_list[difflib.get_close_matches(
+                        fargs.name.lower(), games)[0]]
 
-                content = requests.get(
-                    f"https://store.steampowered.com/api/appdetails?appids={id}").json()
-                content = content.get(str(id))["data"]
+                    content = requests.get(
+                        f"https://store.steampowered.com/api/appdetails?appids={id}").json()
+                    content = content.get(str(id))["data"]
 
-                name = content.get("name", "Unknown")
-                age = content.get("required_age", "Unknown")
-                publisher = content.get("publishers", "Unknown")
-                discount = content.get("price_overview", {}).get(
-                    "discount_percent", "Unknown")
-                price = content.get("price_overview", {}).get(
-                    "final_formatted", "Unknown")
-                metacritic = content.get("metacritic", {})
-                categories = content.get("categories", "Unknown")
-                genres = content.get("genres", "Unknown")
-                recommendations = content.get(
-                    "recommendations", {}).get("total", "Unknown")
-                achievements = content.get(
-                    "achievements", {}).get("total", "Unknown")
-                release_date = content.get(
-                    "release_date", {}).get("date", "Unknown")
-                game_type = content.get("type", "Unknown")
+                    name = content.get("name", "Unknown")
+                    age = content.get("required_age", "Unknown")
+                    publisher = content.get("publishers", "Unknown")
+                    discount = content.get("price_overview", {}).get(
+                        "discount_percent", "Unknown")
+                    price = content.get("price_overview", {}).get(
+                        "final_formatted", "Unknown")
+                    metacritic = content.get("metacritic", {})
+                    categories = content.get("categories", "Unknown")
+                    genres = content.get("genres", "Unknown")
+                    recommendations = content.get(
+                        "recommendations", {}).get("total", "Unknown")
+                    achievements = content.get(
+                        "achievements", {}).get("total", "Unknown")
+                    release_date = content.get(
+                        "release_date", {}).get("date", "Unknown")
+                    game_type = content.get("type", "Unknown")
 
-                category_names = []
-                for i in categories:
-                    category_names.append(i.get("description", "Unknown"))
+                    category_names = []
+                    for i in categories:
+                        category_names.append(i.get("description", "Unknown"))
 
-                genre_names = []
-                for i in genres:
-                    genre_names.append(i.get("description", "Unknown"))
+                    genre_names = []
+                    for i in genres:
+                        genre_names.append(i.get("description", "Unknown"))
 
-                print(f"""
+                    print(f"""
 {c.bold}Name{c.end}: {c.okgreen}{name}{c.end}
 
 Release date: {c.okgreen}{release_date}{c.end}
@@ -1177,18 +1189,23 @@ Type: {c.okgreen}{game_type}{c.end}
 
 URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             """)
+                except Exception as e: print(f"{c.fail}{e}{c.end}")
+                return
 
         elif splitInput[0].lower() == "game-deals":
-            from tabulate import tabulate,TableFormat
-            response = requests.get(
-                "https://www.cheapshark.com/api/1.0/deals").json()
+            try:
+                from tabulate import tabulate,TableFormat
+                response = requests.get(
+                    "https://www.cheapshark.com/api/1.0/deals").json()
 
-            l = list()
+                l = list()
 
-            for game in response:
-                l.append([game["title"], game["salePrice"], game["savings"]+"%", storeID.get(
-                    game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
-            print(tabulate(l,["Title", "Price", "Discount", "Store", "URL"]))
+                for game in response:
+                    l.append([game["title"], game["salePrice"], game["savings"]+"%", storeID.get(
+                        game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
+                print(tabulate(l,["Title", "Price", "Discount", "Store", "URL"]))
+            except Exception as e: print(f"{c.fail}{e}{c.end}")
+            return
 
         elif splitInput[0].lower() == "grantfiles" and iswindows():
             fparser = argparse.ArgumentParser(prog="grantfiles")
@@ -1612,11 +1629,13 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             except SystemExit:
                 return
 
-            rate = core.utils.currencyconverter(
-                fargs.base.upper(), fargs.other.upper())
-            if not args.quiet:
-                print(
-                    f"{(rate * float(fargs.amount)).__round__(2)} {c.okgreen}{fargs.other}{c.end}")
+            try:
+                rate = core.utils.currencyconverter(
+                    fargs.base.upper(), fargs.other.upper())
+                if not args.quiet:
+                    print(
+                        f"{(rate * float(fargs.amount)).__round__(2)} {c.okgreen}{fargs.other}{c.end}")
+            except: print(f"{c.fail}Server unreachable{c.end}")
             return
 
         elif splitInput[0] == "os":  # Show os
