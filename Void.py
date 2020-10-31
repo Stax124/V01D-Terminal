@@ -991,7 +991,7 @@ class Void_Terminal(PromptSession):
 
             volume_parser = sub_parsers.add_parser("volume")
             volume_parser.add_argument(
-                    "TARGET", help="Set default volume ( 0 - MAXVOLUME )", type=int)
+                    "volume", help="Set default volume ( 0 - MAXVOLUME )", type=int)
             volume_parser.add_argument(
                 "-n", "--no-updating", help="Do not update global variable VOLUME", action="store_true")
 
@@ -1023,16 +1023,18 @@ class Void_Terminal(PromptSession):
 
             elif fargs.function == "volume":
                 try:
-                    self.mpv["volume"] = fargs.TARGET
-                    VOLUME = fargs.TARGET
-                    config["volume"] = fargs.TARGET
+                    self.mpv["volume"] = fargs.volume
+                    VOLUME = fargs.volume
+                    config["volume"] = fargs.volume
                     saveToYml(config, CONFIG)
                 except:
                     print(f"{c.fail}Player not initialized{c.end}")
                     if fargs.no_updating:
                         return
                     else:
-                        VOLUME = fargs.TARGET
+                        VOLUME = fargs.volume
+                        config["volume"] = fargs.volume
+                        saveToYml(config, CONFIG)
                         print(
                             f"{c.okgreen}Default volume for new instances updated{c.end}")
 
