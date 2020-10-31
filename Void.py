@@ -110,7 +110,6 @@ def _import():
     import GPUtil
     import psutil
 
-    # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
     from prompt_toolkit import PromptSession, print_formatted_text
     from prompt_toolkit.shortcuts import confirm
@@ -134,7 +133,6 @@ try:
     import GPUtil
     import psutil
 
-    # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
     from prompt_toolkit import PromptSession, print_formatted_text
     from prompt_toolkit.shortcuts import confirm
@@ -159,7 +157,7 @@ except Exception as e:
 
         from prompt_toolkit.shortcuts import confirm
 
-        # Ask to install all dependencies, if denied, import error will be raised
+        # Ask to install all dependencies, if denied, exit application
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
@@ -189,7 +187,7 @@ try:
     else:
         USER = os.environ["USER"]
 except:
-    USER = "ERROR"
+    USER = "UNKNOWN"
 
 
 try:
@@ -198,7 +196,7 @@ try:
     else:
         USERDOMAIN = os.environ["NAME"]
 except:
-    USERDOMAIN = "ERROR"
+    USERDOMAIN = "UNKNOWN"
 
 defPath = os.getcwd()
 defcompleter = {'append': None, 'arp': None, 'assoc': None, 'at': None, 'atmadm': None, 'attrib': None, 'auditpol': None, 'backup': None, 'bcdboot': None, 'bcdedit': None,
@@ -232,12 +230,13 @@ None, 'print': None, 'prompt': None, 'pushd': None, 'pwlauncher': None, 'qappsrv
 'sha224': None, 'sha256': None, 'sha384': None, 'sha512': None, 'md5sum': None, 'sha1sum': None, 'sha224sum': None, 'sha256sum': None, 'sha384sum': None, 'sha512sum': None, 'elevate': None, 'admin': None, 'compile': None, 'interface': {'enable': None, 'disable': None},
 'online': {'http://localhost': None}, 'clear': None, 'search': None, 'void': {'config': None, 'perfmon': {'true': None, 'false': None}, 'mode': {'CMD': None, 'POWERSHELL': None}, 'install': {'chocolatey': None}, 'multithreading': {'true': None, 'false': None}, 'license': {'full': None},
 'version': {'latest': None, 'local': None}, 'mouseSupport': {'true': None, 'false': None}, 'fuzzycomplete': {'true': None, 'false': None}, 'completeWhileTyping': {'true': None, 'false': None}, 'wrapLines': {'true': None, 'false': None}, 'welcome': {'true': None, 'false': None},
-'start': None, 'updatePythonPackages': None, 'title': None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None,
+'start': None, 'title': None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None,
 'control': None, 'msconfig': None, 'msinfo32': None, 'regedit': None, 'sysdm.cpl': None, 'firewall': None, 'component': None, 'services': None, 'manager': None, 'event': None, 'os': None, 'pwned': None, 'quit': None, 'alias': {'-list': None}, 'delalias': None, '+': None, '-': None, '*': None, '/': None, '**': None, '//': None, '%': None, 'download': None}
 
 # For use in "back"
 LASTDIR = ""
 
+# Global mpv player stats
 playing = False
 playerInitialized = False
 
@@ -378,30 +377,6 @@ _style = Style.from_dict(
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 
 logo = """
-                         __ .  _                                   
-                    _wr""        "-q__                             
-                 _dP                 9m_     
-               _#P                     9#_                         
-              d#@                       9#m                        
-             d##                         ###                       
-            J###                         ###L                      
-            {###K                       J###K                      
-            ]####K      ___aaa___      J####F                      
-        __gmM######_  w#P""   ""9#m  _d#####Mmw__               
-     _g##############mZ_         __g##############m_            
-   _d####M@PPPP@@M#######Mmp gm#########@@PPP9@M####m_          
-  a###""          ,Z"#####@" '######"\g          ""M##m         
- J#@"             0L  "*##     ##@"  J#              *#K        
- #"               `#    "_gmwgm_~    dF               `#_       
-7F                 "#_   ]#####F   _dK                 JE          
-]                    *m__ ##### __g@"                   F          
-                       "PJ#####LP"                                 
- `                       0######_                      '           
-   .                   _0########_                   .               
-     .               _d#####^#####m__              ,              
-      "*w_________am#####P"   ~9#####mw_________w*"                  
-          ""9@#####@M""           ""P@#####@M""                    
-
 ██╗   ██╗  ██████╗  ██╗ ██████╗         ████████╗ ███████╗ ██████╗  ███╗   ███╗ ██╗ ███╗   ██╗  █████╗  ██╗
 ██║   ██║ ██╔═══██╗ ██║ ██╔══██╗        ╚══██╔══╝ ██╔════╝ ██╔══██╗ ████╗ ████║ ██║ ████╗  ██║ ██╔══██╗ ██║
 ██║   ██║ ██║   ██║ ██║ ██║  ██║ █████╗    ██║    █████╗   ██████╔╝ ██╔████╔██║ ██║ ██╔██╗ ██║ ███████║ ██║
@@ -419,7 +394,7 @@ def welcome() -> None:
     if not args.quiet:
         print(f"""{c.bold}{logo}{c.end}
 
-    {c.okblue}Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users{c.end}
+    {c.okblue}Welcome to Void-Terminal, Windows compatible terminal with functions for advanced users{c.end}
 
     For full functionality, please use commands one after another: {c.okgreen}'void install chocolatey'{c.end}, {c.okgreen}'choco install mpv'{c.end}, {c.okgreen}'choco install ffmpeg'{c.end}
     Linux users may use: {c.okgreen}'sudo apt install ffmpeg'{c.end}, {c.okgreen}'sudo apt install mpv'{c.end}
@@ -434,11 +409,8 @@ def welcome() -> None:
 
 def wifipassword() -> None:
     "Get password of wifi network (Windows only)"
-
     os.system("netsh wlan show profiles")
-
     networkName = input("Network name > ")
-
     os.system(f"netsh wlan show profiles {networkName} key=clear")
 
 
@@ -546,12 +518,7 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
             """)
 
         elif (_splitinput[1] == "version"):
-            if _splitinput[2] == "latest":
-                if not args.quiet:
-                    print(c.okgreen+core.utils.version()+c.end)
-            elif _splitinput[2] == "local":
-                if not args.quiet:
-                    print(c.okgreen+VERSION+c.end)
+            print(c.okgreen+VERSION+c.end)
 
         elif (_splitinput[1] == "install"):
             if _splitinput[2] == "chocolatey":
@@ -565,17 +532,6 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
                 else:
                     if not args.quiet:
                         print(f"{c.fail}Only available on Windows{c.end}")
-
-        elif _splitinput[1] == "updatePythonPackages":
-            import pkg_resources
-            packages = [
-                dist.project_name for dist in pkg_resources.working_set]
-            if iswindows():
-                call("pip install --upgrade --use-feature=2020-resolver" +
-                     ' '.join(packages), shell=True)
-            else:
-                call("sudo pip3 install --upgrade --use-feature=2020-resolver" +
-                     ' '.join(packages), shell=True)
 
         elif _splitinput[1] == "title":
             os.system(f"title {_splitinput[-1]}")
