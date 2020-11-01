@@ -54,7 +54,6 @@ for i in [
     "downloadeta 50GB 2MB",
     "cd C:\\Users",
     "back",
-    "power",
     "tasklist",
     "steam game 'Team fortress 2'",
     "game-deals",

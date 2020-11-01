@@ -101,7 +101,6 @@ if iswindows():
 
 def _import():
     from sys import exit as _exit
-    from python_ls import ls
     from packaging import version
     import yaml
     import requests
@@ -111,7 +110,6 @@ def _import():
     import GPUtil
     import psutil
 
-    # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
     from prompt_toolkit import PromptSession, print_formatted_text
     from prompt_toolkit.shortcuts import confirm
@@ -126,7 +124,6 @@ def _import():
 
 try:
     from sys import exit as _exit
-    from python_ls import ls
     from packaging import version
     import yaml
     import datetime
@@ -136,7 +133,6 @@ try:
     import GPUtil
     import psutil
 
-    # Prompt-toolkit - autocompletion library
     from prompt_toolkit.enums import EditingMode
     from prompt_toolkit import PromptSession, print_formatted_text
     from prompt_toolkit.shortcuts import confirm
@@ -161,15 +157,15 @@ except Exception as e:
 
         from prompt_toolkit.shortcuts import confirm
 
-        # Ask to install all dependencies, if denied, import error will be raised
+        # Ask to install all dependencies, if denied, exit application
         if confirm("Install dependencies: "):
             if iswindows():
                 os.system(
-                    "pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests psutil gputil tabulate pypickle screen-brightness-control pathlib typing pynput webcolors instaloader {0}".format("--user" if not confirm("Root (Admin) user: ") else ""))
+                    "pip3 install -r requirements.txt {0}".format("--user" if not confirm("Root (Admin) user: ") else ""))
             else:
                 root = confirm("Root (Admin) user: ")
                 os.system(
-                    "{0}pip3 install packaging python-ls python-mpv colr youtube_dl clint pyyaml requests pypickle screen-brightness-control pathlib typing pynput tabulate psutil gputil webcolors instaloader {1}".format("sudo " if root else "","--user" if not root else ""))
+                    "{0}pip3 install -r requirements.txt {1}".format("sudo " if root else "","--user" if not root else ""))
                 os.system("{0}apt-get install -y libmpv-dev".format("sudo " if root else ""))
         else:
             exit(0)
@@ -191,7 +187,7 @@ try:
     else:
         USER = os.environ["USER"]
 except:
-    USER = "ERROR"
+    USER = "UNKNOWN"
 
 
 try:
@@ -200,7 +196,7 @@ try:
     else:
         USERDOMAIN = os.environ["NAME"]
 except:
-    USERDOMAIN = "ERROR"
+    USERDOMAIN = "UNKNOWN"
 
 defPath = os.getcwd()
 defcompleter = {'append': None, 'arp': None, 'assoc': None, 'at': None, 'atmadm': None, 'attrib': None, 'auditpol': None, 'backup': None, 'bcdboot': None, 'bcdedit': None,
@@ -234,12 +230,13 @@ None, 'print': None, 'prompt': None, 'pushd': None, 'pwlauncher': None, 'qappsrv
 'sha224': None, 'sha256': None, 'sha384': None, 'sha512': None, 'md5sum': None, 'sha1sum': None, 'sha224sum': None, 'sha256sum': None, 'sha384sum': None, 'sha512sum': None, 'elevate': None, 'admin': None, 'compile': None, 'interface': {'enable': None, 'disable': None},
 'online': {'http://localhost': None}, 'clear': None, 'search': None, 'void': {'config': None, 'perfmon': {'true': None, 'false': None}, 'mode': {'CMD': None, 'POWERSHELL': None}, 'install': {'chocolatey': None}, 'multithreading': {'true': None, 'false': None}, 'license': {'full': None},
 'version': {'latest': None, 'local': None}, 'mouseSupport': {'true': None, 'false': None}, 'fuzzycomplete': {'true': None, 'false': None}, 'completeWhileTyping': {'true': None, 'false': None}, 'wrapLines': {'true': None, 'false': None}, 'welcome': {'true': None, 'false': None},
-'start': None, 'updatePythonPackages': None, 'title': None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None,
+'start': None, 'title': None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None,
 'control': None, 'msconfig': None, 'msinfo32': None, 'regedit': None, 'sysdm.cpl': None, 'firewall': None, 'component': None, 'services': None, 'manager': None, 'event': None, 'os': None, 'pwned': None, 'quit': None, 'alias': {'-list': None}, 'delalias': None, '+': None, '-': None, '*': None, '/': None, '**': None, '//': None, '%': None, 'download': None}
 
 # For use in "back"
 LASTDIR = ""
 
+# Global mpv player stats
 playing = False
 playerInitialized = False
 
@@ -380,30 +377,6 @@ _style = Style.from_dict(
 # ---------------------------------------------------------------------------------------------------------------------------------------------
 
 logo = """
-                         __ .  _                                   
-                    _wr""        "-q__                             
-                 _dP                 9m_     
-               _#P                     9#_                         
-              d#@                       9#m                        
-             d##                         ###                       
-            J###                         ###L                      
-            {###K                       J###K                      
-            ]####K      ___aaa___      J####F                      
-        __gmM######_  w#P""   ""9#m  _d#####Mmw__               
-     _g##############mZ_         __g##############m_            
-   _d####M@PPPP@@M#######Mmp gm#########@@PPP9@M####m_          
-  a###""          ,Z"#####@" '######"\g          ""M##m         
- J#@"             0L  "*##     ##@"  J#              *#K        
- #"               `#    "_gmwgm_~    dF               `#_       
-7F                 "#_   ]#####F   _dK                 JE          
-]                    *m__ ##### __g@"                   F          
-                       "PJ#####LP"                                 
- `                       0######_                      '           
-   .                   _0########_                   .               
-     .               _d#####^#####m__              ,              
-      "*w_________am#####P"   ~9#####mw_________w*"                  
-          ""9@#####@M""           ""P@#####@M""                    
-
 ██╗   ██╗  ██████╗  ██╗ ██████╗         ████████╗ ███████╗ ██████╗  ███╗   ███╗ ██╗ ███╗   ██╗  █████╗  ██╗
 ██║   ██║ ██╔═══██╗ ██║ ██╔══██╗        ╚══██╔══╝ ██╔════╝ ██╔══██╗ ████╗ ████║ ██║ ████╗  ██║ ██╔══██╗ ██║
 ██║   ██║ ██║   ██║ ██║ ██║  ██║ █████╗    ██║    █████╗   ██████╔╝ ██╔████╔██║ ██║ ██╔██╗ ██║ ███████║ ██║
@@ -421,7 +394,7 @@ def welcome() -> None:
     if not args.quiet:
         print(f"""{c.bold}{logo}{c.end}
 
-    {c.okblue}Welcome to Void-Terminal, Windows compatible terminal with predefined functions for advanced users{c.end}
+    {c.okblue}Welcome to Void-Terminal, Windows compatible terminal with functions for advanced users{c.end}
 
     For full functionality, please use commands one after another: {c.okgreen}'void install chocolatey'{c.end}, {c.okgreen}'choco install mpv'{c.end}, {c.okgreen}'choco install ffmpeg'{c.end}
     Linux users may use: {c.okgreen}'sudo apt install ffmpeg'{c.end}, {c.okgreen}'sudo apt install mpv'{c.end}
@@ -436,11 +409,8 @@ def welcome() -> None:
 
 def wifipassword() -> None:
     "Get password of wifi network (Windows only)"
-
     os.system("netsh wlan show profiles")
-
     networkName = input("Network name > ")
-
     os.system(f"netsh wlan show profiles {networkName} key=clear")
 
 
@@ -548,12 +518,7 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
             """)
 
         elif (_splitinput[1] == "version"):
-            if _splitinput[2] == "latest":
-                if not args.quiet:
-                    print(c.okgreen+core.utils.version()+c.end)
-            elif _splitinput[2] == "local":
-                if not args.quiet:
-                    print(c.okgreen+VERSION+c.end)
+            print(c.okgreen+VERSION+c.end)
 
         elif (_splitinput[1] == "install"):
             if _splitinput[2] == "chocolatey":
@@ -567,17 +532,6 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
                 else:
                     if not args.quiet:
                         print(f"{c.fail}Only available on Windows{c.end}")
-
-        elif _splitinput[1] == "updatePythonPackages":
-            import pkg_resources
-            packages = [
-                dist.project_name for dist in pkg_resources.working_set]
-            if iswindows():
-                call("pip install --upgrade --use-feature=2020-resolver" +
-                     ' '.join(packages), shell=True)
-            else:
-                call("sudo pip3 install --upgrade --use-feature=2020-resolver" +
-                     ' '.join(packages), shell=True)
 
         elif _splitinput[1] == "title":
             os.system(f"title {_splitinput[-1]}")
@@ -1013,7 +967,9 @@ class Void_Terminal(PromptSession):
             core.utils.convert(splitInput)
 
         elif splitInput[0].lower() == "ytdown":
-            core.utils.ytdown(splitInput)
+            try:
+                core.utils.ytdown(splitInput)
+            except: pass
             return
 
         elif splitInput[0].lower() == "player" and "player" in loaded:
@@ -1037,7 +993,7 @@ class Void_Terminal(PromptSession):
 
             volume_parser = sub_parsers.add_parser("volume")
             volume_parser.add_argument(
-                    "TARGET", help="Set default volume ( 0 - MAXVOLUME )", type=int)
+                    "volume", help="Set default volume ( 0 - MAXVOLUME )", type=int)
             volume_parser.add_argument(
                 "-n", "--no-updating", help="Do not update global variable VOLUME", action="store_true")
 
@@ -1069,16 +1025,18 @@ class Void_Terminal(PromptSession):
 
             elif fargs.function == "volume":
                 try:
-                    self.mpv["volume"] = fargs.TARGET
-                    VOLUME = fargs.TARGET
-                    config["volume"] = fargs.TARGET
+                    self.mpv["volume"] = fargs.volume
+                    VOLUME = fargs.volume
+                    config["volume"] = fargs.volume
                     saveToYml(config, CONFIG)
                 except:
                     print(f"{c.fail}Player not initialized{c.end}")
                     if fargs.no_updating:
                         return
                     else:
-                        VOLUME = fargs.TARGET
+                        VOLUME = fargs.volume
+                        config["volume"] = fargs.volume
+                        saveToYml(config, CONFIG)
                         print(
                             f"{c.okgreen}Default volume for new instances updated{c.end}")
 
@@ -1124,14 +1082,21 @@ class Void_Terminal(PromptSession):
                 return
 
             if fargs.function == "user":
-                steam_api.profileID(fargs.ID)
+                try:
+                    steam_api.profileID(fargs.ID)
+                except Exception as e: print(f"{c.fail}{e}{c.end}")
+                return
 
             elif fargs.function == "friends":
-                print(steam_api.friends())
+                try:
+                    print(steam_api.friends())
+                except Exception as e: print(f"{c.fail}{e}{c.end}")
+                return
 
             elif fargs.function == "me":
-                me = steam_api.SteamUser(steam_api.me.id)
-                print(f"""
+                try:
+                    me = steam_api.SteamUser(steam_api.me.id)
+                    print(f"""
 {c.bold}Name{c.end}: {c.okgreen}{me.name}{c.end}
 
 Real name: {c.okgreen}{me.real_name}{c.end}
@@ -1152,57 +1117,60 @@ Privacy: {c.okgreen}{me.privacy}{c.end}
 
 VAC: {c.okgreen}{me.is_vac_banned}{c.end}
 Country code: {c.okgreen}{me.country_code}{c.end}
-""")
+""") 
+                except Exception as e: print(f"{c.fail}{e}{c.end}")
+                return
 
             elif fargs.function == "game":
-                import difflib
-                print_formatted_text("Loading Steam store details...")
+                try:
+                    import difflib
+                    print_formatted_text("Loading Steam store details...")
 
-                initial_list = requests.get(
-                    r"http://api.steampowered.com/ISteamApps/GetAppList/v0001/").json()["applist"]["apps"]["app"]
-                game_list = dict()
-                games = []
+                    initial_list = requests.get(
+                        r"http://api.steampowered.com/ISteamApps/GetAppList/v0001/").json()["applist"]["apps"]["app"]
+                    game_list = dict()
+                    games = []
 
-                for i in initial_list:
-                    game_list[i["name"].lower()] = i["appid"]
-                    games.append(i["name"].lower())
+                    for i in initial_list:
+                        game_list[i["name"].lower()] = i["appid"]
+                        games.append(i["name"].lower())
 
-                print_formatted_text(
-                    f"Closest results: {difflib.get_close_matches(fargs.name.lower(), games)}")
-                id = game_list[difflib.get_close_matches(
-                    fargs.name.lower(), games)[0]]
+                    print_formatted_text(
+                        f"Closest results: {difflib.get_close_matches(fargs.name.lower(), games)}")
+                    id = game_list[difflib.get_close_matches(
+                        fargs.name.lower(), games)[0]]
 
-                content = requests.get(
-                    f"https://store.steampowered.com/api/appdetails?appids={id}").json()
-                content = content.get(str(id))["data"]
+                    content = requests.get(
+                        f"https://store.steampowered.com/api/appdetails?appids={id}").json()
+                    content = content.get(str(id))["data"]
 
-                name = content.get("name", "Unknown")
-                age = content.get("required_age", "Unknown")
-                publisher = content.get("publishers", "Unknown")
-                discount = content.get("price_overview", {}).get(
-                    "discount_percent", "Unknown")
-                price = content.get("price_overview", {}).get(
-                    "final_formatted", "Unknown")
-                metacritic = content.get("metacritic", {})
-                categories = content.get("categories", "Unknown")
-                genres = content.get("genres", "Unknown")
-                recommendations = content.get(
-                    "recommendations", {}).get("total", "Unknown")
-                achievements = content.get(
-                    "achievements", {}).get("total", "Unknown")
-                release_date = content.get(
-                    "release_date", {}).get("date", "Unknown")
-                game_type = content.get("type", "Unknown")
+                    name = content.get("name", "Unknown")
+                    age = content.get("required_age", "Unknown")
+                    publisher = content.get("publishers", "Unknown")
+                    discount = content.get("price_overview", {}).get(
+                        "discount_percent", "Unknown")
+                    price = content.get("price_overview", {}).get(
+                        "final_formatted", "Unknown")
+                    metacritic = content.get("metacritic", {})
+                    categories = content.get("categories", "Unknown")
+                    genres = content.get("genres", "Unknown")
+                    recommendations = content.get(
+                        "recommendations", {}).get("total", "Unknown")
+                    achievements = content.get(
+                        "achievements", {}).get("total", "Unknown")
+                    release_date = content.get(
+                        "release_date", {}).get("date", "Unknown")
+                    game_type = content.get("type", "Unknown")
 
-                category_names = []
-                for i in categories:
-                    category_names.append(i.get("description", "Unknown"))
+                    category_names = []
+                    for i in categories:
+                        category_names.append(i.get("description", "Unknown"))
 
-                genre_names = []
-                for i in genres:
-                    genre_names.append(i.get("description", "Unknown"))
+                    genre_names = []
+                    for i in genres:
+                        genre_names.append(i.get("description", "Unknown"))
 
-                print(f"""
+                    print(f"""
 {c.bold}Name{c.end}: {c.okgreen}{name}{c.end}
 
 Release date: {c.okgreen}{release_date}{c.end}
@@ -1221,18 +1189,23 @@ Type: {c.okgreen}{game_type}{c.end}
 
 URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             """)
+                except Exception as e: print(f"{c.fail}{e}{c.end}")
+                return
 
         elif splitInput[0].lower() == "game-deals":
-            from tabulate import tabulate,TableFormat
-            response = requests.get(
-                "https://www.cheapshark.com/api/1.0/deals").json()
+            try:
+                from tabulate import tabulate,TableFormat
+                response = requests.get(
+                    "https://www.cheapshark.com/api/1.0/deals").json()
 
-            l = list()
+                l = list()
 
-            for game in response:
-                l.append([game["title"], game["salePrice"], game["savings"]+"%", storeID.get(
-                    game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
-            print(tabulate(l,["Title", "Price", "Discount", "Store", "URL"]))
+                for game in response:
+                    l.append([game["title"], game["salePrice"], game["savings"]+"%", storeID.get(
+                        game["storeID"]), f"https://www.cheapshark.com/redirect?dealID={game['dealID']}"])
+                print(tabulate(l,["Title", "Price", "Discount", "Store", "URL"]))
+            except Exception as e: print(f"{c.fail}{e}{c.end}")
+            return
 
         elif splitInput[0].lower() == "grantfiles" and iswindows():
             fparser = argparse.ArgumentParser(prog="grantfiles")
@@ -1656,11 +1629,13 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             except SystemExit:
                 return
 
-            rate = core.utils.currencyconverter(
-                fargs.base.upper(), fargs.other.upper())
-            if not args.quiet:
-                print(
-                    f"{(rate * float(fargs.amount)).__round__(2)} {c.okgreen}{fargs.other}{c.end}")
+            try:
+                rate = core.utils.currencyconverter(
+                    fargs.base.upper(), fargs.other.upper())
+                if not args.quiet:
+                    print(
+                        f"{(rate * float(fargs.amount)).__round__(2)} {c.okgreen}{fargs.other}{c.end}")
+            except: print(f"{c.fail}Server unreachable{c.end}")
             return
 
         elif splitInput[0] == "os":  # Show os
