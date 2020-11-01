@@ -1979,8 +1979,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
 
         return string
 
-
-if __name__ == "__main__":
+def main():
     app = Void_Terminal()
 
     if args.command:
@@ -1991,3 +1990,6 @@ if __name__ == "__main__":
     else:
         with patch_stdout(app):
             app.main()
+
+if __name__ == "__main__":
+    main()
