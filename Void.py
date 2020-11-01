@@ -1,5 +1,6 @@
 # Project V01D-Terminal
 
+from plugins import hashing
 import core
 import core.osBased
 from core.database import *
@@ -49,6 +50,11 @@ except: pass
 try:
     import plugins.player as player
     loaded.append("player")
+except: pass
+
+try:
+    import plugins.hashing as hashing
+    loaded.append("hashing")
 except: pass
 
 
@@ -270,13 +276,13 @@ if iswindows():
     os.system("title Void-Terminal")
 
 def run_command(command):
-    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, shell=True)
     while True:
         output = process.stdout.readline()
         if output == b'' and process.poll() is not None:
             break
         if output:
-            print(output.strip().decode("utf-8"))
+            print(output.strip(b"\n").decode("utf-8"))
     rc = process.poll()
     return rc
 
@@ -591,12 +597,6 @@ def power() -> None:
 
     else:
         os.system("powercfg /setactive " + _input)
-
-
-def hashfilesum(splitInput, hashalg) -> None:
-    with open(splitInput[1], "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hashalg.update(chunk)
 
 # --------------------------------------------
 
@@ -1331,15 +1331,15 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             return
 
         elif splitInput[0].lower() == "ip":
-            os.system("curl api.ipify.org")
+            run_command("curl api.ipify.org")
             print()
             return
 
         elif splitInput[0].lower() == "geoip":
             try:
-                os.system("curl ipinfo.io/"+splitInput[1])
+                run_command("curl ipinfo.io/"+splitInput[1])
             except:
-                os.system("curl ipinfo.io")
+                run_command("curl ipinfo.io")
             print()
             return
 
@@ -1478,6 +1478,9 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             os.system("eventvwr.msc")
             return
 
+        elif splitInput[0].lower() in ["sha1","sha224","sha256","sha384","sha384","sha512","md5","sha1sum","sha224sum","sha256sum","sha384sum","sha512sum","md5sum"] and "hashing" in loaded:
+            print(hashing.hash(splitInput))
+
         elif splitInput[0].lower() == "power":
             power()
             return
@@ -1487,94 +1490,6 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             os.system(
                 "explorer GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
             os.system("rmdir GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}")
-
-        # Hashing ----------------------------------------------------------
-
-        elif splitInput[0].lower() == "sha1":
-            text = argget(splitInput[1:])
-            if not args.quiet:
-                print(hashlib.sha1(bytes(text, "utf-8")
-                                   ).hexdigest(), c.okgreen+text+c.end)
-            return
-
-        elif splitInput[0].lower() == "sha224":
-            text = argget(splitInput[1:])
-            if not args.quiet:
-                print(hashlib.sha224(bytes(text, "utf-8")
-                                     ).hexdigest(), c.okgreen+text+c.end)
-            return
-
-        elif splitInput[0].lower() == "sha256":
-            text = argget(splitInput[1:])
-            if not args.quiet:
-                print(hashlib.sha256(bytes(text, "utf-8")
-                                     ).hexdigest(), c.okgreen+text+c.end)
-            return
-
-        elif splitInput[0].lower() == "sha384":
-            text = argget(splitInput[1:])
-            if not args.quiet:
-                print(hashlib.sha384(bytes(text, "utf-8")
-                                     ).hexdigest(), c.okgreen+text+c.end)
-            return
-
-        elif splitInput[0].lower() == "sha512":
-            text = argget(splitInput[1:])
-            if not args.quiet:
-                print(hashlib.sha512(bytes(text, "utf-8")
-                                     ).hexdigest(), c.okgreen+text+c.end)
-            return
-
-        elif splitInput[0].lower() == "md5":
-            text = argget(splitInput[1:])
-            if not args.quiet:
-                print(hashlib.md5(bytes(text, "utf-8")
-                                  ).hexdigest(), c.okgreen+text+c.end)
-            return
-
-        # Hash sum -----------------------------------------------
-
-        elif splitInput[0].lower() == "sha1sum":
-            hashsum = hashlib.sha1()
-            hashfilesum(splitInput, hashsum)
-            if not args.quiet:
-                print(hashsum.hexdigest())
-            return
-
-        elif splitInput[0].lower() == "sha224sum":
-            hashsum = hashlib.sha224()
-            hashfilesum(splitInput, hashsum)
-            if not args.quiet:
-                print(hashsum.hexdigest())
-            return
-
-        elif splitInput[0].lower() == "sha256sum":
-            hashsum = hashlib.sha256()
-            hashfilesum(splitInput, hashsum)
-            if not args.quiet:
-                print(hashsum.hexdigest())
-            return
-
-        elif splitInput[0].lower() == "sha384sum":
-            hashsum = hashlib.sha384()
-            hashfilesum(splitInput, hashsum)
-            if not args.quiet:
-                print(hashsum.hexdigest())
-            return
-
-        elif splitInput[0].lower() == "sha512sum":
-            hashsum = hashlib.sha512()
-            hashfilesum(splitInput, hashsum)
-            if not args.quiet:
-                print(hashsum.hexdigest())
-            return
-
-        elif splitInput[0].lower() == "md5sum":
-            hashsum = hashlib.md5()
-            hashfilesum(splitInput, hashsum)
-            if not args.quiet:
-                print(hashsum.hexdigest())
-            return
 
         # --------------------------------------------------------------
 
