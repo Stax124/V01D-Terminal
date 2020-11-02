@@ -1,29 +1,31 @@
 # Project V01D-Terminal
 
-from plugins import hashing
-import core
-import core.osBased
-from core.database import *
-import core.utils
-
 import argparse
+import os
+import platform
 import shlex
 import subprocess
-from subprocess import call, check_output
+import sys
 import threading
+import traceback
+import zipimport
+from math import *
+from subprocess import call, check_output
 from threading import Thread
 from webbrowser import open_new_tab
-from math import *
-import platform
-import os
-import sys
-import traceback
+
+import core
+import core.osBased
+import core.utils
+from core.database import *
 
 # Plugin loader -------------------------------------------
 loaded = []
 
 try:
-    from plugins.vectors import Vector2, Vector3
+    vectors = zipimport.zipimporter("./plugins/vectors.zip").load_module("vectors")
+    Vector2 = vectors.Vector2
+    Vector3 = vectors.Vector3
     loaded.append("vectors")
 except: pass
 
@@ -33,30 +35,29 @@ try:
 except: pass
 
 try:
-    from plugins import steam_api
+    steam_api = zipimport.zipimporter("./plugins/steam_api.zip").load_module("steam_api")
     loaded.append("steam-api")
 except: pass
 
 try:
-    import plugins.autoclicker as autoclicker
+    autoclicker = zipimport.zipimporter("./plugins/autoclicker.zip").load_module("autoclicker")
     loaded.append("autoclicker")
 except: pass
 
 try:
-    import plugins.pwned as pwned
+    pwned = zipimport.zipimporter("./plugins/pwned.zip").load_module("pwned")
     loaded.append("pwned")
 except: pass
 
 try:
-    import plugins.player as player
+    player = zipimport.zipimporter("./plugins/player.zip").load_module("player")
     loaded.append("player")
 except: pass
 
 try:
-    import plugins.hashing as hashing
+    hashing = zipimport.zipimporter("./plugins/hashing.zip").load_module("hashing")
     loaded.append("hashing")
 except: pass
-
 
 
 # Add to PATH ---------------------------------------------
@@ -106,49 +107,55 @@ if iswindows():
 
 
 def _import():
-    from sys import exit as _exit
-    from packaging import version
-    import yaml
-    import requests
+    import ctypes
     import datetime
     import hashlib
-    import ctypes
+    from sys import exit as _exit
+
     import GPUtil
     import psutil
-
-    from prompt_toolkit.enums import EditingMode
+    import requests
+    import yaml
+    from packaging import version
     from prompt_toolkit import PromptSession, print_formatted_text
-    from prompt_toolkit.shortcuts import confirm
-    from prompt_toolkit.patch_stdout import patch_stdout
-    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, DummyAutoSuggest
-    from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter, DummyCompleter
-    from core.PathCompleter import PathCompleter
+    from prompt_toolkit.auto_suggest import (AutoSuggestFromHistory,
+                                             DummyAutoSuggest)
+    from prompt_toolkit.completion import (DummyCompleter, FuzzyCompleter,
+                                           ThreadedCompleter, merge_completers)
+    from prompt_toolkit.enums import EditingMode
     from prompt_toolkit.formatted_text import HTML
-    from prompt_toolkit.styles import Style
     from prompt_toolkit.output.color_depth import ColorDepth
+    from prompt_toolkit.patch_stdout import patch_stdout
+    from prompt_toolkit.shortcuts import confirm
+    from prompt_toolkit.styles import Style
+
+    from core.PathCompleter import PathCompleter
 
 
 try:
-    from sys import exit as _exit
-    from packaging import version
-    import yaml
+    import ctypes
     import datetime
     import hashlib
-    import requests
-    import ctypes
+    from sys import exit as _exit
+
     import GPUtil
     import psutil
-
-    from prompt_toolkit.enums import EditingMode
+    import requests
+    import yaml
+    from packaging import version
     from prompt_toolkit import PromptSession, print_formatted_text
-    from prompt_toolkit.shortcuts import confirm
-    from prompt_toolkit.patch_stdout import patch_stdout
-    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, DummyAutoSuggest
-    from prompt_toolkit.completion import merge_completers, FuzzyCompleter, ThreadedCompleter, DummyCompleter
-    from core.PathCompleter import PathCompleter
+    from prompt_toolkit.auto_suggest import (AutoSuggestFromHistory,
+                                             DummyAutoSuggest)
+    from prompt_toolkit.completion import (DummyCompleter, FuzzyCompleter,
+                                           ThreadedCompleter, merge_completers)
+    from prompt_toolkit.enums import EditingMode
     from prompt_toolkit.formatted_text import HTML
-    from prompt_toolkit.styles import Style
     from prompt_toolkit.output.color_depth import ColorDepth
+    from prompt_toolkit.patch_stdout import patch_stdout
+    from prompt_toolkit.shortcuts import confirm
+    from prompt_toolkit.styles import Style
+
+    from core.PathCompleter import PathCompleter
 
 
 except Exception as e:
@@ -913,9 +920,9 @@ class Void_Terminal(PromptSession):
             except SystemExit:
                 return
 
-            from queue import Queue
-            import time
             import socket
+            import time
+            from queue import Queue
 
             threading_lock = threading.Lock()
             target = socket.gethostbyname(fargs.target)
@@ -1194,7 +1201,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
 
         elif splitInput[0].lower() == "game-deals":
             try:
-                from tabulate import tabulate,TableFormat
+                from tabulate import TableFormat, tabulate
                 response = requests.get(
                     "https://www.cheapshark.com/api/1.0/deals").json()
 
@@ -1744,7 +1751,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
         else:
             try:
                 output = eval(userInput)
-                if type(output) in [float, int, list, tuple, str, bool, Vector2, Vector3]:
+                if type(output) not in [object, type(dir)]:
                     if not args.quiet:
                         print(output)
                 else:
