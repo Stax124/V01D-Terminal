@@ -997,6 +997,8 @@ class Void_Terminal(PromptSession):
                 "--maxvolume", help="Set maximum volume ( 100 - 1000 )", type=int, default=130)
             play_parser.add_argument(
                 "-f", "--format", help="Select stream ( best,worst,140 etc. )")
+            play_parser.add_argument(
+                "-t", "--title", help="Querry instead of URL", action="store_true", default=False)
 
             volume_parser = sub_parsers.add_parser("volume")
             volume_parser.add_argument(
@@ -1022,7 +1024,7 @@ class Void_Terminal(PromptSession):
                 try:
                     self.mpv
                 except:
-                    self.mpv = player.Player(volume=fargs.volume, volume_max=fargs.maxvolume, _format=_format)
+                    self.mpv = player.Player(volume=fargs.volume, volume_max=fargs.maxvolume, _format=_format, search=True if fargs.title else False)
 
                 def run():
                     self.mpv.global_play(fargs.TARGET)
