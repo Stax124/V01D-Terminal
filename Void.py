@@ -8,7 +8,6 @@ import subprocess
 import sys
 import threading
 import traceback
-import zipimport
 from math import *
 from subprocess import call, check_output
 from threading import Thread
