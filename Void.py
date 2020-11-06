@@ -20,7 +20,7 @@ import core.utils
 from core.database import *
 
 # Plugin loader -------------------------------------------
-steam_api, pwned, hashing, player, autoclicker = None
+steam_api, pwned, hashing, player, autoclicker = None, None, None, None, None
 from plugins import *
 
 # Add to PATH ---------------------------------------------
