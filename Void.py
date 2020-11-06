@@ -21,6 +21,7 @@ import core.utils
 from core.database import *
 
 # Plugin loader -------------------------------------------
+steam_api, pwned, hashing, player, autoclicker = None
 from plugins import *
 
 # Add to PATH ---------------------------------------------
