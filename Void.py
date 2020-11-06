@@ -16,49 +16,12 @@ from webbrowser import open_new_tab
 
 import core
 import core.osBased
+import core.elevate
 import core.utils
 from core.database import *
 
 # Plugin loader -------------------------------------------
-loaded = []
-
-try:
-    vectors = zipimport.zipimporter("./plugins/vectors.zip").load_module("vectors")
-    Vector2 = vectors.Vector2
-    Vector3 = vectors.Vector3
-    loaded.append("vectors")
-except: pass
-
-try:
-    from plugins.elevate import elevate
-    loaded.append("elevate")
-except: pass
-
-try:
-    steam_api = zipimport.zipimporter("./plugins/steam_api.zip").load_module("steam_api")
-    loaded.append("steam-api")
-except: pass
-
-try:
-    autoclicker = zipimport.zipimporter("./plugins/autoclicker.zip").load_module("autoclicker")
-    loaded.append("autoclicker")
-except: pass
-
-try:
-    pwned = zipimport.zipimporter("./plugins/pwned.zip").load_module("pwned")
-    loaded.append("pwned")
-except: pass
-
-try:
-    player = zipimport.zipimporter("./plugins/player.zip").load_module("player")
-    loaded.append("player")
-except: pass
-
-try:
-    hashing = zipimport.zipimporter("./plugins/hashing.zip").load_module("hashing")
-    loaded.append("hashing")
-except: pass
-
+from plugins import *
 
 # Add to PATH ---------------------------------------------
 os.environ["PATH"] = os.path.dirname(
@@ -626,11 +589,10 @@ class Void_Terminal(PromptSession):
         self.default_auto_suggest = auto_suggest
         self.skipsteam = False if config.get("steamapikey") != "" and config.get("steamurl") != "" else True
 
-        if "steam-api" in loaded:
-            try:
-                if not self.skipsteam: steam_api.connect(config["steamapikey"])
-                if not self.skipsteam: steam_api.profile(config["steamurl"])
-            except: print(f"{c.warning}Cannot contact steam servers{c.end}")
+        try:
+            if not self.skipsteam: steam_api.connect(config["steamapikey"])
+            if not self.skipsteam: steam_api.profile(config["steamurl"])
+        except: print(f"{c.warning}Cannot contact steam servers{c.end}")
 
     def password(self, text="Password: "):
         return self.prompt(text, is_password=True, completer=DummyCompleter(
@@ -904,8 +866,8 @@ class Void_Terminal(PromptSession):
                 LASTDIR = __placeholder
             return
 
-        elif (splitInput[0].lower() == "elevate" or splitInput[0].lower() == "admin") and "elevate" in loaded:
-            elevate()
+        elif (splitInput[0].lower() == "elevate" or splitInput[0].lower() == "admin"):
+            core.elevate.elevate()
             return
 
         elif splitInput[0].lower() == "tcp-scan":
@@ -979,7 +941,7 @@ class Void_Terminal(PromptSession):
             except: pass
             return
 
-        elif splitInput[0].lower() == "player" and "player" in loaded:
+        elif splitInput[0].lower() == "player":
             parent_parser = argparse.ArgumentParser("player")
             sub_parsers = parent_parser.add_subparsers(dest="function")
             
@@ -1487,7 +1449,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             os.system("eventvwr.msc")
             return
 
-        elif splitInput[0].lower() in ["sha1","sha224","sha256","sha384","sha384","sha512","md5","sha1sum","sha224sum","sha256sum","sha384sum","sha512sum","md5sum"] and "hashing" in loaded:
+        elif splitInput[0].lower() in ["sha1","sha224","sha256","sha384","sha384","sha512","md5","sha1sum","sha224sum","sha256sum","sha384sum","sha512sum","md5sum"]:
             print(hashing.hash(splitInput))
 
         elif splitInput[0].lower() == "power":
@@ -1583,7 +1545,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             call(f'auto-py-to-exe -c config.json', shell=True)
             return
 
-        elif splitInput[0].lower() == "autoclicker" and "autoclicker" in loaded:
+        elif splitInput[0].lower() == "autoclicker":
             fparser = argparse.ArgumentParser(prog="autoclicker")
             fparser.add_argument(
                 "--right", help="Use right mouse button instead of left", action="store_true")
@@ -1668,7 +1630,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                 r"explorer %AppData%\Microsoft\Windows\Start Menu\Programs\Startup")
 
         # Check if your password is in someones dictionary
-        elif splitInput[0].lower() == "pwned" and "pwned" in loaded:
+        elif splitInput[0].lower() == "pwned":
             try:
                 if not args.quiet:
                     print(pwned.lookup_pwned_api(splitInput[1]))
