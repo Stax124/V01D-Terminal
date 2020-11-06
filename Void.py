@@ -296,7 +296,8 @@ except Exception as e:
         "steamapikey":"",
         "steamurl":"",
         "volume":100,
-        "completer": defcompleter
+        "completer": defcompleter,
+        "prompt": f"\n┏━━(<user>USER</user> at <user>USERDOMAIN</user>)━[<path>PATH</path>]━(T:<user>TCOUNT</user> V:<user>VOLUME</user>)\n┗━<pointer>ROOT</pointer> "
     }
 
     if not args.skipconfig:
@@ -1770,8 +1771,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
         while True:
             try:
                 cd = os.getcwd()  # Get current working directory
-                promptMessage = HTML(
-                    f"""\n┏━━(<user>{USER}</user> at <user>{USERDOMAIN}</user>)━[<path>{cd}</path>]━(T:<user>{threading.active_count()}</user> V:<user>{VOLUME}</user>)\n┗━<pointer>{"#" if isadmin() == True else "$"}</pointer> """)
+                promptMessage = HTML(str(config["prompt"]).replace("USERDOMAIN",USERDOMAIN).replace("USER",USER).replace("PATH",cd).replace("TCOUNT",str(threading.active_count())).replace("VOLUME", str(VOLUME)).replace("ROOT","#" if isadmin() == True else "$"))
 
                 userInput = self.prompt(enable_history_search=True, completer=self.default_completer, auto_suggest=self.default_auto_suggest, is_password=False, message=promptMessage,
                                         style=_style, complete_in_thread=config[
@@ -1795,8 +1795,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                     print()
             except Exception as error:
                 if not args.quiet:
-                    print(
-                        f"{c.fail}{traceback.format_exc()}{c.end}")
+                    print_formatted_text(f"{c.fail}{traceback.format_exc()}{c.end}")
                     if iswindows():
                         os.system("pause")
 
