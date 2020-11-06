@@ -212,9 +212,6 @@ None, 'print': None, 'prompt': None, 'pushd': None, 'pwlauncher': None, 'qappsrv
 # For use in "back"
 LASTDIR = ""
 
-# Global mpv player stats
-playing = False
-playerInitialized = False
 
 # Find config file
 if iswindows():
@@ -585,7 +582,6 @@ class Void_Terminal(PromptSession):
                          color_depth=color_depth,
                          editing_mode=editing_mode)
         self.exceptions = config.get("exeptions", tuple())
-        self.playing = False
         self.default_completer = completer
         self.default_auto_suggest = auto_suggest
         self.skipsteam = False if config.get("steamapikey") != "" and config.get("steamurl") != "" else True
@@ -719,8 +715,6 @@ class Void_Terminal(PromptSession):
 
         global LASTDIR
         global VOLUME
-        global playing
-        global playerInitialized
         try:
             arg = argget(splitInput[1:])
         except:
@@ -993,7 +987,6 @@ class Void_Terminal(PromptSession):
                     self.mpv.global_play(fargs.TARGET)
                 thread = Thread(target=run)
                 thread.start()
-                self.playing = True
 
             elif fargs.function == "volume":
                 try:
