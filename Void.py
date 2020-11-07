@@ -175,52 +175,128 @@ except:
     USERDOMAIN = "UNKNOWN"
 
 defPath = os.getcwd()
-defcompleter = {'append': None, 'arp': None, 'assoc': None, 'at': None, 'atmadm': None, 'attrib': None, 'auditpol': None, 'backup': None, 'bcdboot': None, 'bcdedit': None,
-'bdehdcfg': None, 'bitsadmin': None, 'bootcfg': None, 'bootsect': None, 'break': None, 'cacls': None, 'call': None, 'cd': None, 'certreq': None, 'certutil': None, 'cipher': None,
-'clip': None, 'cls': None, 'cmd': None, 'cmdkey': None, 'cmstp': None, 'color': None, 'command': None, 'comp': None, 'compact': None, 'copy': None, 'cscript': None, 'ctty': None, 
-'date': None, 'dblspace': None, 'debug': None, 'defrag': None, 'del': None, 'deltree': None, 'diantz': None, 'dir': None, 'diskcomp': None, 'diskcopy': None, 'diskpart': None, 
-'diskperf': None, 'diskraid': None, 'dism': None, 'dispdiag': None, 'djoin': None, 'doskey': None, 'dosshell': None, 'dosx': None, 'driverquery': None, 'drvspace': None, 'edit': None,
-'edlin': None, 'echo': None, 'emm386': None, 'endlocal': None, 'erase': None, 'esentutl': None, 'eventcreate': None, 'eventtriggers': None, 'exe2bin': None, 'exit': None, 'expand': None, 
-'extrac32': None, 'extract': None, 'fasthelp': None, 'fastopen': None, 'fc': None, 'fdisk': None, 'find': None, 'findstr': None, 'finger': None, 'fltmc': None, 'fondue': None, 'for': None,
-'forcedos': None, 'forfiles': None, 'format': None, 'fsutil': None, 'ftp': None, 'ftype': None, 'getmac': None, 'goto': None, 'gpresult': None, 'gpupdate': None, 'graftabl': None, 'graphics': None,
-'help': None, 'hostname': None, 'hwrcomp': None, 'hwrreg': None, 'change': None, 'chcp': None, 'chdir': None, 'checknetisolation': None, 'chglogon': None, 'chgport': None, 'chgusr': None, 'chkdsk': None,
-'chkntfs': None, 'choice': None, 'icacls': None, 'if': None, 'interlnk': None, 'intersvr': None, 'ipconfig': None, 'ipxroute': None, 'irftp': None, 'iscsicli': None, 'kb16': None, 'keyb': None, 'klist': None,
-'ksetup': None, 'ktmutil': None, 'label': None, 'lh': None, 'licensingdiag': None, 'loadfix': None, 'loadhigh': None, 'lock': None, 'lodctr': None, 'logman': None, 'logoff': None, 'lpq': None, 'lpr': None, 'makecab': None, 'manage-bde': None, 'md': None, 'mem': 
-None, 'memmaker': None, 'mkdir': None, 'mklink': None, 'mode': None, 'mofcomp': None, 'more': None, 'mount': None, 'mountvol': None, 'move': None, 'mrinfo': None, 'msav': None, 
-'msbackup': None, 'mscdex': None, 'msd': None, 'msg': None, 'msiexec': None, 'muiunattend': None, 'nbtstat': None, 'net': None, 'net1': None, 'netcfg': None, 'netsh': None, 'netstat': None, 'nfsadmin': None,
-'nlsfunc': None, 'nltest': None, 'nslookup': None, 'ntbackup': None, 'ntsd': None, 'ocsetup': None, 'openfiles': None, 'path': None, 'pathping': None, 'pause': None, 'pentnt': None,
-'ping': {'/?': None, '-t': None, '-a': None, '-n': None, '-l': None, '-f': None, '-i': None, '-v': None, '-r': None, '-s': None, '-j': None, 
-'-k': None, '-w': None, '-R': None, '-S': None, '-C': None, '-p': None, '-4': None, '-6': None}, 'pkgmgr': None, 'pnpunattend': None, 'pnputil': None, 'popd': None, 'powercfg': 
-None, 'print': None, 'prompt': None, 'pushd': None, 'pwlauncher': None, 'qappsrv': None, 'qbasic': None, 'qprocess': None, 'query': None, 'quser': None, 'qwinsta': None, 'rasautou': None, 'rasdial': None,
-'rcp': None, 'rd': None, 'rdpsign': None, 'reagentc': None, 'recimg': None, 'recover': None, 'reg': None, 'regini': None, 'register-cimprovider': None, 'regsvr32': None, 'relog': None, 'rem': None, 'ren': None,
-'rename': None, 'repair-bde': None, 'replace': None, 'reset': None, 'restore': None, 'rexec': None, 'rmdir': None, 'robocopy': None, 'route': None, 'rpcinfo': None, 'rpcping': None, 'rsh': None, 'rsm': None, 'runas': None,
-'rwinsta': None, 'sc': None, 'scandisk': None, 'scanreg': None, 'sdbinst': None, 'secedit': None, 'set': None, 'setlocal': None, 'setspn': None, 'setver': None, 'setx': None, 'sfc': None, 'shadow': None, 'share': None,
-'shift': None, 'showmount': None, 'shutdown': None, 'schtasks': None, 'smartdrv': None, 'sort': None, 'start': None, 'subst': None, 'sxstrace': None, 'sys': None, 'systeminfo': None, 'takeown': None, 'taskkill': None, 'tasklist': None,
-'tcmsetup': None, 'telnet': None, 'tftp': None, 'time': None, 'timeout': None, 'title': None, 'tlntadmn': None, 'tpmvscmgr': None, 'tracerpt': None, 'tracert': None, 'tree': None, 'tscon': None, 'tsdiscon': None, 'tskill': None, 'tsshutdn': None,
-'type': None, 'typeperf': None, 'tzutil': None, 'umount': None, 'undelete': None, 'unformat': None, 'unlock': None, 'unlodctr': None, 'vaultcmd': None, 'ver': None, 'verify': None, 'vol': None, 'vsafe': None, 'vssadmin': None, 'w32tm': None, 'waitfor': None,
-'wbadmin': None, 'wecutil': None, 'wevtutil': None, 'where': None, 'whoami': None, 'winmgmt': None, 'winrm': None, 'winrs': None, 'winsat': None, 'wmic': None, 'wsmanhttpconfig': None, 'xcopy': None, 'xwizard': None, 'player': {'play': None, 'volume': None,
-'pause': None, 'next': None, 'prev': None, 'terminate': None}, 'tcp-scan': None, 'refreshenv': None, 'ytdown': None, 'grantfiles': None, 'back': None, 'downloadeta': None, 'poweroff': None, 'reboot': None, 'instaloader': None, 'pwd': None, 'prime': None,
-'steam': {'user': None, 'friends': None, 'me': None, 'game': None}, 'game-deals': None, 'thread': None, 'autoclicker': None, 'brightness': None, 'plain2string': None, 'cryptocurrency': {'btc': None, 'eth': None, 'xrp': None, 'usdt': None, 'bch': None,
-'ltc': None, 'ada': None, 'bnb': None}, 'eval': None, 'sizeof': None, 'godmode': None, 'cheat': None, 'threads': None, 'currencyconverter': None, 'checklastvid': None, 'checklasttweet': None, 'checktwitchonline': None, 'fileconverter': None, 'ping.gg': None,
-'guid': None, 'dns': None, 'shorten': None, 'transfer': None, 'speedtest': None, 'weather': None, 'covid19': None, 'ip': None, 'geoip': None, 'qrcode': None, 'stonks': None, 'md5': None, 'welcome': None, 'startup': None, 'open': None, 'settings': None, 'sha1': None,
-'sha224': None, 'sha256': None, 'sha384': None, 'sha512': None, 'md5sum': None, 'sha1sum': None, 'sha224sum': None, 'sha256sum': None, 'sha384sum': None, 'sha512sum': None, 'elevate': None, 'admin': None, 'compile': None, 'interface': {'enable': None, 'disable': None},
-'online': {'http://localhost': None}, 'clear': None, 'search': None, 'void': {'config': None, 'perfmon': {'true': None, 'false': None}, 'mode': {'CMD': None, 'POWERSHELL': None}, 'install': {'chocolatey': None}, 'multithreading': {'true': None, 'false': None}, 'license': {'full': None},
-'version': {'latest': None, 'local': None}, 'mouseSupport': {'true': None, 'false': None}, 'fuzzycomplete': {'true': None, 'false': None}, 'completeWhileTyping': {'true': None, 'false': None}, 'wrapLines': {'true': None, 'false': None}, 'welcome': {'true': None, 'false': None},
-'start': None, 'title': None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None,
-'control': None, 'msconfig': None, 'msinfo32': None, 'regedit': None, 'sysdm.cpl': None, 'firewall': None, 'component': None, 'services': None, 'manager': None, 'event': None, 'os': None, 'pwned': None, 'quit': None, 'alias': {'-list': None}, 'delalias': None, '+': None, '-': None, '*': None, '/': None, '**': None, '//': None, '%': None, 'download': None}
 
 # For use in "back"
 LASTDIR = ""
 
-
-# Find config file
-if iswindows():
-    CONFIG = os.environ["userprofile"] + r"\.void"
-else:
-    CONFIG = os.environ["HOME"] + r"/.void"
-
 # Local version
-VERSION = "v0.8.5"
+VERSION = "v0.8.6"
+
+
+class Config():
+    "Class for maintaining configuration information and files"
+    def load(self):
+        try:
+            if not args.skipconfig:
+                self.config = yaml.safe_load(open(self.CONFIG))
+                type(self.config.keys())
+            else:
+                raise Exception
+        except Exception as e:
+            print(traceback.format_exc())
+            self.config = self.fallback
+
+            if not args.skipconfig:
+                try:
+                    print(f"{c.bold}Creating new config file:{c.end} {c.okgreen}{self.CONFIG}{c.end}")
+                    self.save()  # Create new config file
+                except:
+                    if not args.quiet:
+                        print(
+                            f"Error writing config file, please check if you have permission to write in this location {self.CONFIG}")
+
+    def __init__(self):
+        if iswindows():
+            self.CONFIG = os.environ["userprofile"] + r"\.void"
+        else:
+            self.CONFIG = os.environ["HOME"] + r"/.void"
+        self.config = {}
+        self.defcompleter = {'append': None, 'arp': None, 'assoc': None, 'at': None, 'atmadm': None, 'attrib': None, 'auditpol': None, 'backup': None, 'bcdboot': None, 'bcdedit': None,
+            'bdehdcfg': None, 'bitsadmin': None, 'bootcfg': None, 'bootsect': None, 'break': None, 'cacls': None, 'call': None, 'cd': None, 'certreq': None, 'certutil': None, 'cipher': None,
+            'clip': None, 'cls': None, 'cmd': None, 'cmdkey': None, 'cmstp': None, 'color': None, 'command': None, 'comp': None, 'compact': None, 'copy': None, 'cscript': None, 'ctty': None, 
+            'date': None, 'dblspace': None, 'debug': None, 'defrag': None, 'del': None, 'deltree': None, 'diantz': None, 'dir': None, 'diskcomp': None, 'diskcopy': None, 'diskpart': None, 
+            'diskperf': None, 'diskraid': None, 'dism': None, 'dispdiag': None, 'djoin': None, 'doskey': None, 'dosshell': None, 'dosx': None, 'driverquery': None, 'drvspace': None, 'edit': None,
+            'edlin': None, 'echo': None, 'emm386': None, 'endlocal': None, 'erase': None, 'esentutl': None, 'eventcreate': None, 'eventtriggers': None, 'exe2bin': None, 'exit': None, 'expand': None, 
+            'extrac32': None, 'extract': None, 'fasthelp': None, 'fastopen': None, 'fc': None, 'fdisk': None, 'find': None, 'findstr': None, 'finger': None, 'fltmc': None, 'fondue': None, 'for': None,
+            'forcedos': None, 'forfiles': None, 'format': None, 'fsutil': None, 'ftp': None, 'ftype': None, 'getmac': None, 'goto': None, 'gpresult': None, 'gpupdate': None, 'graftabl': None, 'graphics': None,
+            'help': None, 'hostname': None, 'hwrcomp': None, 'hwrreg': None, 'change': None, 'chcp': None, 'chdir': None, 'checknetisolation': None, 'chglogon': None, 'chgport': None, 'chgusr': None, 'chkdsk': None,
+            'chkntfs': None, 'choice': None, 'icacls': None, 'if': None, 'interlnk': None, 'intersvr': None, 'ipconfig': None, 'ipxroute': None, 'irftp': None, 'iscsicli': None, 'kb16': None, 'keyb': None, 'klist': None,
+            'ksetup': None, 'ktmutil': None, 'label': None, 'lh': None, 'licensingdiag': None, 'loadfix': None, 'loadhigh': None, 'lock': None, 'lodctr': None, 'logman': None, 'logoff': None, 'lpq': None, 'lpr': None, 'makecab': None, 'manage-bde': None, 'md': None, 'mem': 
+            None, 'memmaker': None, 'mkdir': None, 'mklink': None, 'mode': None, 'mofcomp': None, 'more': None, 'mount': None, 'mountvol': None, 'move': None, 'mrinfo': None, 'msav': None, 
+            'msbackup': None, 'mscdex': None, 'msd': None, 'msg': None, 'msiexec': None, 'muiunattend': None, 'nbtstat': None, 'net': None, 'net1': None, 'netcfg': None, 'netsh': None, 'netstat': None, 'nfsadmin': None,
+            'nlsfunc': None, 'nltest': None, 'nslookup': None, 'ntbackup': None, 'ntsd': None, 'ocsetup': None, 'openfiles': None, 'path': None, 'pathping': None, 'pause': None, 'pentnt': None,
+            'ping': {'/?': None, '-t': None, '-a': None, '-n': None, '-l': None, '-f': None, '-i': None, '-v': None, '-r': None, '-s': None, '-j': None, 
+            '-k': None, '-w': None, '-R': None, '-S': None, '-C': None, '-p': None, '-4': None, '-6': None}, 'pkgmgr': None, 'pnpunattend': None, 'pnputil': None, 'popd': None, 'powercfg': 
+            None, 'print': None, 'prompt': None, 'pushd': None, 'pwlauncher': None, 'qappsrv': None, 'qbasic': None, 'qprocess': None, 'query': None, 'quser': None, 'qwinsta': None, 'rasautou': None, 'rasdial': None,
+            'rcp': None, 'rd': None, 'rdpsign': None, 'reagentc': None, 'recimg': None, 'recover': None, 'reg': None, 'regini': None, 'register-cimprovider': None, 'regsvr32': None, 'relog': None, 'rem': None, 'ren': None,
+            'rename': None, 'repair-bde': None, 'replace': None, 'reset': None, 'restore': None, 'rexec': None, 'rmdir': None, 'robocopy': None, 'route': None, 'rpcinfo': None, 'rpcping': None, 'rsh': None, 'rsm': None, 'runas': None,
+            'rwinsta': None, 'sc': None, 'scandisk': None, 'scanreg': None, 'sdbinst': None, 'secedit': None, 'set': None, 'setlocal': None, 'setspn': None, 'setver': None, 'setx': None, 'sfc': None, 'shadow': None, 'share': None,
+            'shift': None, 'showmount': None, 'shutdown': None, 'schtasks': None, 'smartdrv': None, 'sort': None, 'start': None, 'subst': None, 'sxstrace': None, 'sys': None, 'systeminfo': None, 'takeown': None, 'taskkill': None, 'tasklist': None,
+            'tcmsetup': None, 'telnet': None, 'tftp': None, 'time': None, 'timeout': None, 'title': None, 'tlntadmn': None, 'tpmvscmgr': None, 'tracerpt': None, 'tracert': None, 'tree': None, 'tscon': None, 'tsdiscon': None, 'tskill': None, 'tsshutdn': None,
+            'type': None, 'typeperf': None, 'tzutil': None, 'umount': None, 'undelete': None, 'unformat': None, 'unlock': None, 'unlodctr': None, 'vaultcmd': None, 'ver': None, 'verify': None, 'vol': None, 'vsafe': None, 'vssadmin': None, 'w32tm': None, 'waitfor': None,
+            'wbadmin': None, 'wecutil': None, 'wevtutil': None, 'where': None, 'whoami': None, 'winmgmt': None, 'winrm': None, 'winrs': None, 'winsat': None, 'wmic': None, 'wsmanhttpconfig': None, 'xcopy': None, 'xwizard': None, 'player': {'play': None, 'volume': None,
+            'pause': None, 'next': None, 'prev': None, 'terminate': None}, 'tcp-scan': None, 'refreshenv': None, 'ytdown': None, 'grantfiles': None, 'back': None, 'downloadeta': None, 'poweroff': None, 'reboot': None, 'instaloader': None, 'pwd': None, 'prime': None,
+            'steam': {'user': None, 'friends': None, 'me': None, 'game': None}, 'game-deals': None, 'thread': None, 'autoclicker': None, 'brightness': None, 'plain2string': None, 'cryptocurrency': {'btc': None, 'eth': None, 'xrp': None, 'usdt': None, 'bch': None,
+            'ltc': None, 'ada': None, 'bnb': None}, 'eval': None, 'sizeof': None, 'godmode': None, 'cheat': None, 'threads': None, 'currencyconverter': None, 'checklastvid': None, 'checklasttweet': None, 'checktwitchonline': None, 'fileconverter': None, 'ping.gg': None,
+            'guid': None, 'dns': None, 'shorten': None, 'transfer': None, 'speedtest': None, 'weather': None, 'covid19': None, 'ip': None, 'geoip': None, 'qrcode': None, 'stonks': None, 'md5': None, 'welcome': None, 'startup': None, 'open': None, 'settings': None, 'sha1': None,
+            'sha224': None, 'sha256': None, 'sha384': None, 'sha512': None, 'md5sum': None, 'sha1sum': None, 'sha224sum': None, 'sha256sum': None, 'sha384sum': None, 'sha512sum': None, 'elevate': None, 'admin': None, 'compile': None, 'interface': {'enable': None, 'disable': None},
+            'online': {'http://localhost': None}, 'clear': None, 'search': None, 'void': {'config': None, 'perfmon': {'true': None, 'false': None}, 'mode': {'CMD': None, 'POWERSHELL': None}, 'install': {'chocolatey': None}, 'multithreading': {'true': None, 'false': None}, 'license': {'full': None},
+            'version': {'latest': None, 'local': None}, 'mouseSupport': {'true': None, 'false': None}, 'fuzzycomplete': {'true': None, 'false': None}, 'completeWhileTyping': {'true': None, 'false': None}, 'wrapLines': {'true': None, 'false': None}, 'welcome': {'true': None, 'false': None},
+            'start': None, 'title': None}, 'read': None, 'power': None, 'wifipassword': None, 'gcd': None, 'lcm': None, 'rng': None, 'pagefile': None, 'motherboard': None, 'ram': None, 'cpu': None, 'gpu': None, 'network': None, 'bootinfo': None, 'disk': None,
+            'control': None, 'msconfig': None, 'msinfo32': None, 'regedit': None, 'sysdm.cpl': None, 'firewall': None, 'component': None, 'services': None, 'manager': None, 'event': None, 'os': None, 'pwned': None, 'quit': None, 'alias': {'-list': None}, 'delalias': None, '+': None, '-': None, '*': None, '/': None, '**': None, '//': None, '%': None, 'download': None
+            }
+        self.fallback = {
+            "mode": "CMD",
+            "welcome": False,
+            "multithreading": True,
+            "fuzzycomplete": True,
+            "completeWhileTyping": True,
+            "wrapLines": False,
+            "mouseSupport": True,
+            "searchIgnoreCase": True,
+            "default": "greenyellow",
+            "pointer": "#ff4500",
+            "path": "aqua",
+            "user": "#ff4500",
+            "completion-menu.completion": "bg:#000000 #ffffff",
+            "completion-menu.completion.current": "bg:#00aaaa #000000",
+            "scrollbar.background": "bg:#88aaaa",
+            "scrollbar.button": "bg:#222222",
+            "exeptions": tuple(),
+            "perfmon": False,
+            "steamapikey":"",
+            "steamurl":"",
+            "volume":100,
+            "completer": self.defcompleter,
+            "prompt": f"\n┏━━(<user>USER</user> at <user>USERDOMAIN</user>)━[<path>PATH</path>]━(T:<user>TCOUNT</user> V:<user>VOLUME</user>)\n┗━<pointer>ROOT</pointer> "
+        }
+
+
+    def save(self):
+        try:
+            with open(self.CONFIG, "w") as f:
+                f.flush()
+                yaml.safe_dump(self.config, f)
+        except:
+            if not args.quiet:
+                print(f"Unable to save data to {self.CONFIG}")
+
+    def default_completer(self):
+        self.config["completer"] = self.defcompleter
+        self.save()
+    
+    def get(self, key):
+        try:
+            return self.config[key]
+        except:
+            return self.fallback[key]
+
+    def set(self, key, value):
+        self.config[key] = value
+        self.save()
+
+config = Config()
+config.load()
 
 # -------------------------------------------
 
@@ -234,10 +310,6 @@ def isadmin() -> bool:
         _is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
 
     return _is_admin
-
-def default_completer():
-    config["completer"] = defcompleter
-    saveToYml(config,CONFIG)
 
 if iswindows():
     os.system("title Void-Terminal")
@@ -262,67 +334,21 @@ def saveToYml(data, path) -> None:
         if not args.quiet:
             print(f"Unable to save data to {path}")
 
-
-# Load config or defaults
-try:
-    if not args.skipconfig:
-        config = yaml.safe_load(open(CONFIG))
-        type(config.keys())
-    else:
-        raise Exception
-except Exception as e:
-    config = {
-        "mode": "CMD",
-        "welcome": False,
-        "multithreading": True,
-        "fuzzycomplete": True,
-        "completeWhileTyping": True,
-        "wrapLines": False,
-        "mouseSupport": True,
-        "searchIgnoreCase": True,
-        "default": "greenyellow",
-        "pointer": "#ff4500",
-        "path": "aqua",
-        "user": "#ff4500",
-        "completion-menu.completion": "bg:#000000 #ffffff",
-        "completion-menu.completion.current": "bg:#00aaaa #000000",
-        "scrollbar.background": "bg:#88aaaa",
-        "scrollbar.button": "bg:#222222",
-        "exeptions": tuple(),
-        "perfmon": False,
-        "steamapikey":"",
-        "steamurl":"",
-        "volume":100,
-        "completer": defcompleter,
-        "prompt": f"\n┏━━(<user>USER</user> at <user>USERDOMAIN</user>)━[<path>PATH</path>]━(T:<user>TCOUNT</user> V:<user>VOLUME</user>)\n┗━<pointer>ROOT</pointer> "
-    }
-
-    if not args.skipconfig:
-        if not args.quiet:
-            print(e)
-        try:
-            print(f"{c.bold}Creating new config file:{c.end} {c.okgreen}{CONFIG}{c.end}")
-            saveToYml(config, CONFIG)  # Create new config file
-        except:
-            if not args.quiet:
-                print(
-                    f"Error writing config file, please check if you have permission to write in this location {CONFIG}")
-
 aliases = GetAliases()
 if platform.system() == "Windows":
-    WinCompleter = NestedCompleter.from_nested_dict(config["completer"])
+    WinCompleter = NestedCompleter.from_nested_dict(config.get("completer"))
 
-MODE = config.get("mode", "CMD")
-VOLUME = config.get("volume", 100)
+MODE = config.get("mode")
+VOLUME = config.get("volume")
 
 # Pick completer based on config and platform
-if config["fuzzycomplete"] and iswindows():
+if config.get("fuzzycomplete") and iswindows():
     combinedcompleter = ThreadedCompleter(FuzzyCompleter(merge_completers([WinCompleter, PathCompleter(
     ), WordCompleter(list(aliases.keys()))])))
 elif iswindows():
     combinedcompleter = ThreadedCompleter(merge_completers(
         [WinCompleter, PathCompleter(), WordCompleter(list(aliases.keys()))]))
-elif platform.system() == "Linux" and config["fuzzycomplete"]:
+elif platform.system() == "Linux" and config.get("fuzzycomplete"):
     combinedcompleter = ThreadedCompleter(FuzzyCompleter(
         merge_completers([LinuxCompleter, PathCompleter(),WordCompleter(list(aliases.keys()))])))
 else:
@@ -392,75 +418,75 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
     try:
         if (_splitinput[1] == "multithreading"):
             if (_splitinput[2].lower() == "true"):
-                config["multithreading"] = True
+                config.set("multithreading",True)
             elif (_splitinput[2].lower() == "false"):
-                config["multithreading"] = False
+                config.set("multithreading",False)
             if not args.quiet:
                 print(
-                    f"multithreading: {c.okgreen}{config['multithreading']}{c.end}")
+                    f"multithreading: {c.okgreen}{config.get('multithreading')}{c.end}")
 
         elif (_splitinput[1] == "perfmon"):
             if (_splitinput[2].lower() == "true"):
-                config["perfmon"] = True
+                config.set("perfmon",True)
             elif (_splitinput[2].lower() == "false"):
-                config["perfmon"] = False
+                config.set("perfmon",False)
             if not args.quiet:
                 print(
-                    f"perfmon: {c.okgreen}{config['perfmon']}{c.end}")
+                    f"perfmon: {c.okgreen}{config.get('perfmon')}{c.end}")
 
         elif (_splitinput[1] == "fuzzycomplete"):
             if (_splitinput[2].lower() == "true"):
-                config["fuzzycomplete"] = True
+                config.set("fuzzycomplete",True)
             elif (_splitinput[2].lower() == "false"):
-                config["fuzzycomplete"] = False
+                config.set("fuzzycomplete",False)
             if not args.quiet:
                 print(
-                    f"fuzzycomplete: {c.okgreen}{config['fuzzycomplete']}{c.end}")
+                    f"fuzzycomplete: {c.okgreen}{config.get('fuzzycomplete')}{c.end}")
 
         elif (_splitinput[1] == "mouseSupport"):
             if (_splitinput[2].lower() == "true"):
-                config["mouseSupport"] = True
+                config.set("mouseSupport",True)
             elif (_splitinput[2].lower() == "false"):
-                config["mouseSupport"] = False
+                config.set("mouseSupport",False)
             if not args.quiet:
                 print(
-                    f"mouseSupport: {c.okgreen}{config['fuzzycomplete']}{c.end}")
+                    f"mouseSupport: {c.okgreen}{config.get('fuzzycomplete')}{c.end}")
 
         elif (_splitinput[1] == "completeWhileTyping"):
             if (_splitinput[2].lower() == "true"):
-                config["completeWhileTyping"] = True
+                config.set("completeWhileTyping", True)
             elif (_splitinput[2].lower() == "false"):
-                config["completeWhileTyping"] = False
+                config.set("completeWhileTyping", False)
             if not args.quiet:
                 print(
-                    f"completeWhileTyping: {c.okgreen}{config['completeWhileTyping']}{c.end}")
+                    f"completeWhileTyping: {c.okgreen}{config.get('completeWhileTyping')}{c.end}")
 
         elif (_splitinput[1] == "wrapLines"):
             if (_splitinput[2].lower() == "true"):
-                config["wrapLines"] = True
+                config.set("wrapLines", True)
             elif (_splitinput[2].lower() == "false"):
-                config["wrapLines"] = False
+                config.set("wrapLines", False) 
             if not args.quiet:
                 print(
-                    f"wrapLines: {c.okgreen}{config['fuzzycomplete']}{c.end}")
+                    f"wrapLines: {c.okgreen}{config.get('fuzzycomplete')}{c.end}")
 
         elif (_splitinput[1] == "welcome"):
             if (_splitinput[2].lower() == "true"):
-                config["welcome"] = True
+                config.set("welcome", True)
             elif (_splitinput[2].lower() == "false"):
-                config["welcome"] = False
+                config.set("welcome", False)
             if not args.quiet:
-                print(f"welcome: {c.okgreen}{config['welcome']}{c.end}")
+                print(f"welcome: {c.okgreen}{config.get('welcome')}{c.end}")
 
         elif (_splitinput[1] == "mode"):
             if (_splitinput[2].lower() == "powershell"):
-                config["mode"] = "POWERSHELL"
+                config.set("mode", "POWERSHELL")
                 MODE = "POWERSHELL"
             elif (_splitinput[2].lower() == "cmd"):
-                config["mode"] = "CMD"
+                config.set("mode", "CMD")
                 MODE = "CMD"
             if not args.quiet:
-                print(f"mode: {c.okgreen}{config['mode']}{c.end}")
+                print(f"mode: {c.okgreen}{config.get('mode')}{c.end}")
 
         elif (_splitinput[1] == "linux") and platform.system() == "Linux":
             if (_splitinput[2].lower() == "generate"):
@@ -512,13 +538,13 @@ def void(_splitinput) -> None:  # Open new terminal or configure it
 
         elif _splitinput[1] == "config":
             if not args.quiet:
-                print(config)
+                print(config.config)
     except:
         if not args.quiet:
             print(f"{c.fail}Not found{c.end}")
 
     if not args.skipconfig:
-        saveToYml(config, CONFIG)
+        config.save()
 
 
 def read(splitInput) -> None:
@@ -581,14 +607,14 @@ class Void_Terminal(PromptSession):
                          refresh_interval=refresh_interval,
                          color_depth=color_depth,
                          editing_mode=editing_mode)
-        self.exceptions = config.get("exeptions", tuple())
+        self.exceptions = config.get("exeptions")
         self.default_completer = completer
         self.default_auto_suggest = auto_suggest
         self.skipsteam = False if config.get("steamapikey") != "" and config.get("steamurl") != "" else True
 
         try:
-            if not self.skipsteam: steam_api.connect(config["steamapikey"])
-            if not self.skipsteam: steam_api.profile(config["steamurl"])
+            if not self.skipsteam: steam_api.connect(config.get("steamapikey"))
+            if not self.skipsteam: steam_api.profile(config.get("steamurl"))
         except: print(f"{c.warning}Cannot contact steam servers{c.end}")
 
     def password(self, text="Password: "):
@@ -992,16 +1018,16 @@ class Void_Terminal(PromptSession):
                 try:
                     self.mpv["volume"] = fargs.volume
                     VOLUME = fargs.volume
-                    config["volume"] = fargs.volume
-                    saveToYml(config, CONFIG)
+                    config.set("volume", fargs.volume)
+                    config.save()
                 except:
                     print(f"{c.fail}Player not initialized{c.end}")
                     if fargs.no_updating:
                         return
                     else:
                         VOLUME = fargs.volume
-                        config["volume"] = fargs.volume
-                        saveToYml(config, CONFIG)
+                        config.set("volume", fargs.volume)
+                        config.save()
                         print(
                             f"{c.okgreen}Default volume for new instances updated{c.end}")
 
@@ -1679,8 +1705,8 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
             while True:
                 try:
                     _eval = self.prompt(message=HTML(f"<user>{USER}</user> <path>eval</path>""<pointer> > </pointer>"), style=_style,
-                                        complete_in_thread=config["multithreading"], set_exception_handler=True, color_depth=ColorDepth.TRUE_COLOR, completer=None,
-                                        bottom_toolbar=performance_toobar() if config["perfmon"] else None)
+                                        complete_in_thread=config.get("multithreading"), set_exception_handler=True, color_depth=ColorDepth.TRUE_COLOR, completer=None,
+                                        bottom_toolbar=performance_toobar() if config.get("perfmon") else None)
                     if _eval.lower() == "quit" or _eval.lower() == "exit":
                         break
                     else:
@@ -1723,7 +1749,7 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
                     if MODE == "CMD":
                         os.system(userInput)
                     else:
-                        if config["multithreading"]:
+                        if config.get("multithreading"):
                             def run_async():
                                 if iswindows():
                                     e = run_command(
@@ -1764,12 +1790,11 @@ URL: {c.okgreen}{f"https://store.steampowered.com/app/{id}"}{c.end}
         while True:
             try:
                 cd = os.getcwd()  # Get current working directory
-                promptMessage = HTML(str(config["prompt"]).replace("USERDOMAIN",USERDOMAIN).replace("USER",USER).replace("PATH",cd).replace("TCOUNT",str(threading.active_count())).replace("VOLUME", str(VOLUME)).replace("ROOT","#" if isadmin() == True else "$"))
+                promptMessage = HTML(str(config.get("prompt")).replace("USERDOMAIN",USERDOMAIN).replace("USER",USER).replace("PATH",cd).replace("TCOUNT",str(threading.active_count())).replace("VOLUME", str(VOLUME)).replace("ROOT","#" if isadmin() == True else "$"))
 
                 userInput = self.prompt(enable_history_search=True, completer=self.default_completer, auto_suggest=self.default_auto_suggest, is_password=False, message=promptMessage,
-                                        style=_style, complete_in_thread=config[
-                                            "multithreading"], color_depth=ColorDepth.TRUE_COLOR,
-                                        bottom_toolbar=performance_toobar() if config["perfmon"] else None)  # Get user input (autocompetion allowed)
+                                        style=_style, complete_in_thread=config.get("multithreading"), color_depth=ColorDepth.TRUE_COLOR,
+                                        bottom_toolbar=performance_toobar() if config.get("perfmon") else None)  # Get user input (autocompetion allowed)
 
                 userInput = self.envirotize(userInput)
 
