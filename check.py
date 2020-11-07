@@ -26,6 +26,7 @@ for i in [
     "ytdown https://www.youtube.com/watch?v=iW5fN65oNls -F",
     "player volume 100",
     "player play nothing",
+    "player terminate",
     "alias DSADADA start explorer",
     "alias -list",
     "delalias DSADADA",
@@ -56,7 +57,6 @@ for i in [
     "tasklist",
     "steam game 'Team fortress 2'",
     "game-deals",
-    "player terminate",
     ]:
     userInput = app.envirotize(i)
     try:
