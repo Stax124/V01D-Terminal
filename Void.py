@@ -258,11 +258,20 @@ class Config():
             "pointer": "#ff4500",
             "path": "aqua",
             "user": "#ff4500",
-            "custom1": "#ffffff",
-            "custom2": "#ffffff",
-            "custom3": "#ffffff",
-            "custom4": "#ffffff",
-            "custom5": "#ffffff",
+
+            "yellow": "#ffff00",
+            "yellowgreen": "#9acd32",
+            "green": "#008000",
+            "bluegreen": "#0d98ba",
+            "blue": "#0000ff",
+            "blueviolet": "#8a2be2",
+            "violet": "#ee82ee",
+            "redviolet": "#c71585",
+            "red": "#ff0000",
+            "redorange": "#ff5349",
+            "orange": "#ffa500",
+            "yelloworange": "#ffae42",
+
             "completion-menu.completion": "bg:#000000 #ffffff",
             "completion-menu.completion.current": "bg:#00aaaa #000000",
             "scrollbar.background": "bg:#88aaaa",
@@ -294,6 +303,7 @@ class Config():
         try:
             return self.config[key]
         except:
+            self.config[key] = self.fallback[key]
             return self.fallback[key]
 
     def set(self, key, value):
@@ -370,11 +380,17 @@ _style = Style.from_dict(
         "pointer": config.get("pointer"),
         "path": config.get("path"),
         "user": config.get("user"),
-        "custom1": config.get("custom1"),
-        "custom2": config.get("custom2"),
-        "custom3": config.get("custom3"),
-        "custom4": config.get("custom4"),
-        "custom5": config.get("custom5"),
+        "yellow": config.get("yellow"),
+        "yellowgreen": config.get("yellowgreen"),
+        "bluegreen": config.get("bluegreen"),
+        "blue": config.get("blue"),
+        "blueviolet": config.get("blueviolet"),
+        "violet": config.get("violet"),
+        "redviolet": config.get("redviolet"),
+        "red": config.get("red"),
+        "redorange": config.get("redorange"),
+        "orange": config.get("orange"),
+        "yelloworange": config.get("yelloworange"),
 
         # Completor
         "completion-menu.completion": config.get("completion-menu.completion"),
