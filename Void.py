@@ -258,6 +258,11 @@ class Config():
             "pointer": "#ff4500",
             "path": "aqua",
             "user": "#ff4500",
+            "custom1": "#ffffff",
+            "custom2": "#ffffff",
+            "custom3": "#ffffff",
+            "custom4": "#ffffff",
+            "custom5": "#ffffff",
             "completion-menu.completion": "bg:#000000 #ffffff",
             "completion-menu.completion.current": "bg:#00aaaa #000000",
             "scrollbar.background": "bg:#88aaaa",
@@ -365,6 +370,11 @@ _style = Style.from_dict(
         "pointer": config.get("pointer"),
         "path": config.get("path"),
         "user": config.get("user"),
+        "custom1": config.get("custom1"),
+        "custom2": config.get("custom2"),
+        "custom3": config.get("custom3"),
+        "custom4": config.get("custom4"),
+        "custom5": config.get("custom5"),
 
         # Completor
         "completion-menu.completion": config.get("completion-menu.completion"),
@@ -1004,9 +1014,7 @@ class Void_Terminal(PromptSession):
                 elif fargs.fps or fargs.resolution: _format = f"bestvideo{f'[height<=?{fargs.resolution}]' if fargs.resolution else ''}{f'[fps<=?{fargs.resolution}]' if fargs.resolution else ''}+bestaudio/best"
                 else: _format = "bestvideo+bestaudio"
 
-                try:
-                    self.mpv
-                except:
+                if not player.playing:
                     self.mpv = player.Player(volume=fargs.volume, volume_max=fargs.maxvolume, _format=_format, search=True if fargs.title else False)
 
                 def run():
