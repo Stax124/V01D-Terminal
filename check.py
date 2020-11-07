@@ -1,6 +1,5 @@
 import os
 from Void import Void_Terminal, c
-from time import sleep
 
 app = Void_Terminal()
 error_count = 0
@@ -57,6 +56,7 @@ for i in [
     "tasklist",
     "steam game 'Team fortress 2'",
     "game-deals",
+    "player terminate",
     ]:
     userInput = app.envirotize(i)
     try:
