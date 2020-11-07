@@ -46,7 +46,7 @@ for i in [
     "cheat python lambda",
     "read .\\debug.log",
     "sha256sum Void.py",
-    "open %USERPROFILE%\\Downloads",
+    "echo %PATH%",
     "sha512 password",
     "convert celsius kelvin 27",
     "currencyconverter CZK USD 20000",
