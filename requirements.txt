@@ -4,6 +4,7 @@ python-ls
 python-mpv
 colr
 youtube-dl
+youtube-search
 clint
 pyyaml
 requests

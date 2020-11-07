@@ -11,6 +11,10 @@ output/
 dist/
 build/
 Void-Terminal.spec
+deb_dist
+debian
+Void_Terminal.egg-info
+*.gz
 
 # Other
 config.json

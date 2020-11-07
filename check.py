@@ -1,6 +1,5 @@
 import os
 from Void import Void_Terminal, c
-from time import sleep
 
 app = Void_Terminal()
 error_count = 0
@@ -27,6 +26,7 @@ for i in [
     "ytdown https://www.youtube.com/watch?v=iW5fN65oNls -F",
     "player volume 100",
     "player play nothing",
+    "player terminate",
     "alias DSADADA start explorer",
     "alias -list",
     "delalias DSADADA",
@@ -46,7 +46,7 @@ for i in [
     "cheat python lambda",
     "read .\\debug.log",
     "sha256sum Void.py",
-    "open %USERPROFILE%\\Downloads",
+    "echo %PATH%",
     "sha512 password",
     "convert celsius kelvin 27",
     "currencyconverter CZK USD 20000",
