@@ -93,14 +93,7 @@ def ytdown(splitInput: str) -> None:
         "format":fargs.format,
         "listformats":fargs.formats,
         "subtitlesformat":fargs.subtitle,
-        "listsubtitles":fargs.subtitles,
-        "format":fargs.format,
-        "format":fargs.format,
-        "format":fargs.format,
-        "format":fargs.format,
-        "format":fargs.format,
-        "format":fargs.format,
-        "format":fargs.format,
+        "listsubtitles":fargs.subtitles
     }))
     yt.download([fargs.URL])
     
