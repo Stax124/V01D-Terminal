@@ -63,7 +63,7 @@ def ytdown(splitInput: str) -> None:
     fparser.add_argument("-k","--keep", help="Keep video file after post processing", action="store_true")
     fparser.add_argument("--skip", help="Skip video downloading", action="store_true")
     fparser.add_argument("--geo_bypass", help="Bypass geographic restriction via faking X-Forwarded-For HTTP header", action="store_true")
-    fparser.add_argument("--prefer_ffmpeg", help="If False, use avconv instead of ffmpeg if both are available, otherwise prefer ffmpeg.", action="store_true")
+    fparser.add_argument("-x", help="Set output file format", type=str)
     fparser.add_argument("--proxy", help="URL of the proxy server to use")
     fparser.add_argument("--thumbnails", help="Print a table of all thumbnails and exit", action="store_true")
     fparser.add_argument("--source", help="Client-side IP address to bind to")
@@ -84,7 +84,6 @@ def ytdown(splitInput: str) -> None:
         "keepvideo":fargs.keep,
         "skip_download":fargs.skip,
         "geo_bypass":fargs.geo_bypass,
-        "prefer_ffmpeg":fargs.prefer_ffmpeg,
         "list_thumbnails":fargs.thumbnails,
         "source_address":fargs.source,
         "download_archive":fargs.archive,
@@ -93,7 +92,12 @@ def ytdown(splitInput: str) -> None:
         "format":fargs.format,
         "listformats":fargs.formats,
         "subtitlesformat":fargs.subtitle,
-        "listsubtitles":fargs.subtitles
+        "listsubtitles":fargs.subtitles,
+        "noplaylist": False,
+        'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': fargs.x,
+            }] if fargs.x != "" else [],
     }))
     yt.download([fargs.URL])
     
